@@ -3,6 +3,7 @@ import os
 import sys
 #添加注释
 #master修改
+#测试
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Ecommerce.settings")
     try:
