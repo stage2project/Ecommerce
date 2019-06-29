@@ -1,3 +1,6 @@
 .idea
 Ecommerce/__pycache__/
 backmanage/__pycache__/
+*/__pycache__/
+*__pycache__
+*/migrations/*
