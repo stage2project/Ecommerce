@@ -5,4 +5,5 @@ from goods import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^details/(?P<spu_id>\d+)$', views.details, name='details'),
+    url(r'^get_price/$', views.get_price, name='get_price'),
 ]
