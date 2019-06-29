@@ -50,11 +50,39 @@ class Address(models.Model):                                       # address 收
     a_phone = models.CharField(max_length=128)                     # 收件人电话
     a_place = models.CharField(max_length=255, null=False)         # 收货地址
     a_email = models.CharField(max_length=255, null=False)         # 收件人邮箱
+    is_default = models.BooleanField(default=False, verbose_name='是否默认')  # 是否默认
 
     class Meta:
         db_table = 'address'                                       # 表名address
 
 
+class UserFav(models.Model):
+    user = models.ForeignKey('users.User', verbose_name='用户', related_name='user_fav')
+    sku = models.ForeignKey('goods.TbSku', verbose_name='商品SKU')
+    create_time = models.DateField(default=datetime.now)
+
+    class Meta:
+        db_table = 'user_fav'
 
 
+class UserComment(models.Model):
+    LEVEL = (
+        (1, '好评'),
+        (2, '中评'),
+        (3, '差评'),
+    )
+    LEVEL_DIC = {
+        '1': '好评',
+        '2': '中评',
+        '3': '差评',
+    }
+    user = models.ForeignKey('users.User', verbose_name='用户', related_name='user_fav')
+    sku = models.ForeignKey('goods.TbSku', verbose_name='商品SKU')
+    create_time = models.DateField(default=datetime.now)
+    content = models.CharField(max_length=10000)
+    pics = models.CharField(max_length=1000)
+    score = models.IntegerField()
+    level = models.SmallIntegerField(choices=LEVEL, default=1)
 
+    class Meta:
+        db_table = 'user_comment'
