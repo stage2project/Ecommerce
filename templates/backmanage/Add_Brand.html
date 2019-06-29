@@ -7,8 +7,7 @@
     <title>添加品牌</title>
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <link href="{% static 'backmanage/assets/css/bootstrap.min.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'backmanage/css/style.css' %}"/>
@@ -17,10 +16,10 @@
     <link href="{% static 'backmanage/Widget/icheck/icheck.css' %}" rel="stylesheet" type="text/css"/>
     <!--[if IE 7]>
 		  <link rel="stylesheet" href="{% static 'backmanage/assets/css/font-awesome-ie7.min.css' %}" />
-		<![endif]-->
+	<![endif]-->
     <!--[if lte IE 8]>
 		  <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace-ie.min.css' %}" />
-		<![endif]-->
+	<![endif]-->
     <script src="{% static 'backmanage/js/jquery-1.9.1.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/typeahead-bs2.min.js' %}"></script>
@@ -30,26 +29,30 @@
     <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.speed.js' %}"></script>
     <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/handlers.js' %}"></script>
 </head>
-
 <body>
 <div class=" clearfix">
     <div id="add_brand" class="clearfix">
         <div class="left_add">
             <div class="title_name">添加品牌</div>
             <ul class="add_conent">
-                <li class=" clearfix"><label class="label_name"><i>*</i>品牌名称：</label> <input name="" type="text"
-                                                                                             class="add_text"/></li>
-                <li class=" clearfix"><label class="label_name"><i>*</i>品牌序号：</label> <input name="" type="text"
-                                                                                             class="add_text"
-                                                                                             style="width:80px"/></li>
+                <li class=" clearfix">
+                    <label class="label_name"><i>*</i>品牌名称：</label>
+                    <input name="" type="text" class="add_text"/>
+                </li>
+                <li class=" clearfix">
+                    <label class="label_name"><i>*</i>品牌序号：</label>
+                    <input name="" type="text" class="add_text" style="width:80px"/>
+                </li>
                 <li class=" clearfix"><label class="label_name">品牌图片：</label>
                     <div class="demo l_f">
                         <div class="logobox">
-                            <div class="resizebox"><img src="{% static 'backmanage/images/image.png' %}" width="100px" alt="" height="100px"/>
+                            <div class="resizebox">
+                                <img src="{% static 'backmanage/images/image.png' %}" width="100px" alt="" height="100px"/>
                             </div>
                         </div>
                         <div class="logoupload">
-                            <div class="btnbox"><a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">上传替换</a>
+                            <div class="btnbox">
+                                <a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">上传替换</a>
                             </div>
                             <div style="clear:both;height:0;overflow:hidden;"></div>
                             <div class="progress-box" style="display:none;">
@@ -59,60 +62,64 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="prompt"><p>图片大小<b>120px*60px</b>图片大小小于5MB,</p>
-                        <p>支持.jpg;.gif;.png;.jpeg格式的图片</p></div>
+                        <p>支持.jpg;.gif;.png;.jpeg格式的图片</p>
+                    </div>
                 </li>
-                <li class=" clearfix"><label class="label_name"><i>*</i>所属地区：</label> <input name="" type="text"
-                                                                                             class="add_text"
-                                                                                             style="width:120px"/></li>
-                <li class=" clearfix"><label class="label_name">品牌描述：</label> <textarea name="" cols="" rows=""
-                                                                                        class="textarea"
-                                                                                        onkeyup="checkLength(this);"></textarea><span
-                        class="wordage">剩余字数：<span id="sy" style="color:Red;">500</span>字</span></li>
+                <li class=" clearfix">
+                    <label class="label_name"><i>*</i>所属地区：</label>
+                    <input name="" type="text" class="add_text" style="width:120px"/>
+                </li>
+                <li class=" clearfix"><label class="label_name">品牌描述：</label>
+                    <textarea name="" cols="" rows="" class="textarea" onkeyup="checkLength(this);">
+                    </textarea>
+                    <span class="wordage">剩余字数：<span id="sy" style="color:Red;">500</span>字</span>
+                </li>
                 <li class=" clearfix"><label class="label_name"><i>*</i>显示状态：</label>
-                    <label><input name="checkbox" type="radio" class="ace" checked="checked"><span class="lbl">显示</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label><input type="radio" class="ace" name="checkbox"><span class="lbl">不显示</span></label>
+                    <label><input name="checkbox" type="radio" class="ace" checked="checked">
+                        <span class="lbl">显示</span>
+                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label><input type="radio" class="ace" name="checkbox">
+                        <span class="lbl">不显示</span>
+                    </label>
                 </li>
             </ul>
         </div>
         <div class="right_add">
             <div class="title_name">添加商品</div>
-
             <div class="p_select_list">
                 <div class="left_produt produt_select_style">
                     <div id="select_style"></div>
-                    <span class="seach_style"><input name="" type="text" id="seach"/ class="seach"><i
-                            class="icon-search"></i></span>
+                    <span class="seach_style">
+                        <input name="" type="text" id="seach" class="seach">
+                        <i class="icon-search"></i>
+                    </span>
                 </div>
                 <div class="Switching_btn">
-        
-          <span id="add_all" class="Switching">
-          <input type="button" class="btn btn-warning" value=">>"/>
-          </span>
+                    <span id="add_all" class="Switching">
+                        <input type="button" class="btn btn-warning" value=">>"/>
+                    </span>
                     <span id="add" class="Switching">
-          <input type="button" class="btn btn-primary" value=">"/>
-          </span>
+                        <input type="button" class="btn btn-primary" value=">"/>
+                    </span>
                     <span id="remove" class="Switching">
-          <input type="button" class="btn btn-primary" value="<"/>
-          </span>
+                        <input type="button" class="btn btn-primary" value="<"/>
+                    </span>
                     <span id="remove_all" class="Switching">
-          <input type="button" class="btn btn-warning" value="<<"/>
-          </span>
+                        <input type="button" class="btn btn-warning" value="<<"/>
+                    </span>
                 </div>
                 <div class="right_product produt_select_style">
                     <div class="title_name">归类商品</div>
-                    <select multiple="multiple" id="select2" class="select">
-                    </select>
+                    <select multiple="multiple" id="select2" class="select"></select>
                 </div>
             </div>
         </div>
     </div>
-    <div class="button_brand"><input name="" type="button" class="btn btn-warning" value="保存"/><input name=""
-                                                                                                      type="reset"
-                                                                                                      value="取消"
-                                                                                                      class="btn btn-warning"/>
+    <div class="button_brand">
+        <input name="" type="button" class="btn btn-warning" value="保存"/>
+        <input name="" type="reset" value="取消" class="btn btn-warning"/>
     </div>
 </div>
 </body>
@@ -204,7 +211,6 @@
         {"id": 20, "name": "华为 畅享5 梦幻金 移动联通电信4G手机 双卡双待", "status": "关闭"}];
     $(document).ready(function () {
         var seach = $("#seach");
-
         seach.keyup(function (event) {
             //获取当前文本框的值
             var seachText = $("#seach").val();
@@ -240,8 +246,6 @@
         })
         product + "</select>";
         $("#select_style").html(product);
-
-
     })
 </script>
 <script type="text/javascript">
@@ -253,13 +257,11 @@
             $('.progress-box').hide();
         }
     }
-
     function initProgress() {
         $('.progress-box').show();
         $('.progress-box .progress-bar > div').css('width', '0%');
         $('.progress-box .progress-num > b').html('0%');
     }
-
     function successAction(fileInfo) {
         var up_path = fileInfo.path;
         var up_width = fileInfo.width;
@@ -274,7 +276,6 @@
         $(".logobox .resizebox > img").attr('width', _up_width);
         $(".logobox .resizebox > img").attr('height', _up_height);
     }
-
     var swfImageUpload;
     $(document).ready(function () {
         var settings = {
@@ -296,9 +297,7 @@
             button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
             button_cursor: SWFUpload.CURSOR.HAND,
             button_action: SWFUpload.BUTTON_ACTION.SELECT_FILE,
-
             moving_average_history_size: 40,
-
             // The event handler functions are defined in handlers.js
             swfupload_preload_handler: preLoad,
             swfupload_load_failed_handler: loadFailed,
