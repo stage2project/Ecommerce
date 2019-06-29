@@ -15,5 +15,5 @@ def details(request, spu_id):
     print(spu.title)
     skus = spu.skus.all()
     print(skus)
-    print(skus[0].sku_attr.va)
+    print(skus[0].sku_attr.all())
     return render(request, 'goods/details.html')
