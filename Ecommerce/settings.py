@@ -25,7 +25,7 @@ SECRET_KEY = 'voyxl@1b=ph#1!=1hhu#-a$u-u@!%k4_fllc+=ycq7qtb#r!b#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django01',
+        'NAME': 'django02',
         'HOST': '47.102.128.212',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
