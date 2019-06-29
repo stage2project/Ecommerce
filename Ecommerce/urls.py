@@ -18,4 +18,5 @@ from django.conf.urls import url, include
 urlpatterns = [
     url(r'^admin/', include('backmanage.urls', namespace='backmanage')),
     url(r'^', include('goods.urls', namespace='goods')),
+    url(r'^', include('users.urls', namespace='users')),
 ]
