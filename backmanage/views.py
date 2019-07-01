@@ -25,7 +25,7 @@ def admin_competence(request):
     return render(request, 'backmanage/admin_Competence.html')
 
 
-def info(request):
+def admin_info(request):
     return render(request, 'backmanage/admin_info.html')
 
 

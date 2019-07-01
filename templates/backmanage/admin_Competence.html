@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'backmanage/font/css/font-awesome.min.css' %}"/>
     <!--[if lte IE 8]>
 		  <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace-ie.min.css' %}" />
-		<![endif]-->
+	<![endif]-->
     <script src="{% static 'backmanage/js/jquery-1.9.1.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/typeahead-bs2.min.js' %}"></script>
@@ -28,64 +28,50 @@
 <body>
 <div class="margin clearfix">
     <div class="border clearfix">
-       <span class="l_f">
-        <a href="Competence.html" id="Competence_add" class="btn btn-warning" title="添加权限"><i class="fa fa-plus"></i> 添加权限</a>
-        <a href="javascript:ovid()" class="btn btn-danger"><i class="fa fa-trash"></i> 批量删除</a>
-       </span>
+        <span class="l_f">
+            <a href="Competence.html" id="Competence_add" class="btn btn-warning" title="添加权限">
+                <i class="fa fa-plus"></i> 添加权限
+            </a>
+            <a href="javascript:ovid()" class="btn btn-danger">
+                <i class="fa fa-trash"></i> 批量删除
+            </a>
+        </span>
         <span class="r_f">共：<b>5</b>类</span>
     </div>
     <div class="compete_list">
         <table id="sample-table-1" class="table table-striped table-bordered table-hover">
             <thead>
-            <tr>
-                <th class="center"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></th>
-                <th>权限名称</th>
-                <th>人数</th>
-                <th>用户名称</th>
-                <th class="hidden-480">描述</th>
-                <th class="hidden-480">操作</th>
-            </tr>
+                <tr>
+                    <th class="center">
+                        <label><input type="checkbox" class="ace"><span class="lbl"></span></label>
+                    </th>
+                    <th>权限名称</th>
+                    <th>人数</th>
+                    <th>用户名称</th>
+                    <th class="hidden-480">描述</th>
+                    <th class="hidden-480">操作</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="center"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                <td>超级管理员</td>
-                <td>1</td>
-                <td class="hidden-480">admin</td>
-                <td>拥有至高无上的权利,操作系统的所有权限</td>
-                <td>
-                    <a title="编辑" onclick="Competence_modify('560')" href="javascript:;" class="btn btn-xs btn-info"><i
-                            class="fa fa-edit bigger-120"></i></a>
-                    <a title="删除" href="javascript:;" onclick="Competence_del(this,'1')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="center"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                <td>普通管理员</td>
-                <td>3</td>
-                <td class="hidden-480">admin123 , 张小泉 ,克雷鲍</td>
-                <td>拥有网站的系统大部分使用权限，没有权限管理功能。</td>
-                <td>
-                    <a title="编辑" onclick="Competence_modify('561')" href="javascript:;" class="btn btn-xs btn-info"><i
-                            class="fa fa-edit bigger-120"></i></a>
-                    <a title="删除" href="javascript:;" onclick="Competence_del(this,'2')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td class="center"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                <td>编辑管理员</td>
-                <td>5</td>
-                <td class="hidden-480">admin345,stysty,adminstyle,admin45678,admin123455</td>
-                <td>拥有部分权限，主要进行编辑功能，无边界订单功能，权限分配功能。</td>
-                <td>
-                    <a title="编辑" onclick="Competence_modify('562')" href="javascript:;" class="btn btn-xs btn-info"><i
-                            class="fa fa-edit bigger-120"></i></a>
-                    <a title="删除" href="javascript:;" onclick="Competence_del(this,'3')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a>
-                </td>
-            </tr>
+                <tr>
+                    <td class="center">
+                        <label><input type="checkbox" class="ace">
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+                    <td>超级管理员</td>
+                    <td>1</td>
+                    <td class="hidden-480">admin</td>
+                    <td>拥有至高无上的权利,操作系统的所有权限</td>
+                    <td>
+                        <a title="编辑" onclick="Competence_modify('560')" href="javascript:;" class="btn btn-xs btn-info">
+                            <i class="fa fa-edit bigger-120"></i>
+                        </a>
+                        <a title="删除" href="javascript:;" onclick="Competence_del(this,'1')" class="btn btn-xs btn-warning">
+                            <i class="fa fa-trash  bigger-120"></i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -147,12 +133,10 @@
             layer.msg('已删除!', {icon: 1, time: 1000});
         });
     }
-
     /*修改权限*/
     function Competence_modify(id) {
         window.location.href = "Competence.html?=" + id;
     };
-
     /*字数限制*/
     function checkLength(which) {
         var maxChars = 200; //
