@@ -76,7 +76,7 @@ class UserComment(models.Model):
         '2': '中评',
         '3': '差评',
     }
-    user = models.ForeignKey('users.User', verbose_name='用户', related_name='user_fav')
+    user = models.ForeignKey('User', verbose_name='用户', related_name='user_comment')
     sku = models.ForeignKey('goods.TbSku', verbose_name='商品SKU')
     create_time = models.DateField(default=datetime.now)
     content = models.CharField(max_length=10000)
