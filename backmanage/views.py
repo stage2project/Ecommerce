@@ -1,9 +1,25 @@
 from datetime import datetime
 
+from django.http import HttpResponse
 from django.shortcuts import render
+
+from backmanage.models import *
 
 
 # Create your views here.
+def add_competence(request):
+    # comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站的系统大部分使用权限，没有权限管理功能'}
+    # print(111111111)
+    # for name,description in comp.items():
+    #     res = Competence()
+    #     res.name = name
+    #     print(res.name)
+    #     res.description = description
+    #     print(res.description)
+    #     res.save()
+    return HttpResponse('添加权限')
+
+
 def index(request):
     date = datetime.now()
     return render(request, 'backmanage/index.html',context={'date':date})
