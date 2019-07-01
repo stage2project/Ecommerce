@@ -64,9 +64,9 @@
         <div class="yNavIndex">
             <ul class="BHeaderl">
                 <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#" style="float:left;">退出</a> </li>
-                <li><a href="login.html" style="color:#ea4949;">请登录</a> </li>
+                <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a> </li>
                 <li class="headerul">|</li>
-                <li><a href="register.html">免费注册</a> </li>
+                <li><a href="{% url 'users:register' %}">免费注册</a> </li>
                 <li class="headerul">|</li>
                 <li><a href="my-d.html">订单查询</a> </li>
                 <li class="headerul">|</li>
@@ -91,7 +91,7 @@
         </div>
     </div>
     <div class="container clearfix">
-        <div class="header-logo fl"><h1><a href="首页.html"><img src="/static/goods/icon/logo.png"></a> </h1></div>
+        <div class="header-logo fl"><h1><a href="{% url 'users:index' %}"><img src="/static/goods/icon/logo.png"></a> </h1></div>
         <div class="head-form fl">
             <form class="clearfix">
                 <input type="text" class="search-text" accesskey="" id="key" autocomplete="off"  placeholder="洗衣机">
