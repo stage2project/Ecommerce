@@ -1,3 +1,4 @@
+{% load customfilter %}
 <!doctype html>
 <html>
  <head>
@@ -42,18 +43,25 @@
          })
      </script>
     <script>
+        function attrdiv_click(name, value){
+         		$(".attrdiv a[name='"+name+"']").removeClass("cur");
+                $(".attrdiv a[value='"+value+"']").addClass("cur");
+                items = $(".attrdiv a[class='cur']")
+                post_json = {}
+                for(i = 0; i< items.length; i++ ){
+                    post_json[$(items[i]).attr('name')] = $(items[i]).attr('value')
+                }
+                $.post('{% url "goods:get_price"%}',post_json, function (data) {
+                    document.getElementById('price').innerHTML ='<strong>'+data['price']+'</strong>';
+                })
+         	};
          $(function(){
          	$("#pro_detail a").click(function(){
          		$("#pro_detail a").removeClass("cur");
          		$(this).addClass("cur");
          		$("#big_img").attr("src",$(this).attr("simg"));
          	});
-         	
-         	$(".attrdiv a").click(function(){
-         		$(".attrdiv a").removeClass("cur");
-				$(this).addClass("cur");
-				console.log($(this).attr('name'), $(this).attr('value'))
-         	});
+
          	
          	$('.amount2').click(function(){
 		        var num_input = $("#subnum");
@@ -215,34 +223,38 @@
                     </div>
                     <div class="pc-product-t">
                         <div class="pc-name-info">
-                            <h1>三星 Galaxy S3 (I939I) 白色 电信3G手机 双卡双待经典S3升级版，全新便捷双卡双待（GSM可上网)</h1>
-                            <p class="clearfix pc-rate"><strong>￥1900.00</strong> <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span></p>
-                            <p>由<a href="#" class="reds">神游官方旗舰店</a> 负责发货，并提供售后服务。</p>
+                            <h1>{{ title }}</h1>
+                            <p class="clearfix pc-rate" id="price"><strong>{{ price }}</strong></p>
+{#                                <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span></p>#}
+{#                            <p>由<a href="#" class="reds">神游官方旗舰店</a> 负责发货，并提供售后服务。</p>#}
                         </div>
                         <div class="pc-dashed clearfix">
                             <span>累计销量：<em class="reds">3988</em> 件</span><b>|</b><span>累计评价：<em class="reds">3888</em></span>
                         </div>
                         <div class="pc-size">
+                            {% for key,value in attr_dict.items %}
                             <div class="attrdiv pc-telling clearfix">
-                                <div class="pc-version">版本</div>
+                                <div class="pc-version">{{ key|get_split_0 }}</div>
                                 <div class="pc-adults">
                                     <ul>
-                                        <li><a href="javascript:void(0);" class="cur" name="1" value="1">32</a> </li>
-                                        <li><a href="javascript:void(0);" name="1" value="2">32</a> </li>
+                                        {% for v in value %}
+                                            <li><a href="javascript:void(0);" {% if forloop.counter == 1 %}class="cur"{% endif %} name="{{ key|get_split_1 }}" value="{{ v|get_split_1 }}" onclick="attrdiv_click({{ key|get_split_1 }}, {{ v|get_split_1 }} )">{{ v|get_split_0 }}</a> </li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
-                            <div class="pc-telling clearfix">
-                                <div class="pc-version">颜色分类</div>
-                                <div class="pc-adults">
-                                    <ul>
-                                        <li><a href="#" title="黑色" class="cur"><img src="/static/goods/img/pd/product.png" width="35" height="35"></a> </li>
-                                        <li><a href="#" title="白色"><img src="/static/goods/img/pd/product1.png" width="35" height="35"></a> </li>
-                                        <li><a href="#" title="金色"><img src="/static/goods/img/pd/product2.png" width="35" height="35"></a> </li>
-
-                                    </ul>
-                                </div>
-                            </div>
+                            {% endfor %}
+{#                            <div class="pc-telling clearfix">#}
+{#                                <div class="pc-version">颜色分类</div>#}
+{#                                <div class="pc-adults">#}
+{#                                    <ul>#}
+{#                                        <li><a href="#" title="黑色" class="cur"><img src="/static/goods/img/pd/product.png" width="35" height="35"></a> </li>#}
+{#                                        <li><a href="#" title="白色"><img src="/static/goods/img/pd/product1.png" width="35" height="35"></a> </li>#}
+{#                                        <li><a href="#" title="金色"><img src="/static/goods/img/pd/product2.png" width="35" height="35"></a> </li>#}
+{##}
+{#                                    </ul>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="pc-telling clearfix">
                                 <div class="pc-version">数量</div>
                                 <div class="pc-adults clearfix">
