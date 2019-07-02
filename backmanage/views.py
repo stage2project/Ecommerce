@@ -1,16 +1,20 @@
 import hashlib
 from datetime import datetime
-
 from django.contrib.messages.storage import session
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
 
 # Create your views here.
+from goods.models import TbCategory, TbAttributeKey
 
 
 def add_competence(request):
@@ -131,7 +135,58 @@ def brand_manage(request):
 
 
 def category_manage(request):
-    return render(request, 'backmanage/Category_Manage.html')
+    category = TbCategory.objects.values('id', 'name', 'parentid').filter(status=0).order_by('order').all()
+    return render(request, 'backmanage/Category_Manage.html', context={'categorys': category})
+
+
+def category_list(request):
+    category = TbCategory.objects.filter(status=0).order_by('order').all()
+    count = TbCategory.objects.filter(status=0).count()
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    # todo 按照大类目分组显示小类目
+    return render(request, 'backmanage/Category_list.html', context={'categorys': category, 'count': count, 'all_big_category': all_big_category})
+
+
+@csrf_exempt
+def category_add(request):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    if request.method == "POST":
+        category = TbCategory()
+        name = request.POST['name']
+        order = request.POST['order']
+        parentid = request.POST['parentid']
+        description = request.POST['description']
+        category.name = name
+        category.parentid = parentid
+        category.description = description
+        category.order = order
+        category.save()
+        # todo 增加小类目时，列表未更新
+        return redirect(reverse('backmanage:category_list'))
+    return render(request, 'backmanage/Category_add.html', context={'all_big_category': all_big_category})
+
+
+@csrf_exempt
+def category_update(request, cid=None):
+    if request.method == 'POST':
+        category = TbCategory.objects.get(pk=request.POST.get('cid'))
+        name = request.POST.get('name')
+        parentid = request.POST.get('parentid')
+        description = request.POST.get('description')
+        order = request.POST.get('order')
+        category.name = name
+        category.parentid = parentid
+        category.description = description
+        category.order = order
+        category.save()
+        # todo 修改所属分类时，列表未更新
+        return redirect(reverse('backmanage:category_list'))
+    category = TbCategory.objects.get(pk=cid)
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    # TODO  cid不存在时错误页面没有
+    if not category:
+        return HttpResponse("板块不存在")
+    return render(request, 'backmanage/Category_update.html', context={"category": category, 'all_big_category': all_big_category})
 
 
 def competence(request):
@@ -200,10 +255,6 @@ def picture_add(request):
     return render(request, 'backmanage/picture-add.html')
 
 
-def product_category_add(request):
-    return render(request, 'backmanage/product-category-add.html')
-
-
 def pruduct_list(request):
     return render(request, 'backmanage/Products_List.html')
 
@@ -252,3 +303,38 @@ def user_list(request):
     return render(request, 'backmanage/user_list.html')
 
 
+def attribute_list(request, cid):
+    print(cid)
+    category = TbCategory.objects.get(pk=cid)
+    attribute_key_all = category.attr_key.all()
+    common_attribute = []
+    special_attribute = []
+    for key in attribute_key_all:
+        if key.is_common:
+            common_attribute.append({'id': key.id, "name": key.name, 'values': []})
+        else:
+            special_attribute.append({'id': key.id, "name": key.name, 'values': []})
+    for key in common_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    for key in special_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    print(common_attribute, special_attribute)
+    return render(request, 'backmanage/Attribute_list.html', context={'common_attribute': common_attribute, 'special_attribute': special_attribute})
+
+
+def attribute_update(request):
+    return None
+
+
+def attribute_delete(request):
+    return None
+
+
+def attribute_add(request):
+    return None

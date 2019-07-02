@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/font-awesome.min.css">
+<script src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
+</head>
+<body class="user-select">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<table class="table">
+                <caption>通用属性（不影响价格的属性）</caption>
+				<thead>
+					<tr>
+						<th>属性</th>
+						<th>属性值</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for attribute in common_attribute %}
+                        {% for value in attribute.values %}
+                            <tr>
+                                <td>{{ attribute.name }}</td>
+                                <td>{{ value.value }}</td>
+                                <td>
+                                    <a href="/admin/attribute_update/{{ attribute.id }}/{{ value.id }}" draggable="false">修改</a>
+                                    <a href="/admin/category_update/{{ attribute.id }}/{{ value.id }}/" draggable="false">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+				</tbody>
+			</table>
+			<table class="table table-striped table-hover">
+                <caption>特有属性（与价格直接挂钩的属性）</caption>
+				<thead>
+					<tr>
+						<th>属性</th>
+						<th>属性值</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for attribute in special_attribute %}
+                        {% for value in attribute.values %}
+                            <tr>
+                                <td>{{ attribute.name }}</td>
+                                <td>{{ value.value }}</td>
+                                <td>
+                                    <a href="/admin/attribute_update/{{ attribute.id }}/{{ value.id }}" draggable="false">修改</a>
+                                    <a href="/admin/category_update/{{ attribute.id }}/{{ value.id }}/" draggable="false">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+				</tbody>
+			</table>
+            <div>
+        <div class="Operate_btn">
+            <a href="{% url 'backmanage:category_add' %}" class="btn  btn-warning">
+                <i class="icon-edit align-top bigger-125"></i>新增属性
+            </a>
+        </div>
+    </div>
+		</div>
+	</div>
+</div>
+<script src="/static/backmanage/js/bootstrap.min.js"></script>
+<script src="/static/backmanage/js/admin-scripts.js"></script>
+</body>
+</html>

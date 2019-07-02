@@ -8,9 +8,10 @@ class TbCategory(models.Model):
     """
     name = models.CharField(max_length=40)
     parentid = models.IntegerField()
-    status = models.SmallIntegerField()
+    status = models.SmallIntegerField(default=0)
     order = models.IntegerField()
-    create_time = models.DateTimeField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=200, default=None, null=True)
 
     class Meta:
         db_table = 'tb_category'
