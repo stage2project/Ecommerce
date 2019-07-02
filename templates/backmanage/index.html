@@ -346,6 +346,7 @@
                             <i class="icon-home"></i><span class="menu-text"> 系统首页 </span>
                         </a>
                     </li>
+{#                    {% if 1 in menu_list or 2 in menu_list or 3 in menu_list %}#}
                     <li>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-desktop"></i>
@@ -353,6 +354,7 @@
                             <b class="arrow icon-angle-down"></b>
                         </a>
                         <ul class="submenu">
+{#                            {%  %}#}
                             <li class="home">
                                 <a href="javascript:void(0)" name="{% url 'backmanage:product_list' %}" title="产品类表" class="iframeurl">
                                     <i class="icon-double-angle-right"></i>产品类表
@@ -364,12 +366,13 @@
                                 </a>
                             </li>
                             <li class="home">
-                                <a href="javascript:void(0)" name="{% url 'backmanage:category_manage' %}" title="分类管理" class="iframeurl">
+                                <a href="javascript:void(0)" name="{% url 'backmanage:category_manage' %}" title="分类1管理" class="iframeurl">
                                     <i class="icon-double-angle-right"></i>分类管理
                                 </a>
                             </li>
                         </ul>
                     </li>
+{#                    {% endif %}#}
                     <li>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-picture "></i>

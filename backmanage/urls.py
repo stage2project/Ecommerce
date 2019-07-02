@@ -49,4 +49,5 @@ urlpatterns = [
     url(r'^transaction/$', views.transaction, name='transaction'),
     url(r'^user_list/$', views.user_list, name='user_list'),
     url(r'^add_competence/$', views.add_competence, name='add_competence'),
+    url(r'^add_admin/$', views.add_admin, name='add_admin'),
 ]
