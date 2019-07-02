@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/font-awesome.min.css' %}"/>
     <!--[if IE 7]>
 		  <link rel="stylesheet" href="{% static 'backmanage/assets/css/font-awesome-ie7.min.css' %}" />
-		<![endif]-->
+	<![endif]-->
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace-rtl.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace-skins.min.css' %}"/>
@@ -47,23 +47,23 @@
                 <div class="widget-body">
                     <div class="widget-main">
                         <h4 class="header blue lighter bigger">
-                            <i class="icon-coffee green"></i>
-                            管理员登陆
+                            <i class="icon-coffee green"></i>管理员登陆
                         </h4>
                         <div class="login_icon">
                             <img src="{% static 'backmanage/images/login.png' %}"/>
                         </div>
-                        <form class="">
+                        <form class="" method="post" action="{% url 'backmanage:login' %}">
                             <fieldset>
+                                {% csrf_token %}
                                 <ul>
                                     <li class="frame_style form_error">
                                         <label class="user_icon"></label>
-                                        <input name="用户名" type="text" id="username"/>
+                                        <input name="username" type="text" id="username"/>
                                         <i>用户名</i>
                                     </li>
                                     <li class="frame_style form_error">
                                         <label class="password_icon"></label>
-                                        <input name="密码" type="password" id="userpwd"/>
+                                        <input name="password" type="password" id="userpwd"/>
                                         <i>密码</i>
                                     </li>
                                     <li class="frame_style form_error">
@@ -71,6 +71,7 @@
                                         <input name="验证码" type="text" id="Codes_text"/>
                                         <i>验证码</i>
                                         <div class="Codes_region"></div>
+{#                                        <img src="{% url 'backmanage.verfiCode' %}" alt="" onclick="this.src='/verficode?'+Math.random()"> <a href="javascript:;" onclick="this.src='/verficode?'+Math.random()">看不清？</a>#}
                                     </li>
                                 </ul>
                                 <div class="space"></div>
@@ -80,8 +81,7 @@
                                         <span class="lbl">保存密码</span>
                                     </label>
                                     <button type="button" class="width-35 pull-right btn btn-sm btn-primary" id="login_btn">
-                                        <i class="icon-key"></i>
-                                        登陆
+                                        <i class="icon-key"></i>登陆
                                     </button>
                                 </div>
                                 <div class="space-4"></div>

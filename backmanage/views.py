@@ -1,10 +1,14 @@
+import hashlib
 from datetime import datetime
-
-from django.http import HttpResponse, JsonResponse
+from django.contrib.messages.storage import session
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
 
@@ -13,24 +17,65 @@ from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 
 
 def add_competence(request):
-    # comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站的系统大部分使用权限，没有权限管理功能'}
-    # print(111111111)
-    # for name,description in comp.items():
-    #     res = Competence()
-    #     res.name = name
-    #     print(res.name)
-    #     res.description = description
-    #     print(res.description)
-    #     res.save()
+    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站系统大部分使用权限,无权限管理功能','编辑管理员':'拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
+    for key,value in comp.items():
+        res = Privilege()
+        res.privilege_name = key
+        res.describe = value
+        res.menu_list = [0]
+        res.save()
     return HttpResponse('添加权限')
+
+
+def add_admin(request):
+    admin = Admin()
+    admin.admin_name = '李晓妮'
+    admin.admin_age = '22'
+    admin.admin_sex = False
+    admin.admin_reg_date = datetime.now()
+    admin.admin_login_ip = request.META['REMOTE_ADDR']
+    admin.admin_login_addr = '北京海淀'
+    admin.admin_email = '1134492261@qq.com'
+    admin.admin_phone = 17635144631
+    admin.admin_qq = '1134492261'
+    admin.privilege = Privilege.objects.get(id=13)
+    admin.save()
+    return HttpResponse('add_admin')
 
 
 def index(request):
     date = datetime.now()
+    # id = session['id']
+    # menu_list = Admin.objects.values('menu_list').get(pk=id)
+    # [1,2,3]
+    if 'uid' in request.COOKIES:
+        username = request.get_signed_cookie('username', salt=SECRET_KEY)
+        return render(request,'backmanage/index.html',context={'username':username})
     return render(request, 'backmanage/index.html',context={'date':date})
 
 
 def login(request):
+    print(123456)
+    print(request.method)
+    # if request.method == 'POST':
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    # password = hashlib.sha1(password.encode('utf8')).hexdigest()
+    print(username, password)
+    res = Admin.objects.filter(admin_name=username,admin_password=password).values('admin_name','id')
+    print(res)
+#     if len(res)>0:  # 登录成功
+#         request.session['uid'] = res[0]['id']
+#         request.session['username'] = res[0]['username']
+#         return redirect(reverse('backmanage:index'))
+# return render(request, 'backmanage/login.html')
+    if len(res) > 0:
+        response = HttpResponseRedirect(reverse('backmanage:index'))
+        # response.set_cookie('uid', res[0]['id'], max_age=3600)
+        # response.set_cookie('username', res[0]['username'], max_age=3600)
+        response.set_signed_cookie('uid', res[0]['id'], max_age=3600, salt=SECRET_KEY)
+        response.set_signed_cookie('username', res[0]['username'], max_age=3600, salt=SECRET_KEY)
+        return response
     return render(request, 'backmanage/login.html')
 
 
@@ -47,6 +92,8 @@ def admin_competence(request):
 
 
 def admin_info(request):
+    # info = Admin.objects.get(admin_name = request.session.get('username'))
+    # info.admin_sex
     return render(request, 'backmanage/admin_info.html')
 
 
