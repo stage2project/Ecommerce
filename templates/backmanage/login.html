@@ -52,8 +52,9 @@
                         <div class="login_icon">
                             <img src="{% static 'backmanage/images/login.png' %}"/>
                         </div>
-                        <form class="" method="post">
+                        <form class="" method="post" action="{% url 'backmanage:login' %}">
                             <fieldset>
+                                {% csrf_token %}
                                 <ul>
                                     <li class="frame_style form_error">
                                         <label class="user_icon"></label>

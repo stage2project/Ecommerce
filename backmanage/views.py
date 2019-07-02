@@ -2,10 +2,11 @@ import hashlib
 from datetime import datetime
 
 from django.contrib.messages.storage import session
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
 
@@ -44,20 +45,34 @@ def index(request):
     # id = session['id']
     # menu_list = Admin.objects.values('menu_list').get(pk=id)
     # [1,2,3]
+    if 'uid' in request.COOKIES:
+        username = request.get_signed_cookie('username', salt=SECRET_KEY)
+        return render(request,'backmanage/index.html',context={'username':username})
     return render(request, 'backmanage/index.html',context={'date':date})
 
 
 def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        password = hashlib.sha1(password.encode('utf8')).hexdigest()
-        print(username, password)
-        res = Admin.objects.filter(admin_name=username,admin_password=password).values('username','id')
-        if len(res)>0:  # 登录成功
-            request.session['uid'] = res[0]['id']
-            request.session['username'] = res[0]['username']
-            return redirect(reverse('backmanage:index'))
+    print(123456)
+    print(request.method)
+    # if request.method == 'POST':
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    # password = hashlib.sha1(password.encode('utf8')).hexdigest()
+    print(username, password)
+    res = Admin.objects.filter(admin_name=username,admin_password=password).values('admin_name','id')
+    print(res)
+#     if len(res)>0:  # 登录成功
+#         request.session['uid'] = res[0]['id']
+#         request.session['username'] = res[0]['username']
+#         return redirect(reverse('backmanage:index'))
+# return render(request, 'backmanage/login.html')
+    if len(res) > 0:
+        response = HttpResponseRedirect(reverse('backmanage:index'))
+        # response.set_cookie('uid', res[0]['id'], max_age=3600)
+        # response.set_cookie('username', res[0]['username'], max_age=3600)
+        response.set_signed_cookie('uid', res[0]['id'], max_age=3600, salt=SECRET_KEY)
+        response.set_signed_cookie('username', res[0]['username'], max_age=3600, salt=SECRET_KEY)
+        return response
     return render(request, 'backmanage/login.html')
 
 
