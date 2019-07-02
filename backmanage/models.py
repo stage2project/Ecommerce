@@ -26,7 +26,7 @@ class Advertisement(models.Model):
 
 
 class Admin(models.Model):                                               # admin 管理员表建模
-    admin_name = models.CharField(max_length=255)                        # 管理员姓名
+    admin_name = models.CharField(max_length=255,unique=True)            # 管理员姓名
     admin_password = models.CharField(max_length=128, default='a123')    # 管理员密码
     admin_sex = models.BooleanField(default=True)
     admin_age = models.IntegerField()

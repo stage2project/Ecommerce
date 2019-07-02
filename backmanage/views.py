@@ -1,7 +1,9 @@
 import hashlib
 from datetime import datetime
+from itertools import count
+
 from django.contrib.messages.storage import session
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
@@ -12,8 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
+import json
+
 
 # Create your views here.
+from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey
 
 
@@ -56,27 +61,19 @@ def index(request):
 
 
 def login(request):
-    print(123456)
-    print(request.method)
-    # if request.method == 'POST':
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    # password = hashlib.sha1(password.encode('utf8')).hexdigest()
-    print(username, password)
-    res = Admin.objects.filter(admin_name=username,admin_password=password).values('admin_name','id')
-    print(res)
-#     if len(res)>0:  # 登录成功
-#         request.session['uid'] = res[0]['id']
-#         request.session['username'] = res[0]['username']
-#         return redirect(reverse('backmanage:index'))
-# return render(request, 'backmanage/login.html')
-    if len(res) > 0:
-        response = HttpResponseRedirect(reverse('backmanage:index'))
-        # response.set_cookie('uid', res[0]['id'], max_age=3600)
-        # response.set_cookie('username', res[0]['username'], max_age=3600)
-        response.set_signed_cookie('uid', res[0]['id'], max_age=3600, salt=SECRET_KEY)
-        response.set_signed_cookie('username', res[0]['username'], max_age=3600, salt=SECRET_KEY)
-        return response
+    if request.is_ajax():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        code = request.POST.get('code')
+        verficode = request.session['verficode']
+        if verficode != code:
+            return render(request, 'backmanage/login.html')
+        res = Admin.objects.filter(admin_name=username, admin_password=password).values('admin_name', 'id')
+        if len(res)>0:  # 登录成功
+            request.session['uid'] = res[0]['id']
+            request.session['username'] = res[0]['admin_name']
+            return JsonResponse({'code':1,'msg':'ok'},safe=False)
+        return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
 
 
@@ -93,13 +90,25 @@ def admin_competence(request):
 
 
 def admin_info(request):
-    # info = Admin.objects.get(admin_name = request.session.get('username'))
-    # info.admin_sex
-    return render(request, 'backmanage/admin_info.html')
+    admin_name = request.session.get('username')
+    info = Admin.objects.get(admin_name = request.session.get('username'))
+    admin_sex = info.admin_sex
+    admin_age = info.admin_age
+    admin_phone = info.admin_phone
+    admin_email = info.admin_email
+    admin_qq = info.admin_qq
+    admin_privilege = Privilege.objects.get(admin__admin_name=request.session.get('username'))
+    print(admin_privilege)
+    admin_reg_date = info.admin_reg_date
+    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'admin_sex':admin_sex,'admin_age':admin_age,'admin_phone':admin_phone,'admin_email':admin_email,'admin_qq':admin_qq,'admin_privilege':admin_privilege,'admin_reg_date':admin_reg_date})
 
 
 def administrator(request):
-    return render(request, 'backmanage/administrator.html')
+    admin_total = Admin.objects.count()
+    admin_super = Admin.objects.filter(privilege=13).count()
+    admin_commom = Admin.objects.filter(privilege=14).count()
+    admin_editor = Admin.objects.filter(privilege=15).count()
+    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admin_super':admin_super,'admin_commom':admin_commom,'admin_editor':admin_editor})
 
 
 def ads_list(request):
@@ -338,3 +347,16 @@ def attribute_delete(request):
 
 def attribute_add(request):
     return None
+
+
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('backmanage:login'))
+
+
+def verficode(request):
+    vc = VerfiCode()
+    res = vc.output()
+    request.session['verficode'] = vc.code
+    print(request.session['verficode'])
+    return HttpResponse(res)

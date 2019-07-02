@@ -58,4 +58,6 @@ urlpatterns = [
     url(r'^attribute_update/$', views.attribute_update, name='attribute_update'),
     url(r'^attribute_delete/$', views.attribute_delete, name='attribute_delete'),
     url(r'^attribute_add/$', views.attribute_add, name='attribute_add'),
+    url(r'^logout/$', views.logout, name='logout'),
+    url(r'^verficode/$', views.verficode, name='verficode'),
 ]
