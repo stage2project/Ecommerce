@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +9,7 @@ from backmanage.models import *
 
 
 # Create your views here.
-from goods.models import TbCategory, TbAttributeKey
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 
 
 def add_competence(request):
@@ -276,12 +276,19 @@ def attribute_list(request, cid):
         attribute_values = attribute.attr_value.all()
         for value in attribute_values:
             key['values'].append({'id': value.id, 'value': value.value})
-    print(common_attribute, special_attribute)
     return render(request, 'backmanage/Attribute_list.html', context={'common_attribute': common_attribute, 'special_attribute': special_attribute})
 
 
+@csrf_exempt
 def attribute_update(request):
-    return None
+    if request.method == 'POST' and request.is_ajax():
+        value_id = request.POST.get('value_id')
+        value = request.POST.get("value")
+        attribute_value = TbAttributeValue.objects.get(pk=value_id)
+        attribute_value.value = value
+        attribute_value.save()
+        return JsonResponse({'code': 0})
+    return JsonResponse({'code': 1})
 
 
 def attribute_delete(request):
