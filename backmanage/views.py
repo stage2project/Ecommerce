@@ -323,7 +323,7 @@ def attribute_list(request, cid):
         attribute_values = attribute.attr_value.all()
         for value in attribute_values:
             key['values'].append({'id': value.id, 'value': value.value})
-    return render(request, 'backmanage/Attribute_list.html', context={'common_attribute': common_attribute, 'special_attribute': special_attribute})
+    return render(request, 'backmanage/Attribute_list.html', context={'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid':cid})
 
 
 @csrf_exempt
@@ -332,10 +332,12 @@ def attribute_update(request):
         value_id = request.POST.get('value_id')
         value = request.POST.get("value")
         attribute_value = TbAttributeValue.objects.get(pk=value_id)
+        if attribute_value.attr.attr_value.filter(value=value).exists():
+            return JsonResponse({'code': 1, 'msg': '属性已存在'})
         attribute_value.value = value
         attribute_value.save()
         return JsonResponse({'code': 0})
-    return JsonResponse({'code': 1})
+    return JsonResponse({'code': 1, 'msg': '未知错误,请刷新重试'})
 
 
 def attribute_delete(request):
@@ -343,4 +345,50 @@ def attribute_delete(request):
 
 
 def attribute_add(request):
-    return None
+    if request.method == 'POST' and request.is_ajax():
+        cid = request.POST.get('cid')
+        category = TbCategory.objects.get(pk=cid)
+        is_common = request.POST.get('is_common')
+        attribute_name = request.POST.get("attribute_name")
+        attribute_value = request.POST.get("attribute_value")
+        print(is_common, attribute_name, attribute_value)
+        if is_common is None or attribute_value is None or attribute_name is None or attribute_name.strip() == '' or attribute_value.strip() =='':
+            return JsonResponse({'code': 1, 'msg': '参数错误'})
+        if is_common == '1':
+            res = category.attr_key.filter(is_common=1, name=attribute_name.strip())
+            if res.exists():
+                return JsonResponse({'code': 1, 'msg': '属性已存在'})
+            common_attribute = TbAttributeKey()
+            common_attribute.is_common = 1
+            common_attribute.category = category
+            common_attribute.name = attribute_name.strip()
+            common_attribute.save()
+            common_attribute_value = TbAttributeValue()
+            common_attribute_value.value = attribute_value.strip()
+            common_attribute_value.attr = common_attribute
+            common_attribute_value.save()
+            return JsonResponse({'code': 0, 'msg': 'success'})
+        if is_common == '0':
+            res = category.attr_key.filter(is_common=0, name=attribute_name.strip())
+            if res.exists():
+                attribute_values = res[0].attr_value.filter(value=attribute_value)
+                if attribute_values.exists():
+                    return JsonResponse({'code': 1, 'msg': '属性已存在'})
+                else:
+                    special_attribute_value = TbAttributeValue()
+                    special_attribute_value.attr = res[0]
+                    special_attribute_value.value = attribute_value
+                    special_attribute_value.save()
+                    return JsonResponse({'code': 0, 'msg': 'success'})
+            else:
+                special_attribute = TbAttributeKey()
+                special_attribute.is_common = 0
+                special_attribute.category = category
+                special_attribute.name = attribute_name.strip()
+                special_attribute.save()
+                special_attribute_value = TbAttributeValue()
+                special_attribute_value.attr = special_attribute
+                special_attribute_value.value = attribute_value
+                special_attribute_value.save()
+                return JsonResponse({'code': 0, 'msg': 'success'})
+    return JsonResponse({'code': 1, 'msg': '请求方式错误'})

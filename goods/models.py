@@ -38,9 +38,9 @@ class TbAttributeKey(models.Model):
     """
     name = models.CharField(max_length=30, blank=True, null=True)
     category = models.ForeignKey('TbCategory', models.DO_NOTHING, db_column='cid', blank=True, null=True, related_name='attr_key')
-    create_time = models.DateTimeField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     is_common = models.IntegerField(default=0)
-    yn = models.IntegerField(blank=True, null=True)
+    yn = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'tb_attribute_key'
@@ -53,8 +53,8 @@ class TbAttributeValue(models.Model):
         """
     value = models.CharField(max_length=30, blank=True, null=True)
     attr = models.ForeignKey('TbAttributeKey', models.DO_NOTHING, db_column='attr_key_id', blank=True, null=True, related_name='attr_value')
-    create_time = models.DateTimeField(blank=True, null=True)
-    yn = models.IntegerField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    yn = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'tb_attribute_value'
