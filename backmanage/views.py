@@ -90,8 +90,6 @@ def add_brand(request):
 
 def admin_competence(request):
     number = Privilege.objects.count()
-    # admin_amount = list(Admin.objects.values('privilege','admin_name').all())
-    # print(admin_amount)
     privilege = []
     privileges = Privilege.objects.all()
     for p in privileges:
@@ -102,40 +100,30 @@ def admin_competence(request):
 def admin_info(request):
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name = request.session.get('username'))
-    admin_sex = info.admin_sex
-    admin_age = info.admin_age
-    admin_phone = info.admin_phone
-    admin_email = info.admin_email
-    admin_qq = info.admin_qq
-    admin_privilege = Privilege.objects.get(admin__admin_name=request.session.get('username'))
-    print(admin_privilege)
-    admin_reg_date = info.admin_reg_date
-    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'admin_sex':admin_sex,'admin_age':admin_age,'admin_phone':admin_phone,'admin_email':admin_email,'admin_qq':admin_qq,'admin_privilege':admin_privilege,'admin_reg_date':admin_reg_date})
+    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'info':info})
 
 
 def administrator(request):
     if request.method == 'POST':
         user_name = request.POST.get('username')
         userpassword = request.POST.get('password')
-        newpassword2 = request.POST.get('newpassword2')
-        # user_sex = request.POST.get('form-field-radio')
-        user_sex = True
+        user_sex = request.POST.get('form-field-radio')
         login_ip = request.META['REMOTE_ADDR']
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        pid = request.POST.get('admin-role')
-        print(pid)
+        privilege = Privilege.objects.filter(id = request.POST.get( 'admin-role'))[0]
         reg_date = datetime.now()
-        if userpassword == newpassword2:
-            Admin.objects.get_or_create(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=pid)
-            return render(request, 'backmanage/administrator.html')
+        admin = Admin(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=privilege)
+        admin.save()
+        return JsonResponse({'code':1,'msg':'ok'},safe=False)
     admin_total = Admin.objects.count()
-    admin_perivilege = Privilege.objects.values('privilege_name')
     admin_super = Admin.objects.filter(privilege=13).count()
     admin_commom = Admin.objects.filter(privilege=14).count()
     admin_editor = Admin.objects.filter(privilege=15).count()
-    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admin_super':admin_super,'admin_commom':admin_commom,'admin_editor':admin_editor})
+    admins = Admin.objects.all()
+    privileges = Privilege.objects.all()
+    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admin_super':admin_super,'admin_commom':admin_commom,'admin_editor':admin_editor,'admins':admins,'privileges':privileges})
 
 
 def ads_list(request):

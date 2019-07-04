@@ -23,7 +23,7 @@
     <script src="{% static 'backmanage/assets/layer/layer.js' %}" type="text/javascript"></script>
     <script src="{% static 'backmanage/js/lrtk.js' %}" type="text/javascript"></script>
     <script src="{% static 'backmanage/assets/laydate/laydate.js' %}" type="text/javascript"></script>
-    <title>管理员</title>
+    <title>管理员列表</title>
 </head>
 <body>
 <div class="page-content clearfix">
@@ -73,18 +73,12 @@
                                             <i class="fa fa-users green"></i>
                                             <a href="#">全部管理员（{{ admin_total }}）</a>
                                         </li>
-                                        <li>
-                                            <i class="fa fa-users orange"></i>
-                                            <a href="#">超级管理员（{{ admin_super }}）</a>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-users orange"></i>
-                                            <a href="#">普通管理员（{{ admin_commom }}）</a>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-users orange"></i>
-                                            <a href="#">产品编辑管理员（{{ admin_editor }}）</a>
-                                        </li>
+                                        {% for prv in privileges %}
+                                            <li>
+                                                <i class="fa fa-users orange"></i>
+                                                <a href="#">{{ prv.privilege_name }}（{{ prv.admin.count}}）</a>
+                                            </li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -109,30 +103,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                                <td>1</td>
-                                <td>admin</td>
-                                <td>18934334544</td>
-                                <td>2345454@qq.com</td>
-                                <td>超级管理员</td>
-                                <td>2016-6-29 12:34</td>
-                                <td class="td-status"><span class="label label-success radius">已启用</span></td>
-                                <td class="td-manage">
-                                    <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
-                                       class="btn btn-xs btn-success">
-                                        <i class="fa fa-check  bigger-120"></i>
-                                    </a>
-                                    <a title="编辑" onclick="member_edit('编辑','member-add.html','4','','510')"
-                                       href="javascript:;" class="btn btn-xs btn-info">
-                                        <i class="fa fa-edit bigger-120"></i>
-                                    </a>
-                                    <a title="删除" href="javascript:;" onclick="member_del(this,'1')"
-                                       class="btn btn-xs btn-warning">
-                                        <i class="fa fa-trash  bigger-120"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            {% for adm in admins %}
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" class="ace">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{ adm.id }}</td>
+                                    <td>{{ adm.admin_name }}</td>
+                                    <td>{{ adm.admin_phone }}</td>
+                                    <td>{{ adm.admin_email }}</td>
+                                    <td>{{ adm.privilege.privilege_name }}</td>
+                                    <td>{{ adm.admin_reg_date }}</td>
+                                    <td class="td-status">
+                                        <span class="label label-success radius">
+                                            {% if adm.status %}{{ '已启用' }}{% else %}{{ '已停用' }}{% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="td-manage">
+                                        <a onClick="member_stop(this,'{{ adm.id }}')" href="javascript:;" title="停用"
+                                           class="btn btn-xs btn-success">
+                                            <i class="fa fa-check  bigger-120"></i>
+                                        </a>
+                                        <a title="编辑" onclick="member_edit('编辑','member-add.html','4','','510')"
+                                           href="javascript:;" class="btn btn-xs btn-info">
+                                            <i class="fa fa-edit bigger-120"></i>
+                                        </a>
+                                        <a title="删除" href="javascript:;" onclick="member_del(this,'1')"
+                                           class="btn btn-xs btn-warning">
+                                            <i class="fa fa-trash  bigger-120"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -141,7 +146,7 @@
     </div>
     <!--添加管理员-->
     <div id="add_administrator_style" class="add_menber" style="display:none">
-        <form action="" method="post" id="form-admin-add">
+        <form action="" method="" id="form-admin-add">
             {% csrf_token %}
             <div class="form-group">
                 <label class="form-label"><span class="c-red">*</span>管理员：</label>
@@ -168,8 +173,8 @@
                 <label class="form-label "><span class="c-red">*</span>性别：</label>
                 <div class="formControls  skin-minimal">
 {#                    <label><input name="form-field-radio" type="radio" class="ace" checked="checked"><span class="lbl">保密</span></label>&nbsp;&nbsp;#}
-                    <label><input name="form-field-radio" type="radio" class="ace"><span class="lbl">男</span></label>&nbsp;&nbsp;
-                    <label><input name="form-field-radio" type="radio" class="ace"><span class="lbl">女</span></label>
+                    <label><input name="form-field-radio" type="radio" class="ace" value="1"><span class="lbl">男</span></label>&nbsp;&nbsp;
+                    <label><input name="form-field-radio" type="radio" class="ace" value="0"><span class="lbl">女</span></label>
                 </div>
                 <div class="col-4"><span class="Validform_checktip"></span></div>
             </div>
@@ -199,9 +204,8 @@
                 <div class="formControls "> <span class="select-box" style="width:150px;">
 				<select class="select" name="admin-role" size="1">
 					<option value="13">超级管理员</option>
-					<option value="14">管理员</option>
-					<option value="15">栏目主辑</option>
-{#					<option value="3">栏目编辑</option>#}
+					<option value="14">普通管理员</option>
+					<option value="15">编辑管理员</option>
 				</select>
 				</span></div>
             </div>
@@ -214,14 +218,15 @@
                 <div class="col-4"></div>
             </div>
             <div>
-                <input class="btn btn-primary radius" type="submit" id="Add_Administrator"
-                       value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                <button class="btn btn-primary radius" type="submit" id="Add_Administrator"
+                        value="&nbsp;&nbsp;提交&nbsp;&nbsp;">提交</button>
             </div>
         </form>
     </div>
 </div>
 </body>
 </html>
+
 <script type="text/javascript">
     jQuery(function ($) {
         var oTable1 = $('#sample_table').dataTable({
@@ -233,7 +238,6 @@
             ]
         });
 
-
         $('table th input:checkbox').on('click', function () {
             var that = this;
             $(this).closest('table').find('tr > td:first-child input:checkbox')
@@ -244,7 +248,6 @@
 
         });
 
-
         $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
 
         function tooltip_placement(context, source) {
@@ -252,16 +255,15 @@
             var $parent = $source.closest('table')
             var off1 = $parent.offset();
             var w1 = $parent.width();
-
             var off2 = $source.offset();
             var w2 = $source.width();
-
             if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
             return 'left';
         }
     });
 
 </script>
+
 <script type="text/javascript">
     $(function () {
         $("#administrator").fix({
@@ -273,6 +275,7 @@
             spacingh: 270,//设置显示时间距
         });
     });
+
 
     //字数限制
     function checkLength(which) {
@@ -307,6 +310,7 @@
         event: 'focus'
     });
 
+
     /*用户-停用*/
     function member_stop(obj, id) {
         layer.confirm('确认要停用吗？', function (index) {
@@ -316,6 +320,7 @@
             layer.msg('已停用!', {icon: 5, time: 1000});
         });
     }
+
 
     /*用户-启用*/
     function member_start(obj, id) {
@@ -327,18 +332,21 @@
         });
     }
 
-    /*产品-编辑*/
+
+    /*用户-编辑*/
     function member_edit(title, url, id, w, h) {
         layer_show(title, url, w, h);
     }
 
-    /*产品-删除*/
+
+    /*用户-删除*/
     function member_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
             $(obj).parents("tr").remove();
             layer.msg('已删除!', {icon: 1, time: 1000});
         });
     }
+
 
     /*添加管理员*/
     $('#administrator_add').on('click', function () {
@@ -347,19 +355,19 @@
             title: '添加管理员',
             area: ['700px', ''],
             shadeClose: false,
-            content: $('#add_administrator_style'),
-
+            content: $('#add_administrator_style'
+            ),
         });
-        console.log($('input').serialize())
-            username = $('#username').val()
-            password = $('#password').val()
-            $.post('{% url "backmanage:administrator" %}', $('input').serialize())
     })
+
+    $('#Add_Administrator').on('click', function () {
+        $.post('{% url "backmanage:administrator" %}', $('form').serialize())
+    })
+
+
     //表单验证提交
     $("#form-admin-add").Validform({
-
         tiptype: 2,
-
         callback: function (data) {
             //form[0].submit();
             if (data.status == 1) {
@@ -374,8 +382,6 @@
             parent.layer.close(index);
             //
         }
-
-
     });
 </script>
 
