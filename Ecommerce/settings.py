@@ -25,7 +25,7 @@ SECRET_KEY = 'voyxl@1b=ph#1!=1hhu#-a$u-u@!%k4_fllc+=ycq7qtb#r!b#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'goods',
-    'users'
+    'users',
+    # 'tinymce'
+
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,21 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+
+# 阿里云短信验证码配置
+SMSCONFIG = {
+    'ACCESS_KEY_ID': "LTAIDHOYSjYcvyVt",
+    'ACCESS_KEY_SECRET': "qrEgykmXX4e6GUMFOqzuiLZ5gsUxSC",
+    'SignName': "SMS",  # 签名
+    'TemplateCode': "SMS_102315005"
+}
+
+# TINYMCE_DEFAULT_CONFIG = {
+#     'theme': 'advanced',
+#     'width': 500,
+#     'height': 300
+# }
+
+
+

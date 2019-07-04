@@ -10,11 +10,11 @@
 	<meta name="renderer" content="webkit">
     <meta content="歪秀购物, 购物, 大家电, 手机" name="keywords">
     <meta content="歪秀购物，购物商城。" name="description">
-	<title>会员系统帮助中心</title>
-    <link rel="shortcut icon" type="image/x-icon" href="theme/icon/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="theme/css/base.css">
-	<link rel="stylesheet" type="text/css" href="theme/css/member.css">
-    <script type="text/javascript" src="theme/js/jquery.js"></script>
+	<title>会员中心</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/goods/icon/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="/static/goods/css/base.css">
+	<link rel="stylesheet" type="text/css" href="/static/goods/css/member.css">
+    <script type="text/javascript" src="/static/goods/js/jquery.js"></script>
     <script type="text/javascript">
          (function(a){
              a.fn.hoverClass=function(b){
@@ -43,17 +43,19 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li><a href="#">登录</a> </li>
+                <li><a href="{% url 'users:login' %}">登录</a> </li>
                 <li class="headerul">|</li>
                 <li><a href="#">订单查询</a> </li>
                 <li class="headerul">|</li>
                 <li><a href="#">我的收藏</a> </li>
                 <li class="headerul">|</li>
-                <li id="pc-nav" class="menu"><a href="#" class="tit">我的商城</a>
+                <li id="pc-nav" class="menu"><a href="{% url 'users:person' %}" class="tit">我的商城</a>
                     <div class="subnav">
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
+                        <a href="#">我的订单</a>
+                        <a href="#">我的收藏</a>
+                        <a href="#">账户安全</a>
+                        <a href="#">地址管理</a>
+                        <a href="#">我要评价</a>
                     </div>
                 </li>
                 <li class="headerul">|</li>
@@ -62,7 +64,7 @@
         </div>
     </div>
     <div class="container clearfix">
-        <div class="header-logo fl"><h1><a href="#"><img src="theme/icon/logo.png"></a> </h1></div>
+        <div class="header-logo fl"><h1><a href="{% url 'goods:index' %}"><img src="/static/goods/icon/logo.png"></a> </h1></div>
         <div class="member-title fl"><h2></h2></div>
         <div class="head-form fl">
             <form class="clearfix">
@@ -79,24 +81,24 @@
                 <a href="#">服装城</a>
             </div>
         </div>
-        <div class="header-cart fr"><a href="#"><img src="theme/icon/car.png"></a> <i class="head-amount">99</i></div>
+        <div class="header-cart fr"><a href="#"><img src="/static/goods/icon/car.png"></a> <i class="head-amount">99</i></div>
     </div>
 </header>
 <!-- header End -->
 
-<div class="containers"><div class="pc-nav-item"><a href="#">首页</a> &gt; <a href="#">会员中心 </a> &gt; <a href="#">商城快讯</a></div></div>
+<div class="containers"><div class="pc-nav-item"><a href="{% url 'goods:index' %}">首页</a> &gt; <a href="{% url 'users:person' %}">会员中心 </a></div></div>
 
 <!-- 商城快讯 begin -->
 <section id="member">
     <div class="member-center clearfix">
         <div class="member-left fl">
             <div class="member-apart clearfix">
-                <div class="fl"><a href="#"><img src="theme/img/bg/mem.png"></a></div>
+                <div class="fl"><a href="#"><img src="/static/goods/img/bg/mem.png"></a></div>
                 <div class="fl">
                     <p>用户名：</p>
                     <p><a href="#">亚里士多德</a></p>
-                    <p>搜悦号：</p>
-                    <p>389323080</p>
+{#                    <p>搜悦号：</p>#}
+{#                    <p>389323080</p>#}
                 </div>
             </div>
             <div class="member-lists">
@@ -121,6 +123,36 @@
             </div>
         </div>
         <div class="member-right fr">
+            <div class="member-head">
+                <div class="member-heels fl"><h2>个人中心</h2></div>
+            </div>
+                      <div class="member-caution clearfix">
+                   <ul>
+                       <li class="clearfix">
+                           <div class="warn1"></div>
+                           <div class="warn2">用户名</div>
+                           <div class="warn3">亚里士多德</div>
+{#                           <div class="warn4"><a href="#">修改</a> </div>#}
+                       </li>
+                       <li class="clearfix">
+                           <div class="warn1"></div>
+                           <div class="warn2">性别</div>
+                           <div class="warn3">女 </div>
+                       </li>
+                       <li class="clearfix">
+                           <div class="warn1"></div>
+                           <div class="warn2">生日</div>
+                           <div class="warn3">2019-6-16 </div>
+                       </li>
+                       <li class="clearfix">
+                           <div class="warn1"></div>
+                           <div class="warn2">所在地</div>
+                           <div class="warn3">北京海淀</div>
+                       </li>
+                   </ul>
+               </div>
+
+
             <div class="member-head">
                 <div class="member-heels fl"><h2>账户安全</h2></div>
             </div>
@@ -189,7 +221,7 @@
     <div class="time-lists aui-footer-pd clearfix">
         <div class="aui-footer-list clearfix">
             <h4>
-                <span><img src="theme/icon/icon-d1.png"></span>
+                <span><img src="/static/goods/icon/icon-d1.png"></span>
                 <em>消费者权益</em>
             </h4>
             <ul>
@@ -202,7 +234,7 @@
         </div>
         <div class="aui-footer-list clearfix">
             <h4>
-                <span><img src="theme/icon/icon-d2.png"></span>
+                <span><img src="/static/goods/icon/icon-d2.png"></span>
                 <em>新手上路</em>
             </h4>
             <ul>
@@ -214,7 +246,7 @@
         </div>
         <div class="aui-footer-list clearfix">
             <h4>
-                <span><img src="theme/icon/icon-d3.png"></span>
+                <span><img src="/static/goods/icon/icon-d3.png"></span>
                 <em>保障正品</em>
             </h4>
             <ul>
@@ -226,7 +258,7 @@
         </div>
         <div class="aui-footer-list clearfix">
             <h4>
-                <span><img src="theme/icon/icon-d1.png"></span>
+                <span><img src="/static/goods/icon/icon-d1.png"></span>
                 <em>消费者权益</em>
             </h4>
             <ul>

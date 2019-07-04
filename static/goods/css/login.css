@@ -244,20 +244,20 @@ div{
 .form .itxt02{
     padding:10px 5px;
     width:150px;
-    text-align:center；
+    text-align:center;
 }
 .form .verify-code{/*验证码*/
     cursor:pointer;
     width:90px;
-    height:33px;
-    vertical-align:middle；
+    height:63px;
+    vertical-align:middle;
 }
 .form .item-vcode .placeholder{left:25px}
 .form .item-vcode .itxt02,.form .item-vcode .verify-code{float:left}
 .form .item-vcode a{
     display:inline-block;
     width:38px;
-    float:right；
+    float:right;
 }
 .form .item-vcode:after{
     display:block;

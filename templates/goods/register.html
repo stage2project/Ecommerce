@@ -1,3 +1,5 @@
+
+{% load static %}
 <!doctype html>
 <html>
  <head>
@@ -18,7 +20,7 @@
 <!--- header begin-->
 <header id="pc-header">
     <div class="login-header" style="padding-bottom:0">
-        <div><h1><a href="{% url 'users:index' %}"><img src="/static/goods/icon/logo.png"></a></h1></div>
+        <div><h1><a href="{% url 'goods:index' %}"><img src="/static/goods/icon/logo.png"></a></h1></div>
     </div>
 </header>
 <!-- header End -->
@@ -32,35 +34,53 @@
         </div>
         <div class="login-back">
             <div class="H-over">
-                <form>
+                <form action="{% url 'users:register' %}" method="post">
+                    {% csrf_token %}
                     <div class="login-input">
-                        <label><i class="heart">*</i>用户名：</label>
-                        <input type="text" class="list-input1" id="username" name="info[username]" placeholder="">
+                        <label><i class="heart">*</i>用  户  名：</label>
+                        <input type="text" class="list-input1" id="username" name="username" placeholder="">
                     </div>
-                    <div class="login-input">
+                    <div style="color: red; margin-left: 272px"  >{{ form.username.errors }}</div>
+
+                    <div class="login-input" >
                         <label><i class="heart">*</i>请设置密码：</label>
-                        <input type="text" class="list-input" id="password" name="info[password]" placeholder="">
+                        <input type="password" class="list-input" id="password" name="password" placeholder="">
                     </div>
+                     <div style="color: red; margin-left: 272px">{{ form.password.errors }}</div>
+
                     <div class="login-input">
                         <label><i class="heart">*</i>请确认密码：</label>
-                        <input type="text" class="list-input" id="password1" name="info[password]" placeholder="">
+                        <input type="password" class="list-input" id="confirm_password" name="confirm_password" placeholder="">
                     </div>
+                    <div style="color: red; margin-left: 272px">{{ form.confirm_password.errors }}</div>
+
                     <div class="login-input">
-                        <label><i class="heart">*</i>手机号：</label>
-                        <input type="text" class="list-iphone" id="iphone" name="info[password]" placeholder="">
+                        <label><i class="heart">*</i>电子邮箱：</label>
+                        <input type="text" class="list-input" id="email" name="email" placeholder="">
+                    </div>
+                    <div style="color: red; margin-left: 272px">{{ form.email.errors }}</div>
+
+                    <div class="login-input">
+                        <label><i class="heart">*</i>手  机  号：</label>
+                        <input type="text" class="list-iphone" id="iphone" name="phone" placeholder="">
                         <a href="#" class="obtain">获取短信验证码</a>
                     </div>
-                    <div class="login-input">
-                        <label><i class="heart">*</i>短信验证码：</label>
-                        <input type="text" class="list-notes" id="message" name="info[password]" placeholder="">
-                    </div>
+                    <div style="color: red; margin-left: 272px">{{ form.phone.errors }}</div>
+{#                    <div class="login-input">#}
+{#                        <label><i class="heart">*</i>短信验证码：</label>#}
+{#                        <input type="text" class="list-notes" id="message" name="info[password]" placeholder="">#}
+{#                    </div>#}
                     <div class="item-ifo">
                         <input type="checkbox" onClick="agreeonProtocol();" id="readme" checked="checked" class="checkbox">
                         <label for="protocol">我已阅读并同意<a id="protocol" class="blue" href="http://in.m.jd.com/help/app/register_info.html">《用户协议》</a></label>
                         <span class="clr"></span>
                     </div>
+
+{#                  <div class="login-button" >#}
+{#                      <input type="submit" value="立即注册" style='height: 20%; width: 200px; font-size:80px'>#}
+{#                  </div>#}
                     <div class="login-button">
-                        <a href="#">立即注册</a>
+                        <a href="{% url 'users:register' %}">立即注册</a>
                     </div>
                 </form>
             </div>
