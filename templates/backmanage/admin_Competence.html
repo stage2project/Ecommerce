@@ -36,7 +36,7 @@
                 <i class="fa fa-trash"></i> 批量删除
             </a>
         </span>
-        <span class="r_f">共：<b>5</b>类</span>
+        <span class="r_f">共：<b>{{ number}}</b>类</span>
     </div>
     <div class="compete_list">
         <table id="sample-table-1" class="table table-striped table-bordered table-hover">
@@ -53,25 +53,30 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="center">
-                        <label><input type="checkbox" class="ace">
-                            <span class="lbl"></span>
-                        </label>
-                    </td>
-                    <td>超级管理员</td>
-                    <td>1</td>
-                    <td class="hidden-480">admin</td>
-                    <td>拥有至高无上的权利,操作系统的所有权限</td>
-                    <td>
-                        <a title="编辑" onclick="Competence_modify('560')" href="javascript:;" class="btn btn-xs btn-info">
-                            <i class="fa fa-edit bigger-120"></i>
-                        </a>
-                        <a title="删除" href="javascript:;" onclick="Competence_del(this,'1')" class="btn btn-xs btn-warning">
-                            <i class="fa fa-trash  bigger-120"></i>
-                        </a>
-                    </td>
-                </tr>
+            {% for p in privilege %}
+                    <tr>
+                        <td class="center">
+                            <label>
+                                <input type="checkbox" class="ace">
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                                <td>{{ p.privilege.privilege_name }}</td>
+                                <td>{{ p.usercount }}</td>
+                                <td class="hidden-480">{% for user in p.users %}{{ user.admin_name }}&nbsp;&nbsp;{% endfor %}</td>
+
+                                                                    <td>{{ p.privilege.describe}}</td>
+                                                                    <td>
+                                                                        <a title="编辑" onclick="Competence_modify('560')" href="javascript:;" class="btn btn-xs btn-info">
+                                                                            <i class="fa fa-edit bigger-120"></i>
+                                                                        </a>
+                                                                        <a title="删除" href="javascript:;" onclick="Competence_del(this,'1')" class="btn btn-xs btn-warning">
+                                                                            <i class="fa fa-trash  bigger-120"></i>
+                                                                        </a>
+                                                                    </td>
+                    </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
@@ -135,7 +140,7 @@
     }
     /*修改权限*/
     function Competence_modify(id) {
-        window.location.href = "Competence.html?=" + id;
+        window.location.href = "{% url 'backmanage:competence' %}?=" + id;
     };
     /*字数限制*/
     function checkLength(which) {

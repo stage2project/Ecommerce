@@ -36,7 +36,8 @@ def add_competence(request):
 
 def add_admin(request):
     admin = Admin()
-    admin.admin_name = '李晓妮'
+    admin.admin_name = 'lixiaoni'
+    admin.admin_password = hashlib.sha1(b'a123').hexdigest()
     admin.admin_age = '22'
     admin.admin_sex = False
     admin.admin_reg_date = datetime.now()
@@ -55,8 +56,8 @@ def index(request):
     # id = session['id']
     # menu_list = Admin.objects.values('menu_list').get(pk=id)
     # [1,2,3]
-    if 'uid' in request.COOKIES:
-        username = request.get_signed_cookie('username', salt=SECRET_KEY)
+    if 'uid' in request.session:
+        username = request.session.get('username')
         return render(request,'backmanage/index.html',context={'username':username})
     return render(request, 'backmanage/index.html',context={'date':date})
 
@@ -65,12 +66,13 @@ def login(request):
     if request.is_ajax():
         username = request.POST.get('username')
         password = request.POST.get('password')
+        password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
+        print(username,password_hash)
         code = request.POST.get('code')
         verficode = request.session['verficode']
-        if verficode != code:
-            return render(request, 'backmanage/login.html')
-        res = Admin.objects.filter(admin_name=username, admin_password=password).values('admin_name', 'id')
-        if len(res)>0:  # 登录成功
+        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
+        print(res)
+        if len(res)>0 and verficode == code:  # 登录成功
             request.session['uid'] = res[0]['id']
             request.session['username'] = res[0]['admin_name']
             return JsonResponse({'code':1,'msg':'ok'},safe=False)
@@ -87,7 +89,14 @@ def add_brand(request):
 
 
 def admin_competence(request):
-    return render(request, 'backmanage/admin_Competence.html')
+    number = Privilege.objects.count()
+    # admin_amount = list(Admin.objects.values('privilege','admin_name').all())
+    # print(admin_amount)
+    privilege = []
+    privileges = Privilege.objects.all()
+    for p in privileges:
+        privilege.append({'privilege':p, 'users':p.admin.values('admin_name'), 'usercount':p.admin.count()})
+    return render(request, 'backmanage/admin_Competence.html',context={'number': number, 'privilege': privilege})
 
 
 def admin_info(request):
@@ -105,7 +114,24 @@ def admin_info(request):
 
 
 def administrator(request):
+    if request.method == 'POST':
+        user_name = request.POST.get('username')
+        userpassword = request.POST.get('password')
+        newpassword2 = request.POST.get('newpassword2')
+        # user_sex = request.POST.get('form-field-radio')
+        user_sex = True
+        login_ip = request.META['REMOTE_ADDR']
+        user_tel = request.POST.get('user-tel')
+        email = request.POST.get('email')
+        user_qq = request.POST.get('user-qq')
+        pid = request.POST.get('admin-role')
+        print(pid)
+        reg_date = datetime.now()
+        if userpassword == newpassword2:
+            Admin.objects.get_or_create(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=pid)
+            return render(request, 'backmanage/administrator.html')
     admin_total = Admin.objects.count()
+    admin_perivilege = Privilege.objects.values('privilege_name')
     admin_super = Admin.objects.filter(privilege=13).count()
     admin_commom = Admin.objects.filter(privilege=14).count()
     admin_editor = Admin.objects.filter(privilege=15).count()
