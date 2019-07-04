@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class PayMethod(models.Model):
     name = models.CharField(max_length=60, null=False)
     logo = models.CharField(max_length=100, null=False)

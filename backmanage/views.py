@@ -1,6 +1,8 @@
 import hashlib
+import json
 from datetime import datetime
 from django.contrib.messages.storage import session
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -13,7 +15,7 @@ from backmanage.models import *
 
 
 # Create your views here.
-from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku
 
 
 def add_competence(request):
@@ -207,7 +209,7 @@ def guestbook(request):
 def home(request):
     date = datetime.now()
     ip = request.META['REMOTE_ADDR']
-    return render(request, 'backmanage/home.html', context={'date':date,'ip':ip})
+    return render(request, 'backmanage/home.html', context={'date': date, 'ip': ip})
 
 
 def integration(request):
@@ -249,13 +251,26 @@ def payment_detail(request):
 def payment_method(request):
     return render(request, 'backmanage/payment_method.html')
 
-
-def picture_add(request):
-    return render(request, 'backmanage/picture-add.html')
+@csrf_exempt
+def product_add(request):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
+    if request.method == 'POST' and request.is_ajax():
+        data = json.loads(request.POST.get('data'))
+        for sku in data:
+            print(sku)
+            print(sku['price'], sku['store'], sku['attribute'])
+    return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
 
 
 def pruduct_list(request):
-    return render(request, 'backmanage/Products_List.html')
+    category = TbCategory.objects.values('id', 'name', 'parentid').filter(status=0).order_by('order').all()
+    sku_list = TbSku.objects.all()
+    skus = []
+    for sku in sku_list:
+        skus.append({'sku': sku, 'unique_code': sku.spu.unique_code})
+    print(skus)
+    return render(request, 'backmanage/Products_List.html', context={'categorys': category, 'sku_list': skus})
 
 
 def refund(request):
@@ -392,3 +407,27 @@ def attribute_add(request):
                 special_attribute_value.save()
                 return JsonResponse({'code': 0, 'msg': 'success'})
     return JsonResponse({'code': 1, 'msg': '请求方式错误'})
+
+
+def attribute_get(request):
+    cid = request.GET.get('cid')
+    category = TbCategory.objects.get(pk=cid)
+    attribute_key_all = category.attr_key.all()
+    common_attribute = []
+    special_attribute = []
+    for key in attribute_key_all:
+        if key.is_common:
+            common_attribute.append({'id': key.id, "name": key.name, 'values': []})
+        else:
+            special_attribute.append({'id': key.id, "name": key.name, 'values': []})
+    for key in common_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    for key in special_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid})

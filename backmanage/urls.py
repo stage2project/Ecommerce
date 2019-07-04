@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^payment_configure/$', views.payment_configure, name='payment_configure'),
     url(r'^payment_details/$', views.payment_detail, name='payment_detail'),
     url(r'^payment_method/$', views.payment_method, name='payment_method'),
-    url(r'^picture_add/$', views.picture_add, name='picture_add'),
+    url(r'^product_add/$', views.product_add, name='product_add'),
     url(r'^category_add/$', views.category_add, name='category_add'),
     url(r'^category_update/(?P<cid>\d+)/$', views.category_update, name='category_update'),
     url(r'^category_update/$', views.category_update, name='category_update'),
@@ -58,4 +58,5 @@ urlpatterns = [
     url(r'^attribute_update/$', views.attribute_update, name='attribute_update'),
     url(r'^attribute_delete/$', views.attribute_delete, name='attribute_delete'),
     url(r'^attribute_add/$', views.attribute_add, name='attribute_add'),
+    url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
 ]

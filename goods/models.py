@@ -16,6 +16,9 @@ class TbCategory(models.Model):
     class Meta:
         db_table = 'tb_category'
 
+    def __str__(self):
+        return self.name
+
 
 class TbBrand(models.Model):
     """
@@ -70,7 +73,7 @@ class TbSpu(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
     detail = models.TextField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
-    create_time = models.DateTimeField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     list_pirce = models.FloatField(default=0)
 
     class Meta:
@@ -82,6 +85,7 @@ class TbSku(models.Model):
     具体商品表：所属商品分类，价格，状态，创建时间，总数量，已售数量
     """
     spu = models.ForeignKey('TbSpu', models.DO_NOTHING, db_column='unique_code', blank=True, null=True, related_name='skus')
+    title = models.CharField(max_length=100, blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     status = models.SmallIntegerField(blank=True, null=True)
     create_time = models.DateTimeField(blank=True, null=True)
