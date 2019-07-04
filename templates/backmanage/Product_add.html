@@ -1,288 +1,91 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
-{#<script type="text/javascript" src="/static/backmanage/js/liandong.js"></script>#}
-<link type="text/css" rel="stylesheet" href="/static/backmanage/css/liandong.css">
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link href="/static/backmanage/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/static/backmanage/css/style.css"/>
+<link href="/static/backmanage/assets/css/codemirror.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/backmanage/assets/css/ace.min.css" />
+      <link rel="stylesheet" href="/static/backmanage/Widget/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="/static/backmanage/assets/css/font-awesome.min.css" />
+
+<link href="/static/backmanage/Widget/icheck/icheck.css" rel="stylesheet" type="text/css" />
+<link href="/static/backmanage/Widget/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/static/backmanage/css/liandong.css">
+
+<script src="/static/tiny_mce/tiny_mce.js"></script>
+<script>
+        tinyMCE.init({
+            'mode':'textareas',
+            'width':1000,
+            'height':400
+        })
+</script>
 </head>
 <body>
-<div>
-<div id="navtab1" style="width: 960px; margin:0 auto; padding:20px; border: 1px solid #A3C0E8;">
-    <div title="扩展信息" tabid="tabItem3">
-        <div id="Div1">
-            <div position="center">
-                <div style="padding: 5px 8px;" class="div_content">
-                    <li>
-                        <span class="item_name" style="width:120px;">分类：</span>
-                        <select class="select" id="big_category">
-                            <option>选择产品分类</option>
-                            {% for big_category in all_big_category %}
-                               <option value="{{ big_category.id }}">{{ big_category.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <select class="select" id="small_category">
-                            <option>选择产品分类</option>
-                        </select>
-                    </li>
-                    <hr/>
-                    <div class="div_title"><span style="font-size: large;color: red">通用属性</span></div>
-                    <hr/>
-                    <div class="div_contentlist" id="common">
-                    </div>
-                    <hr/>
-                    <div class="div_title"><span style="font-size: large;color: red">特有属性</span></div>
-                    <hr/>
-                    <div class="div_contentlist" id="special">
-                    </div>
-                    <div class="div_contentlist2">
-                        <ul>
-                            <li><div id="createTable"></div></li>
-                        </ul>
-                        <ul><li><input type="button" id="Button1" class="l-button" value="提交" onclick="save()"/></li></ul>
-                    </div>
-                </div>
+<div class="clearfix" id="add_picture">
+   <div class="">
+   <div class="type_title" style="font-size:18px">添加商品</div>
+	<form action="{% url 'backmanage:product_add' %}" method="post" class="form form-horizontal" id="form-article-add" enctype="multipart/form-data">
+		<div class="clearfix cl">
+         <label class="form-label col-2"><span class="c-red">*</span>商品标题：</label>
+		 <div class="formControls col-10"><input type="text" class="input-text" value="" placeholder="" id="" name="title"></div>
+		</div>
+        <div class="clearfix cl">
+         <label class="form-label col-2"><span class="c-red">*</span>商品编码：</label>
+		 <div class="formControls col-10"><input type="text" class="input-text" value="" placeholder="" id="" name="unique_code"></div>
+		</div>
+        <div class="clearfix cl">
+            <label class="form-label col-2"><span class="c-red">*</span>分类：</label>
+            <div class="formControls col-10">
+                <select id="big_category" name="b_cid">
+                <option>选择产品分类</option>
+                {% for big_category in all_big_category %}
+                   <option value="{{ big_category.id }}">{{ big_category.name }}</option>
+                {% endfor %}
+                </select>
+                <select id="small_category" name="s_cid">
+                    <option>选择产品分类</option>
+                </select>
             </div>
         </div>
+        <div class="clearfix cl">
+            <label class="form-label col-2"><span class="c-red">*</span>品牌：</label>
+            <div class="formControls col-10">
+                <select id="brand" name="brandid">
+                    <option>产品品牌</option>
+                </select>
+            </div>
+        </div>
+		<div class="clearfix cl">
+			<label class="form-label col-2">图片上传：</label>
+			<div class="formControls col-10">
+                <input type="file" name="photo"> <br> 允许上传:png,jpeg,jpg,gif,bmp文件
+			</div>
+		</div>
+         <div class="clearfix cl">
+         <label class="form-label col-2">详细内容：</label>
+			<div class="formControls col-10">
+                <textarea name="content" id="" cols="30" rows="10"></textarea>
+             </div>
+        </div>
+		<div class="clearfix cl">
+			<div class="Button_operation">
+				<button class="btn btn-primary radius" type="submit"><i class="icon-save "></i>保存</button>
+			</div>
+		</div>
+	</form>
     </div>
 </div>
-    <div class="clear"></div><div class="keBottom"></div>
-</div>
-
 </div>
 </body>
 </html>
+<script src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
 <script>
-    function creat_table() {
-    $(".div_contentlist label").bind("change", function () {
-
-        step.Creat_Table();
-    });
-    var step = {
-        //SKU信息组合
-        Creat_Table: function () {
-            step.hebingFunction();
-            var SKUObj = $(".Father_Title");
-            //var skuCount = SKUObj.length;//
-            var arrayTile = new Array();//标题组数
-            var arrayInfor = new Array();//盛放每组选中的CheckBox值的对象
-            var arrayColumn = new Array();//指定列，用来合并哪些列
-            var bCheck = true;//是否全选
-            var columnIndex = 0;
-            $.each(SKUObj, function (i, item){
-                arrayColumn.push(columnIndex);
-                columnIndex++;
-                arrayTile.push(SKUObj.find("li").eq(i).html().replace("：", ""));
-                var itemName = "Father_Item" + i;
-                //选中的CHeckBox取值
-                var order = new Array();
-                $("." + itemName + " input[type=checkbox]:checked").each(function (){
-                    order.push($(this).val());
-                });
-                arrayInfor.push(order);
-                if (order.join() == ""){
-                    bCheck = false;
-                }
-                //var skuValue = SKUObj.find("li").eq(index).html();
-            });
-            //开始创建Table表
-            if (bCheck == true) {
-                var RowsCount = 0;
-                $("#createTable").html("");
-                var table = $("<table id=\"process\" border=\"1\" cellpadding=\"1\" cellspacing=\"0\" style=\"width:100%;padding:5px;\"></table>");
-                table.appendTo($("#createTable"));
-                var thead = $("<thead></thead>");
-                thead.appendTo(table);
-                var trHead = $("<tr></tr>");
-                trHead.appendTo(thead);
-                //创建表头
-                $.each(arrayTile, function (index, item) {
-                    var td = $("<th>" + item + "</th>");
-                    td.appendTo(trHead);
-                });
-                var itemColumHead = $("<th  style=\"width:70px;\">价格</th><th style=\"width:70px;\">库存</th> ");
-                itemColumHead.appendTo(trHead);
-                var tbody = $("<tbody></tbody>");
-                tbody.appendTo(table);
-                ////生成组合
-                var zuheDate = step.doExchange(arrayInfor);
-
-                var postData = step.doGenPostData(arrayInfor)
-                if (zuheDate.length > 0) {
-                    //创建行
-                    $.each(zuheDate, function (index, item) {
-                        var td_array = item.split(",");
-                        var tr = $("<tr></tr>");
-                        tr.appendTo(tbody);
-                        $.each(td_array, function (i, values) {
-                            var td = $("<td>" + values + "</td>");
-                            td.appendTo(tr);
-                        });
-                        var td1 = $("<td ><input name=\"price_"+index+"\" class=\"l-text\" type=\"text\" value=\"\"></td>");
-                        td1.appendTo(tr);
-                        var td2 = $("<td ><input name=\"store_"+index+"\" class=\"l-text\" type=\"text\" value=\"\"></td>");
-                        td2.appendTo(tr);
-                        var td0 = $("<input type='hidden' name=\"attribute_"+index+"\" class=\"l-text\" type=\"text\" value=\""+postData[index]+"\">");
-                        td0.appendTo(tr)
-
-                    });
-                }
-                //结束创建Table表
-                arrayColumn.pop();//删除数组中最后一项
-                //合并单元格
-                $(table).mergeCell({
-                    // 目前只有cols这么一个配置项, 用数组表示列的索引,从0开始
-                    cols: arrayColumn
-                });
-            } else{
-                //未全选中,清除表格
-                document.getElementById('createTable').innerHTML="";
-            }
-        },//合并行
-        hebingFunction: function () {
-            $.fn.mergeCell = function (options) {
-                return this.each(function () {
-                    var cols = options.cols;
-                    for (var i = cols.length - 1; cols[i] != undefined; i--) {
-                        // fixbug console调试
-                        // console.debug(cols[i]);
-                        mergeCell($(this), cols[i]);
-                    }
-                    dispose($(this));
-                });
-            };
-            function mergeCell($table, colIndex) {
-                $table.data('col-content', ''); // 存放单元格内容
-                $table.data('col-rowspan', 1); // 存放计算的rowspan值 默认为1
-                $table.data('col-td', $()); // 存放发现的第一个与前一行比较结果不同td(jQuery封装过的), 默认一个"空"的jquery对象
-                $table.data('trNum', $('tbody tr', $table).length); // 要处理表格的总行数, 用于最后一行做特殊处理时进行判断之用
-                // 进行"扫面"处理 关键是定位col-td, 和其对应的rowspan
-                $('tbody tr', $table).each(function (index) {
-                    // td:eq中的colIndex即列索引
-                    var $td = $('td:eq(' + colIndex + ')', this);
-                    // 取出单元格的当前内容
-                    var currentContent = $td.html();
-                    // 第一次时走此分支
-                    if ($table.data('col-content') == '') {
-                        $table.data('col-content', currentContent);
-                        $table.data('col-td', $td);
-                    } else {
-                        // 上一行与当前行内容相同
-                        if ($table.data('col-content') == currentContent) {
-                            // 上一行与当前行内容相同则col-rowspan累加, 保存新值
-                            var rowspan = $table.data('col-rowspan') + 1;
-                            $table.data('col-rowspan', rowspan);
-                            // 值得注意的是 如果用了$td.remove()就会对其他列的处理造成影响
-                            $td.hide();
-                            // 最后一行的情况比较特殊一点
-                            // 比如最后2行 td中的内容是一样的, 那么到最后一行就应该把此时的col-td里保存的td设置rowspan
-                            if (++index == $table.data('trNum'))
-                                $table.data('col-td').attr('rowspan', $table.data('col-rowspan'));
-                        } else { // 上一行与当前行内容不同
-                            // col-rowspan默认为1, 如果统计出的col-rowspan没有变化, 不处理
-                            if ($table.data('col-rowspan') != 1) {
-                                $table.data('col-td').attr('rowspan', $table.data('col-rowspan'));
-                            }
-                            // 保存第一次出现不同内容的td, 和其内容, 重置col-rowspan
-                            $table.data('col-td', $td);
-                            $table.data('col-content', $td.html());
-                            $table.data('col-rowspan', 1);
-                        }
-                    }
-                });
-            }
-            // 同样是个private函数 清理内存之用
-            function dispose($table) {
-                $table.removeData();
-            }
-        },
-        //组合数组
-        doExchange: function (doubleArrays) {
-            var len = doubleArrays.length;
-            if (len >= 2) {
-                var arr1 = doubleArrays[0];
-                var arr2 = doubleArrays[1];
-                var len1 = doubleArrays[0].length;
-                var len2 = doubleArrays[1].length;
-                var newlen = len1 * len2;
-                var temp = new Array(newlen);
-                var index = 0;
-                for (var i = 0; i < len1; i++) {
-                    for (var j = 0; j < len2; j++) {
-                        a1 = arr1[i].split('_')
-                        a2 = arr2[j].split('_')
-                        a1 = a1[a1.length-1]
-                        a2 = a2[a2.length-1]
-                        temp[index] = a1 + "," +a2;
-                        index++;
-                    }
-                }
-                var newArray = new Array(len - 1);
-                newArray[0] = temp;
-                if (len > 2) {
-                    var _count = 1;
-                    for (var i = 2; i < len; i++) {
-                        newArray[_count] = doubleArrays[i];
-                        _count++;
-                    }
-                }
-                return step.doExchange(newArray);
-            }
-            else {
-                return doubleArrays[0];
-            }
-        },
-{#        {% comment %}#}
-        doGenPostData: function (doubleArrays) {
-            var len = doubleArrays.length;
-            if (len >= 2) {
-                var arr1 = doubleArrays[0];
-                var arr2 = doubleArrays[1];
-                var len1 = doubleArrays[0].length;
-                var len2 = doubleArrays[1].length;
-                var newlen = len1 * len2;
-                var temp = new Array(newlen);
-                var index = 0;
-                for (var i = 0; i < len1; i++) {
-                    for (var j = 0; j < len2; j++) {
-                        {#todo 加入没有通用属性这里会有问题#}
-                        if (arr1[i].split('_').length > 1){
-                            key1 = arr1[i].split('_')[1]
-                            value1 = arr1[i].split('_')[2]
-                            key2 = arr2[j].split('_')[1]
-                            value2 = arr2[j].split('_')[2]
-                            a1 = ""+key1+":"+value1+""
-                            a2 = ""+key2+":"+value2+""
-                            temp[index] = a1 + "," +a2;
-                        } else{
-                            key2 = arr2[j].split('_')[1]
-                            value2 = arr2[j].split('_')[2]
-                            a2 = ""+key2+":"+value2+""
-                            temp[index] = arr1[i] + "," +a2;}
-                        index++;
-                    }
-                }
-                var newArray = new Array(len - 1);
-                newArray[0] = temp;
-                if (len > 2) {
-                    var _count = 1;
-                    for (var i = 2; i < len; i++) {
-                        newArray[_count] = doubleArrays[i];
-                        _count++;
-                    }
-                }
-                return step.doGenPostData(newArray);
-            }
-            else {
-                return doubleArrays[0];
-            }
-
-        }
-{#        {% endcomment %}#}
-    }
-    return step;
-}
     $('#big_category').change(
         function () {
             $('#small_category').empty()
@@ -308,7 +111,7 @@
                     item = item+ '<li class="li_width"><label><input id="Checkbox1" type="checkbox" class="chcBox_Width" value="0_'+attr['id']+'_'+attr.values[value]['id']+'_'+attr.values[value]['value']+'" />'+attr.values[value]['value']+'<span class="li_empty"> </span></label></li>';
                 }
                 item = item+"</ul><br/>";
-                $('#common').append(item)
+                $('#attribute').append(item)
                 index++;
                 }
             for(attribute in data['special_attribute']){
@@ -318,37 +121,17 @@
                     item = item+ '<li class="li_width"><label><input id="Checkbox1" type="checkbox" class="chcBox_Width" value="1_'+attr['id']+'_'+attr.values[value]['id']+'_'+attr.values[value]['value']+'" />'+attr.values[value]['value']+'<span class="li_empty"> </span></label></li>';
                 }
                 item = item+"</ul><br/>";
-                $('#special').append(item)
+                $('#attribute').append(item)
                 index++;
+            }
+            $('#brand').empty()
+            $('#brand').append('<option>选择品牌</option>')
+            for( brand in data['brand']){
+                item = "<option value='" + data['brand'][brand].id +"'>" + data['brand'][brand].name+"</option>"
+                $('#brand').append(item)
             }
             creat_table()
         })
     })
-    function save() {
-        all_inputs = $('table input')
-        items = []
-        for(i=0;i<all_inputs.length;i++){
-            item = all_inputs[i].name.split('_')[1];
-            items.push(item)
-        }
-        var arr = [];    //定义一个临时数组
-        for(var i = 0; i < items.length; i++){    //循环遍历当前数组
-                if(arr.indexOf(items[i]) == -1){
-                    arr.push(items[i]);
-                }
-            }
-        post_data = new Array(arr.length)
-        for(i = 0;i<post_data.length;i++){
-            post_data[i] = {}
-        }
 
-        for(i=0;i<all_inputs.length;i++){
-            index = all_inputs[i].name.split('_')[1];
-            key = all_inputs[i].name.split('_')[0];
-            post_data[index][key]=all_inputs[i].value
-        }
-        console.log(post_data)
-        $.post('{% url 'backmanage:product_add' %}', {'data':JSON.stringify(post_data)})
-
-    }
 </script>

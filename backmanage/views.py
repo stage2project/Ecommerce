@@ -15,7 +15,7 @@ from backmanage.models import *
 
 
 # Create your views here.
-from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
 
 
 def add_competence(request):
@@ -251,16 +251,48 @@ def payment_detail(request):
 def payment_method(request):
     return render(request, 'backmanage/payment_method.html')
 
+
 @csrf_exempt
 def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
-    if request.method == 'POST' and request.is_ajax():
-        data = json.loads(request.POST.get('data'))
-        for sku in data:
-            print(sku)
-            print(sku['price'], sku['store'], sku['attribute'])
+    if request.method == 'POST':
+        spu = TbSpu()
+        spu.title = request.POST.get('title')
+        spu.detail = request.POST.get('content')
+        spu.brand = TbBrand.objects.get(pk=request.POST.get('brandid'))
+        spu.category = TbCategory.objects.get(pk=request.POST.get('s_cid'))
+        spu.unique_code = request.POST.get('unique_code')
+        spu.save()
+        file = request.FILES.get('photo')
+        return redirect(reverse('backmanage:sku_add', kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'), 'unique_code': spu.unique_code}))
     return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
+
+
+@csrf_exempt
+def sku_add(request, bcid=None, scid=None, unique_code=None):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
+    if request.method == 'POST':
+        unique_code = request.POST.get('unique_code')
+        spu = TbSpu.objects.get(unique_code=unique_code)
+        for data in json.loads(request.POST.get('data')):
+            sku = TbSku()
+            sku.title = data['title']
+            sku.price = data["price"]
+            sku.total_amount = data['store']
+            sku.spu = TbSpu.objects.get(unique_code=unique_code)
+            sku.save()
+            attrs = data['attribute'].split(',')
+            for attr in attrs:
+                sku_attr = TbSkuAttr()
+                sku_attr.sku = sku
+                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr[0])
+                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
+                sku_attr.save()
+        return JsonResponse({'code': 0})
+    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category,
+                                                                'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
 def pruduct_list(request):
@@ -430,4 +462,8 @@ def attribute_get(request):
         attribute_values = attribute.attr_value.all()
         for value in attribute_values:
             key['values'].append({'id': value.id, 'value': value.value})
-    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid})
+    brands = []
+    data = category.brand.all()
+    for brand in data:
+        brands.append({"id":brand.id, "name": brand.name})
+    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
