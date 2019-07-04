@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/backmanage/css/font-awesome.min.css">
+<script src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
+</head>
+<body class="user-select">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<table class="table"  style="table-layout: fixed" id="common">
+                <caption>通用属性（不影响价格的属性）</caption>
+				<thead>
+					<tr>
+						<th>属性</th>
+						<th>属性值</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for attribute in common_attribute %}
+                        {% for value in attribute.values %}
+                            <tr>
+                                <td>{{ attribute.name }}</td>
+                                <td>{{ value.value }}</td>
+                                <td>
+                                    <a href="javascript:void(0)" draggable="false" id="update_{{ value.id }}">修改</a>
+{#                                    todo 删除暂时屏蔽 #}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+				</tbody>
+			</table>
+			<table class="table table-striped table-hover" style="table-layout: fixed"  id="special">
+                <caption>特有属性（与价格直接挂钩的属性）</caption>
+				<thead>
+					<tr>
+						<th>属性</th>
+						<th>属性值</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for attribute in special_attribute %}
+                        {% for value in attribute.values %}
+                            <tr>
+                                <td id="key_{{ attribute.id }}">{{ attribute.name }}</td>
+                                <td id="value_{{ value.id }}">{{ value.value }}</td>
+                                <td  id="op_{{ value.id }}">
+                                    <a href="javascript:void(0)" draggable="false" onclick="update_fuc({{ value.id }})">修改</a>
+{#                                    todo 删除暂时屏蔽 #}
+{#                                    <a href="javascript:void(0)" draggable="false" id="del_{{ value.id }}">删除</a>#}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+				</tbody>
+			</table>
+            <div>
+        <div class="Operate_btn">
+            <a href="javascript:void(0)" class="btn  btn-warning" onclick="add_common()">
+                <i class="icon-edit align-top bigger-125"></i>新增属性
+            </a>
+        </div>
+    </div>
+		</div>
+	</div>
+</div>
+<script src="/static/backmanage/js/bootstrap.min.js"></script>
+<script src="/static/backmanage/js/admin-scripts.js"></script>
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新增属性</h4>
+          <span id="helpBlock" class="help-block">普通属性名称不允许重复，特殊属性值不允许重复</span>
+      </div>
+
+      <div class="modal-body">
+          <form id="form_attribute_save">
+              {% csrf_token %}
+              <input type="hidden" name="cid" value="{{ cid }}">
+              <div class="form-group">
+                    <label for="txt_parentdepartment">属性类别</label><br>
+                    <label class="radio-inline">
+                    <input type="radio" name="is_common" id="inlineRadio3" value="1" checked> 普通属性
+                    </label>
+                    <label class="radio-inline">
+                    <input type="radio" name="is_common" id="inlineRadio3" value="0"> 特殊属性
+                    </label>
+              </div>
+              <div class="form-group">
+                    <label for="txt_parentdepartment">属性名称</label>
+                    <input type="text" name="attribute_name" class="form-control" id="txt_parentdepartment" placeholder="属性名称">
+              </div>
+              <div class="form-group">
+                <label for="txt_parentdepartment">属性值</label>
+                <input type="text" name="attribute_value" class="form-control" id="txt_parentdepartment" placeholder="属性值">
+              </div>
+              <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                 <button type="button" class="btn btn-default" onclick="save_attribute()">保存</button>
+              </div>
+          </form>
+
+          <div class="danger" id="errorTips"></div>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+</body>
+</html>
+<script>
+    function update_fuc(value_id) {
+        valueObj = document.getElementById("value_"+value_id)
+        opObj = document.getElementById("op_"+value_id)
+        valueObj.innerHTML="<input type='text' name='value'>"
+        keyObj = document.getElementById("value_"+value_id).previousElementSibling
+        opObj.innerHTML='<a href="javascript:void(0)" draggable="false" onclick="commit('+value_id+')">提交</a>&nbsp;<a href="javascript:void(0)" draggable="false" onclick="cancel()">取消</a>'
+    }
+    function cancel() {
+        window.location.reload()
+    }
+    function commit(value_id){
+        valueObj = document.getElementById("value_"+value_id);
+        value_cus = $('input').val();
+        $.post("{% url 'backmanage:attribute_update'  %}",{'value_id':value_id, 'value':value_cus}, function (data) {
+            if(data['code'] == 0){
+                window.location.reload()
+            }else{
+                alert(data['msg'])
+            }
+        })
+    }
+    function add_common() {
+        $('#myModal').modal();
+    }
+    function save_attribute() {
+        $.post('{% url "backmanage:attribute_add" %}',$("#form_attribute_save").serialize(),function (data) {
+            if(data['code'] == 1){
+                document.getElementById('errorTips').innerHTML = "<h3 style='color:red'>"+data['msg']+"</h3>"
+            }else {
+                window.location.reload()
+            }
+        })
+    }
+</script>

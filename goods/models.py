@@ -8,12 +8,16 @@ class TbCategory(models.Model):
     """
     name = models.CharField(max_length=40)
     parentid = models.IntegerField()
-    status = models.SmallIntegerField()
+    status = models.SmallIntegerField(default=0)
     order = models.IntegerField()
-    create_time = models.DateTimeField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=200, default=None, null=True)
 
     class Meta:
         db_table = 'tb_category'
+
+    def __str__(self):
+        return self.name
 
 
 class TbBrand(models.Model):
@@ -37,9 +41,9 @@ class TbAttributeKey(models.Model):
     """
     name = models.CharField(max_length=30, blank=True, null=True)
     category = models.ForeignKey('TbCategory', models.DO_NOTHING, db_column='cid', blank=True, null=True, related_name='attr_key')
-    create_time = models.DateTimeField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     is_common = models.IntegerField(default=0)
-    yn = models.IntegerField(blank=True, null=True)
+    yn = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'tb_attribute_key'
@@ -52,8 +56,8 @@ class TbAttributeValue(models.Model):
         """
     value = models.CharField(max_length=30, blank=True, null=True)
     attr = models.ForeignKey('TbAttributeKey', models.DO_NOTHING, db_column='attr_key_id', blank=True, null=True, related_name='attr_value')
-    create_time = models.DateTimeField(blank=True, null=True)
-    yn = models.IntegerField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    yn = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         db_table = 'tb_attribute_value'
@@ -69,7 +73,7 @@ class TbSpu(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
     detail = models.TextField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
-    create_time = models.DateTimeField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     list_pirce = models.FloatField(default=0)
 
     class Meta:
@@ -81,6 +85,7 @@ class TbSku(models.Model):
     具体商品表：所属商品分类，价格，状态，创建时间，总数量，已售数量
     """
     spu = models.ForeignKey('TbSpu', models.DO_NOTHING, db_column='unique_code', blank=True, null=True, related_name='skus')
+    title = models.CharField(max_length=100, blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     status = models.SmallIntegerField(blank=True, null=True)
     create_time = models.DateTimeField(blank=True, null=True)
