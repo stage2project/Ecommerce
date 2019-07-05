@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
 SMSCONFIG = {
     'ACCESS_KEY_ID': "LTAIwJRC5pKyAD2r",
     'ACCESS_KEY_SECRET': "2bimJuqryCKWQjy6oHLMY6SNyZEK3T",
-    'SignName': "Ly126",  # 签名
+    'SignName': "歪秀购物",  # 签名
     'TemplateCode': "SMS_169895734"
 }
 

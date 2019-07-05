@@ -1,6 +1,8 @@
 import hashlib
 from random import randint
 
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkcore.request import CommonRequest
 from aliyunsdkcore.vendored.requests import auth
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -53,15 +55,17 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
+            sms = request.POST.get('sms')
+            if sms == request.session['sms']:
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                email = form.cleaned_data.get('email')
+                phone = form.cleaned_data.get('phone')
+                user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
+                                           email=email, phone=phone)
+                user.save()
+                return redirect(reverse('goods:index'))
 
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get('email')
-            phone = form.cleaned_data.get('phone')
-            user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
-                                       email=email, phone=phone)
-            user.save()
-            return redirect(reverse('goods:index'))
     return render(request, 'goods/register.html', context={
             'form': form
         })
@@ -71,14 +75,26 @@ def person(request):
     return render(request, 'goods/my-user.html')
 
 
-code = None
+def send_sms(request, phone, templateParam, **kwargs):
+    client = AcsClient(kwargs['ACCESS_KEY_ID'], kwargs['ACCESS_KEY_SECRET'], 'default')
+    request = CommonRequest()
+    request.set_accept_format('json')
+    request.set_domain('dysmsapi.aliyuncs.com')
+    request.set_method('POST')
+    request.set_protocol_type('https')  # https | http
+    request.set_version('2017-05-25')
+    request.set_action_name('SendSms')
+    request.add_query_param('PhoneNumbers', phone)
+    request.add_query_param('SignName', kwargs['SignName'])
+    request.add_query_param('TemplateCode', kwargs['TemplateCode'])
+    request.add_query_param('TemplateParam', templateParam)
+    response = client.do_action_with_exception(request)
+    print(str(response, encoding='utf-8'))
 
-
-def sms(request, phone):
     if request.method == 'POST':
         num = randint(100000, 999999)
-        request.session['smscode'] = str(num)
-        sms(phone, {'code': str(num), **SMSCONFIG})
+        request.session['sms'] = str(num)
+        send_sms(phone, {'code': str(num), **SMSCONFIG})
         return JsonResponse({'code': 1})
 
 

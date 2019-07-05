@@ -9,7 +9,6 @@ from Ecommerce.settings import SMSCONFIG
 def send_sms(phone, templateParam, **kwargs):
 
     client = AcsClient(kwargs['ACCESS_KEY_ID'], kwargs['ACCESS_KEY_SECRET'], 'default')
-
     request = CommonRequest()
     request.set_accept_format('json')
     request.set_domain('dysmsapi.aliyuncs.com')
@@ -21,7 +20,6 @@ def send_sms(phone, templateParam, **kwargs):
     request.add_query_param('SignName', kwargs['SignName'])
     request.add_query_param('TemplateCode', kwargs['TemplateCode'])
     request.add_query_param('TemplateParam', templateParam)
-
     response = client.do_action_with_exception(request)
     print(str(response, encoding='utf-8'))
 
