@@ -24,6 +24,7 @@ class UserRegisterForm(forms.Form):
         'required': '必须输入手机号码',
         'max_length': '电话号码不能大于11位'
     })
+    # sms = forms.CharField(max_length=6)
 
     def clean_username(self):
         res = User.objects.filter(username=self.cleaned_data.get('username')).exists()
@@ -63,4 +64,7 @@ class UserRegisterForm(forms.Form):
             if not re.match(r'^1[3456789]\d{9}$', phone):
                 raise ValidationError('手机格式不正确')
         return self.cleaned_data.get('phone')
+
+
+
 

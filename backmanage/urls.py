@@ -59,4 +59,5 @@ urlpatterns = [
     url(r'^attribute_delete/$', views.attribute_delete, name='attribute_delete'),
     url(r'^attribute_add/$', views.attribute_add, name='attribute_add'),
     url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
+
 ]

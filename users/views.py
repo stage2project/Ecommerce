@@ -1,12 +1,14 @@
 import hashlib
+from random import randint
 
 from aliyunsdkcore.vendored.requests import auth
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+from Ecommerce.settings import SMSCONFIG
 from users.models import User
 from users.forms import UserRegisterForm
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
 
 # Create your views here.
@@ -51,6 +53,7 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
+
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             email = form.cleaned_data.get('email')
@@ -59,7 +62,6 @@ def register(request):
                                        email=email, phone=phone)
             user.save()
             return redirect(reverse('goods:index'))
-
     return render(request, 'goods/register.html', context={
             'form': form
         })
@@ -68,5 +70,15 @@ def register(request):
 def person(request):
     return render(request, 'goods/my-user.html')
 
+
+code = None
+
+
+def sms(request, phone):
+    if request.method == 'POST':
+        num = randint(100000, 999999)
+        request.session['smscode'] = str(num)
+        sms(phone, {'code': str(num), **SMSCONFIG})
+        return JsonResponse({'code': 1})
 
 

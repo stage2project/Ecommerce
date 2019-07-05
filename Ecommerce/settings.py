@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '',
+        'NAME': 'Django',
         'HOST': '47.102.128.212',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
@@ -134,10 +134,10 @@ STATICFILES_DIRS = [
 
 # 阿里云短信验证码配置
 SMSCONFIG = {
-    'ACCESS_KEY_ID': "LTAIDHOYSjYcvyVt",
-    'ACCESS_KEY_SECRET': "qrEgykmXX4e6GUMFOqzuiLZ5gsUxSC",
-    'SignName': "SMS",  # 签名
-    'TemplateCode': "SMS_102315005"
+    'ACCESS_KEY_ID': "LTAIwJRC5pKyAD2r",
+    'ACCESS_KEY_SECRET': "2bimJuqryCKWQjy6oHLMY6SNyZEK3T",
+    'SignName': "Ly126",  # 签名
+    'TemplateCode': "SMS_169895734"
 }
 
 # TINYMCE_DEFAULT_CONFIG = {
