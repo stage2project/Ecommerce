@@ -1,8 +1,10 @@
 import hashlib
+import json
 from datetime import datetime
 from itertools import count
 
 from django.contrib.messages.storage import session
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -20,6 +22,7 @@ import json
 from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
 
 
 
@@ -240,7 +243,7 @@ def guestbook(request):
 def home(request):
     date = datetime.now()
     ip = request.META['REMOTE_ADDR']
-    return render(request, 'backmanage/home.html', context={'date':date,'ip':ip})
+    return render(request, 'backmanage/home.html', context={'date': date, 'ip': ip})
 
 
 def integration(request):
@@ -283,12 +286,57 @@ def payment_method(request):
     return render(request, 'backmanage/payment_method.html')
 
 
-def picture_add(request):
-    return render(request, 'backmanage/picture-add.html')
+@csrf_exempt
+def product_add(request):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
+    if request.method == 'POST':
+        spu = TbSpu()
+        spu.title = request.POST.get('title')
+        spu.detail = request.POST.get('content')
+        spu.brand = TbBrand.objects.get(pk=request.POST.get('brandid'))
+        spu.category = TbCategory.objects.get(pk=request.POST.get('s_cid'))
+        spu.unique_code = request.POST.get('unique_code')
+        spu.save()
+        file = request.FILES.get('photo')
+        return redirect(reverse('backmanage:sku_add', kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'), 'unique_code': spu.unique_code}))
+    return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
+
+
+@csrf_exempt
+def sku_add(request, bcid=None, scid=None, unique_code=None):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
+    if request.method == 'POST':
+        unique_code = request.POST.get('unique_code')
+        spu = TbSpu.objects.get(unique_code=unique_code)
+        for data in json.loads(request.POST.get('data')):
+            sku = TbSku()
+            sku.title = data['title']
+            sku.price = data["price"]
+            sku.total_amount = data['store']
+            sku.spu = TbSpu.objects.get(unique_code=unique_code)
+            sku.save()
+            attrs = data['attribute'].split(',')
+            for attr in attrs:
+                sku_attr = TbSkuAttr()
+                sku_attr.sku = sku
+                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr[0])
+                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
+                sku_attr.save()
+        return JsonResponse({'code': 0})
+    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category,
+                                                                'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
 def pruduct_list(request):
-    return render(request, 'backmanage/Products_List.html')
+    category = TbCategory.objects.values('id', 'name', 'parentid').filter(status=0).order_by('order').all()
+    sku_list = TbSku.objects.all()
+    skus = []
+    for sku in sku_list:
+        skus.append({'sku': sku, 'unique_code': sku.spu.unique_code})
+    print(skus)
+    return render(request, 'backmanage/Products_List.html', context={'categorys': category, 'sku_list': skus})
 
 
 def refund(request):
@@ -438,3 +486,32 @@ def verficode(request):
     request.session['verficode'] = vc.code
     print(request.session['verficode'])
     return HttpResponse(res)
+
+
+def attribute_get(request):
+    cid = request.GET.get('cid')
+    category = TbCategory.objects.get(pk=cid)
+    attribute_key_all = category.attr_key.all()
+    common_attribute = []
+    special_attribute = []
+    for key in attribute_key_all:
+        if key.is_common:
+            common_attribute.append({'id': key.id, "name": key.name, 'values': []})
+        else:
+            special_attribute.append({'id': key.id, "name": key.name, 'values': []})
+    for key in common_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    for key in special_attribute:
+        attribute = TbAttributeKey.objects.get(pk=key['id'])
+        attribute_values = attribute.attr_value.all()
+        for value in attribute_values:
+            key['values'].append({'id': value.id, 'value': value.value})
+    brands = []
+    data = category.brand.all()
+    for brand in data:
+        brands.append({"id":brand.id, "name": brand.name})
+    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
+

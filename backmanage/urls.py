@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^payment_configure/$', views.payment_configure, name='payment_configure'),
     url(r'^payment_details/$', views.payment_detail, name='payment_detail'),
     url(r'^payment_method/$', views.payment_method, name='payment_method'),
-    url(r'^picture_add/$', views.picture_add, name='picture_add'),
+    url(r'^product_add/$', views.product_add, name='product_add'),
     url(r'^category_add/$', views.category_add, name='category_add'),
     url(r'^category_update/(?P<cid>\d+)/$', views.category_update, name='category_update'),
     url(r'^category_update/$', views.category_update, name='category_update'),
@@ -61,4 +61,8 @@ urlpatterns = [
     url(r'^attribute_add/$', views.attribute_add, name='attribute_add'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^verficode/$', views.verficode, name='verficode'),
+    url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
+    url(r'^sku_add/(?P<bcid>\d+)/(?P<scid>\d+)/(?P<unique_code>\d+)/$', views.sku_add, name='sku_add'),
+    url(r'^sku_add/$', views.sku_add, name='sku_add'),
 ]
+

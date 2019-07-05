@@ -51,7 +51,7 @@
         </div>
         <div class="border clearfix">
             <span class="l_f">
-                <a href="picture-add.html" title="添加商品" class="btn btn-warning Order_form">
+                <a href="{% url 'backmanage:product_add' %}" title="添加商品" class="btn btn-warning Order_form">
                     <i class="icon-plus"></i>添加商品
                 </a>
                 <a href="javascript:ovid()" class="btn btn-danger">
@@ -83,28 +83,24 @@
                             </th>
                             <th width="80px">产品编号</th>
                             <th width="250px">产品名称</th>
-                            <th width="100px">原价格</th>
-                            <th width="100px">现价</th>
-                            <th width="100px">所属地区/国家</th>
+                            <th width="100px">价格</th>
                             <th width="180px">加入时间</th>
-                            <th width="80px">审核状态</th>
+                            <th width="80px">状态</th>
                             <th width="70px">状态</th>
                             <th width="200px">操作</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for sku in sku_list %}
                         <tr>
                             <td width="25px">
                                 <label><input type="checkbox" class="ace"><span class="lbl"></span></label>
                             </td>
-                            <td width="80px">45631</td>
-                            <td width="250px"><u style="cursor:pointer" class="text-primary" onclick="">小米 Max 全网通 高配版 3GB内存
-                                64GB ROM 金色 移动联通电信4G手机Y</u></td>
-                            <td width="100px">5467</td>
-                            <td width="100px">4525</td>
-                            <td width="100px">法国</td>
-                            <td width="180px">2014-6-11 11:11:42</td>
-                            <td class="text-l">通过</td>
+                            <td width="80px">{{ sku.unique_code }}</td>
+                            <td width="250px"><u style="cursor:pointer" class="text-primary" onclick="">{{ sku.sku.title }}</u></td>
+                            <td width="100px">{{ sku.sku.price }}</td>
+                            <td width="180px">{{ sku.sku.create_time }}</td>
+                            <td class="text-l">{{ sku.sku.status }}</td>
                             <td class="td-status"><span class="label label-success radius">已启用</span></td>
                             <td class="td-manage">
                                 <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
@@ -115,6 +111,7 @@
                                    class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
                             </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -130,7 +127,7 @@
             "bStateSave": true,//状态保存
             "aoColumnDefs": [
                 //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-                {"orderable": false, "aTargets": [0, 2, 3, 4, 5, 8, 9]}// 制定列不参与排序
+                {"orderable": false, "aTargets": [0, 2, 3, 6, 7]}// 制定列不参与排序
             ]
         });
         $('table th input:checkbox').on('click', function () {
@@ -209,22 +206,8 @@
         }
     };
     var zNodes = [
-        {id: 1, pId: 0, name: "商城分类列表", open: true},
-        {id: 11, pId: 1, name: "蔬菜水果"},
-        {id: 111, pId: 11, name: "蔬菜"},
-        {id: 112, pId: 11, name: "苹果"},
-        {id: 113, pId: 11, name: "大蒜"},
-        {id: 114, pId: 11, name: "白菜"},
-        {id: 115, pId: 11, name: "青菜"},
-        {id: 12, pId: 1, name: "手机数码"},
-        {id: 121, pId: 12, name: "手机 "},
-        {id: 122, pId: 12, name: "照相机 "},
-        {id: 13, pId: 1, name: "电脑配件"},
-        {id: 131, pId: 13, name: "手机 "},
-        {id: 122, pId: 13, name: "照相机 "},
-        {id: 14, pId: 1, name: "服装鞋帽"},
-        {id: 141, pId: 14, name: "手机 "},
-        {id: 42, pId: 14, name: "照相机 "},
+        {id: 0, pId: -1, name: "商城分类列表", open: true},
+
     ];
     var code;
     function showCode(str) {
@@ -234,6 +217,9 @@
     }
     $(document).ready(function () {
         var t = $("#treeDemo");
+        {% for category in categorys %}
+            zNodes.push({id: {{ category.id }}, pId:{{ category.parentid }}, name:'{{category.name}}'})
+        {% endfor %}
         t = $.fn.zTree.init(t, setting, zNodes);
         demoIframe = $("#testIframe");
         demoIframe.bind("load", loadReady);
@@ -285,7 +271,6 @@
             "color": "#4c8fbd",
             "cursor": "pointer"
         });
-        //parent.$('.Current_page').html("<a href='javascript:void(0)' name="+herf+" class='iframeurl'>" + cnames + "</a>");
         parent.layer.close(index);
     });
 </script>

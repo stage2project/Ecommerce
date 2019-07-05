@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'backmanage',
+    'tinymce'
 ]
  
 MIDDLEWARE = [
@@ -83,6 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django03',
         'HOST': '47.102.128.212',
+        # 'HOST': '127.0.0.1',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
         'PORT': 3306,
@@ -120,7 +122,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -130,3 +132,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "advanced",
+    'width': 500,
+    'height': 300
+}

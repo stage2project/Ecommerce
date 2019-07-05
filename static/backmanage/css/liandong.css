@@ -1,0 +1,33 @@
+@charset "utf-8";
+.div_content{line-height:24px;}
+.div_contentlist ul{clear:both; margin-bottom:10px;}
+li label{cursor: pointer; margin-right:25px;}
+.Father_Item0 li{float: left;}
+.Father_Item1 li{float: left;}
+.Father_Item2 li{float: left;}
+.Father_Item3 li{float: left;}
+
+/*表格样式*/
+#createTable{padding:20px 0}
+.chcBox_Width{position:relative; top:2px; margin-right:5px;}
+table#process {
+    font-size:12px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+}
+table#process th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+}
+table#process td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}

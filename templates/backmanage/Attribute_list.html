@@ -146,7 +146,6 @@
     }
     function save_attribute() {
         $.post('{% url "backmanage:attribute_add" %}',$("#form_attribute_save").serialize(),function (data) {
-            console.log(data)
             if(data['code'] == 1){
                 document.getElementById('errorTips').innerHTML = "<h3 style='color:red'>"+data['msg']+"</h3>"
             }else {
