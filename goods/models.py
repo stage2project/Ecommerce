@@ -96,17 +96,17 @@ class TbSku(models.Model):
         db_table = 'tb_sku'
 
 
-class TbSkuPics(models.Model):
+class TbSpuPics(models.Model):
     """商品展示图表
     商品id，图像路径，是否是默认图片
     """
-    sku = models.ForeignKey(TbSku, models.CASCADE, db_column='sku_id', related_name='sku_pic')
+    spu = models.ForeignKey(TbSpu, models.CASCADE, db_column='spu_id', related_name='spu_pic')
     pic = models.CharField(max_length=1000, blank=True, null=True)
-    is_default = models.IntegerField(blank=True, null=True)
-    order = models.IntegerField(blank=True, null=True)
+    is_default = models.IntegerField(blank=True, null=True, default=0)
+    order = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
-        db_table = 'tb_sku_pics'
+        db_table = 'tb_spu_pics'
 
 
 class TbSkuAttr(models.Model):
