@@ -1,6 +1,8 @@
 import hashlib
 import json
 from datetime import datetime
+from itertools import count
+
 from django.contrib.messages.storage import session
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -13,9 +15,15 @@ from django.views.decorators.csrf import csrf_exempt
 from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
+import json
+
 
 # Create your views here.
-from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku
+from backmanage.verfiCode import VerfiCode
+from goods.models import TbCategory, TbAttributeKey
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
+from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
+
 
 
 def add_competence(request):
@@ -31,7 +39,8 @@ def add_competence(request):
 
 def add_admin(request):
     admin = Admin()
-    admin.admin_name = '李晓妮'
+    admin.admin_name = 'lixiaoni'
+    admin.admin_password = hashlib.sha1(b'a123').hexdigest()
     admin.admin_age = '22'
     admin.admin_sex = False
     admin.admin_reg_date = datetime.now()
@@ -50,34 +59,25 @@ def index(request):
     # id = session['id']
     # menu_list = Admin.objects.values('menu_list').get(pk=id)
     # [1,2,3]
-    if 'uid' in request.COOKIES:
-        username = request.get_signed_cookie('username', salt=SECRET_KEY)
+    if 'uid' in request.session:
+        username = request.session.get('username')
         return render(request,'backmanage/index.html',context={'username':username})
     return render(request, 'backmanage/index.html',context={'date':date})
 
 
 def login(request):
-    print(123456)
-    print(request.method)
-    # if request.method == 'POST':
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    # password = hashlib.sha1(password.encode('utf8')).hexdigest()
-    print(username, password)
-    res = Admin.objects.filter(admin_name=username,admin_password=password).values('admin_name','id')
-    print(res)
-#     if len(res)>0:  # 登录成功
-#         request.session['uid'] = res[0]['id']
-#         request.session['username'] = res[0]['username']
-#         return redirect(reverse('backmanage:index'))
-# return render(request, 'backmanage/login.html')
-    if len(res) > 0:
-        response = HttpResponseRedirect(reverse('backmanage:index'))
-        # response.set_cookie('uid', res[0]['id'], max_age=3600)
-        # response.set_cookie('username', res[0]['username'], max_age=3600)
-        response.set_signed_cookie('uid', res[0]['id'], max_age=3600, salt=SECRET_KEY)
-        response.set_signed_cookie('username', res[0]['username'], max_age=3600, salt=SECRET_KEY)
-        return response
+    if request.is_ajax():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
+        code = request.POST.get('code')
+        verficode = request.session['verficode']
+        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
+        if len(res)>0 and verficode == code:  # 登录成功
+            request.session['uid'] = res[0]['id']
+            request.session['username'] = res[0]['admin_name']
+            return JsonResponse({'code':1,'msg':'ok'},safe=False)
+        return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
 
 
@@ -90,17 +90,42 @@ def add_brand(request):
 
 
 def admin_competence(request):
-    return render(request, 'backmanage/admin_Competence.html')
+    number = Privilege.objects.count()
+    privilege = []
+    privileges = Privilege.objects.all()
+    for p in privileges:
+        privilege.append({'privilege':p, 'users':p.admin.values('admin_name'), 'usercount':p.admin.count()})
+
+    return render(request, 'backmanage/admin_Competence.html',context={'number': number, 'privilege': privilege})
 
 
 def admin_info(request):
-    # info = Admin.objects.get(admin_name = request.session.get('username'))
-    # info.admin_sex
-    return render(request, 'backmanage/admin_info.html')
+    admin_name = request.session.get('username')
+    info = Admin.objects.get(admin_name = request.session.get('username'))
+    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'info':info})
 
 
 def administrator(request):
-    return render(request, 'backmanage/administrator.html')
+    if request.method == 'POST':
+        user_name = request.POST.get('username')
+        userpassword = request.POST.get('password')
+        user_sex = request.POST.get('form-field-radio')
+        login_ip = request.META['REMOTE_ADDR']
+        user_tel = request.POST.get('user-tel')
+        email = request.POST.get('email')
+        user_qq = request.POST.get('user-qq')
+        privilege = Privilege.objects.filter(id = request.POST.get( 'admin-role'))[0]
+        reg_date = datetime.now()
+        admin = Admin(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=privilege)
+        admin.save()
+        return JsonResponse({'code':1,'msg':'ok'},safe=False)
+    admin_total = Admin.objects.count()
+    admin_super = Admin.objects.filter(privilege=13).count()
+    admin_commom = Admin.objects.filter(privilege=14).count()
+    admin_editor = Admin.objects.filter(privilege=15).count()
+    admins = Admin.objects.all()
+    privileges = Privilege.objects.all()
+    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admin_super':admin_super,'admin_commom':admin_commom,'admin_editor':admin_editor,'admins':admins,'privileges':privileges})
 
 
 def ads_list(request):
@@ -191,7 +216,16 @@ def category_update(request, cid=None):
 
 
 def competence(request):
-    return render(request, 'backmanage/Competence.html')
+    print('zxcvbnm')
+    if request.method == 'POST':
+        add_prv = Privilege()
+        add_prv.privilege_name = request.POST.get('privilege_name')
+        add_prv.describe = request.POST.get('describe')
+
+        # add_prv.menu_list = request.POST.get()
+    admins = Admin.objects.all()
+    privileges = Privilege.objects.all()
+    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges})
 
 
 def cover_management(request):
@@ -251,16 +285,48 @@ def payment_detail(request):
 def payment_method(request):
     return render(request, 'backmanage/payment_method.html')
 
+
 @csrf_exempt
 def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
-    if request.method == 'POST' and request.is_ajax():
-        data = json.loads(request.POST.get('data'))
-        for sku in data:
-            print(sku)
-            print(sku['price'], sku['store'], sku['attribute'])
+    if request.method == 'POST':
+        spu = TbSpu()
+        spu.title = request.POST.get('title')
+        spu.detail = request.POST.get('content')
+        spu.brand = TbBrand.objects.get(pk=request.POST.get('brandid'))
+        spu.category = TbCategory.objects.get(pk=request.POST.get('s_cid'))
+        spu.unique_code = request.POST.get('unique_code')
+        spu.save()
+        file = request.FILES.get('photo')
+        return redirect(reverse('backmanage:sku_add', kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'), 'unique_code': spu.unique_code}))
     return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
+
+
+@csrf_exempt
+def sku_add(request, bcid=None, scid=None, unique_code=None):
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
+    if request.method == 'POST':
+        unique_code = request.POST.get('unique_code')
+        spu = TbSpu.objects.get(unique_code=unique_code)
+        for data in json.loads(request.POST.get('data')):
+            sku = TbSku()
+            sku.title = data['title']
+            sku.price = data["price"]
+            sku.total_amount = data['store']
+            sku.spu = TbSpu.objects.get(unique_code=unique_code)
+            sku.save()
+            attrs = data['attribute'].split(',')
+            for attr in attrs:
+                sku_attr = TbSkuAttr()
+                sku_attr.sku = sku
+                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr[0])
+                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
+                sku_attr.save()
+        return JsonResponse({'code': 0})
+    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category,
+                                                                'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
 def pruduct_list(request):
@@ -409,6 +475,19 @@ def attribute_add(request):
     return JsonResponse({'code': 1, 'msg': '请求方式错误'})
 
 
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('backmanage:login'))
+
+
+def verficode(request):
+    vc = VerfiCode()
+    res = vc.output()
+    request.session['verficode'] = vc.code
+    print(request.session['verficode'])
+    return HttpResponse(res)
+
+
 def attribute_get(request):
     cid = request.GET.get('cid')
     category = TbCategory.objects.get(pk=cid)
@@ -430,4 +509,9 @@ def attribute_get(request):
         attribute_values = attribute.attr_value.all()
         for value in attribute_values:
             key['values'].append({'id': value.id, 'value': value.value})
-    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid})
+    brands = []
+    data = category.brand.all()
+    for brand in data:
+        brands.append({"id":brand.id, "name": brand.name})
+    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
+

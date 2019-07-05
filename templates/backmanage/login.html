@@ -54,8 +54,8 @@
                         </div>
                         <form class="" method="post" action="{% url 'backmanage:login' %}">
                             <fieldset>
-                                {% csrf_token %}
                                 <ul>
+                                    {% csrf_token %}
                                     <li class="frame_style form_error">
                                         <label class="user_icon"></label>
                                         <input name="username" type="text" id="username"/>
@@ -63,15 +63,16 @@
                                     </li>
                                     <li class="frame_style form_error">
                                         <label class="password_icon"></label>
-                                        <input name="password" type="password" id="userpwd"/>
+                                        <input name="password" type="password" id="password"/>
                                         <i>密码</i>
                                     </li>
                                     <li class="frame_style form_error">
                                         <label class="Codes_icon"></label>
-                                        <input name="验证码" type="text" id="Codes_text"/>
+                                        <input name="code" type="text" id="Codes_text"/>
                                         <i>验证码</i>
-                                        <div class="Codes_region"></div>
-{#                                        <img src="{% url 'backmanage.verfiCode' %}" alt="" onclick="this.src='/verficode?'+Math.random()"> <a href="javascript:;" onclick="this.src='/verficode?'+Math.random()">看不清？</a>#}
+                                        <div class="Codes_region">
+                                            <img src="{% url 'backmanage:verficode' %}" alt="" onclick="this.src='{% url "backmanage:verficode" %}?'+Math.random()"><a href="javascript:;" onclick="this.src='{% url "backmanage:verficode" %}?'+Math.random()"></a>
+                                        </div>
                                     </li>
                                 </ul>
                                 <div class="space"></div>
@@ -80,8 +81,7 @@
                                         <input type="checkbox" class="ace">
                                         <span class="lbl">保存密码</span>
                                     </label>
-                                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary" id="login_btn">
-                                        <i class="icon-key"></i>登陆
+                                    <button type="button" class="width-35 pull-right btn btn-sm btn-primary" id="login_btn"><i class="icon-key"></i>登陆
                                     </button>
                                 </div>
                                 <div class="space-4"></div>
@@ -122,12 +122,28 @@
             return false;
         }
         else {
-            layer.alert('登陆成功！', {
-                title: '提示框',
-                icon: 1,
-            });
-            location.href = "{% url 'backmanage:index' %}";
-            layer.close(index);
+            console.log($('input').serialize())
+            username = $('#username').val()
+            password = $('#password').val()
+            $.post('{% url "backmanage:login" %}', $('input').serialize(),function (data){
+                if(data['code']){
+                        layer.alert('登陆成功！', {
+                        title: '提示框',
+                        icon: 1,
+                        });
+                        location.href = "{% url 'backmanage:index' %}";
+                        layer.close(index);
+                }else{
+                    layer.alert('登陆失败！', {
+                        title: '提示框',
+                        icon: 1,
+                        });
+                        location.href = "{% url 'backmanage:login' %}";
+                        layer.close(index);
+                }
+
+            })
+
         }
     });
     $(document).ready(function () {

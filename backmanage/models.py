@@ -27,13 +27,17 @@ class Advertisement(models.Model):
 
 
 class Admin(models.Model):                                               # admin 管理员表建模
-    admin_name = models.CharField(max_length=255)                        # 管理员姓名
-    admin_password = models.CharField(max_length=128, default='a123')    # 管理员密码
+    admin_name = models.CharField(max_length=255,unique=True)            # 管理员姓名
+    admin_password = models.CharField(max_length=128)    # 管理员密码
     admin_sex = models.BooleanField(default=True)
     admin_age = models.IntegerField()
     admin_reg_date = models.DateTimeField(max_length=32)                 # 注册时间
     admin_login_ip = models.CharField(max_length=32)                     # 登录ip
     admin_login_addr = models.CharField(max_length=32)                   # 登陆地点
+    admin_age = models.IntegerField(default=0)
+    admin_reg_date = models.DateTimeField(max_length=32)                 #注册时间
+    admin_login_ip = models.CharField(max_length=32)                     #登录ip
+    admin_login_addr = models.CharField(max_length=32)                   #登陆地点
     status = models.BooleanField(default=True)
     admin_email = models.CharField(max_length=255)                       # 管理员电子邮箱
     admin_phone = models.CharField(max_length=11)                        # 管理员电话号码

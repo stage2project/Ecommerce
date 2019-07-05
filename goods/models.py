@@ -72,7 +72,7 @@ class TbSpu(models.Model):
     brand = models.ForeignKey('TbBrand', models.CASCADE, db_column='bid', related_name='spus')
     title = models.CharField(max_length=100, blank=True, null=True)
     detail = models.TextField(blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True, default=0)
     create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     list_pirce = models.FloatField(default=0)
 
@@ -87,8 +87,8 @@ class TbSku(models.Model):
     spu = models.ForeignKey('TbSpu', models.DO_NOTHING, db_column='unique_code', blank=True, null=True, related_name='skus')
     title = models.CharField(max_length=100, blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
-    status = models.SmallIntegerField(blank=True, null=True)
-    create_time = models.DateTimeField(blank=True, null=True)
+    status = models.SmallIntegerField(blank=True, null=True, default=0)
+    create_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     total_amount = models.IntegerField(blank=True, null=True)
     sold_amount = models.IntegerField(blank=True, null=True)
 

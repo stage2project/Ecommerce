@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'backmanage',
+    'tinymce'
 ]
  
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ STATICFILES_DIRS = [
 ]
 
 
+
 # 阿里云短信验证码配置
 SMSCONFIG = {
     'ACCESS_KEY_ID': "LTAIwJRC5pKyAD2r",
@@ -147,4 +149,9 @@ SMSCONFIG = {
 # }
 
 
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "advanced",
+    'width': 500,
+    'height': 300
+}
 

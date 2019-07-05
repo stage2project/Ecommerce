@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^brand_manage/$', views.brand_manage, name='brand_manage'),
     url(r'^category_manage/$', views.category_manage, name='category_manage'),
     url(r'^competence/$', views.competence, name='competence'),
+    # url(r'^competence/(\d+)/$', views.competence, name='competence'),
     url(r'^cover_management/$', views.cover_management, name='cover_management'),
     url(r'^feedback/$', views.feedback, name='feedback'),
     url(r'^guestbook/$', views.guestbook, name='guestbook'),
@@ -58,6 +59,11 @@ urlpatterns = [
     url(r'^attribute_update/$', views.attribute_update, name='attribute_update'),
     url(r'^attribute_delete/$', views.attribute_delete, name='attribute_delete'),
     url(r'^attribute_add/$', views.attribute_add, name='attribute_add'),
+    url(r'^logout/$', views.logout, name='logout'),
+    url(r'^verficode/$', views.verficode, name='verficode'),
     url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
+    url(r'^sku_add/(?P<bcid>\d+)/(?P<scid>\d+)/(?P<unique_code>\d+)/$', views.sku_add, name='sku_add'),
+    url(r'^sku_add/$', views.sku_add, name='sku_add'),
 
 ]
+

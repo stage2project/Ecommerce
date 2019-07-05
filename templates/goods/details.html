@@ -47,11 +47,13 @@
          		$(".attrdiv a[name='"+name+"']").removeClass("cur");
                 $(".attrdiv a[value='"+value+"']").addClass("cur");
                 items = $(".attrdiv a[class='cur']")
+                temp = window.location.href.split('/')
+                spuid = temp[temp.length-1]
                 post_json = {}
                 for(i = 0; i< items.length; i++ ){
                     post_json[$(items[i]).attr('name')] = $(items[i]).attr('value')
                 }
-                $.post('{% url "goods:get_price"%}',post_json, function (data) {
+                $.post('/get_price/'+spuid,post_json, function (data) {
                     document.getElementById('price').innerHTML ='<strong>'+data['price']+'</strong>';
                 })
          	};
