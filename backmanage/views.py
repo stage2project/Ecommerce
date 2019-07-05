@@ -67,11 +67,9 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
-        print(username,password_hash)
         code = request.POST.get('code')
         verficode = request.session['verficode']
         res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
-        print(res)
         if len(res)>0 and verficode == code:  # 登录成功
             request.session['uid'] = res[0]['id']
             request.session['username'] = res[0]['admin_name']
@@ -94,6 +92,7 @@ def admin_competence(request):
     privileges = Privilege.objects.all()
     for p in privileges:
         privilege.append({'privilege':p, 'users':p.admin.values('admin_name'), 'usercount':p.admin.count()})
+
     return render(request, 'backmanage/admin_Competence.html',context={'number': number, 'privilege': privilege})
 
 
@@ -214,7 +213,16 @@ def category_update(request, cid=None):
 
 
 def competence(request):
-    return render(request, 'backmanage/Competence.html')
+    print('zxcvbnm')
+    if request.method == 'POST':
+        add_prv = Privilege()
+        add_prv.privilege_name = request.POST.get('privilege_name')
+        add_prv.describe = request.POST.get('describe')
+
+        # add_prv.menu_list = request.POST.get()
+    admins = Admin.objects.all()
+    privileges = Privilege.objects.all()
+    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges})
 
 
 def cover_management(request):

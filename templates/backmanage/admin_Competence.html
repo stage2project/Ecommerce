@@ -73,7 +73,7 @@
                         </td>
                         <td>{{ p.privilege.describe}}</td>
                         <td>
-                            <a title="编辑" onclick="Competence_modify('560')" href="javascript:;" class="btn btn-xs btn-info">
+                            <a title="编辑" onclick="Competence_modify('{{ p.privilege.id }}')" href="javascript:;" class="btn btn-xs btn-info">
                                 <i class="fa fa-edit bigger-120"></i>
                             </a>
                             <a title="删除" href="javascript:;" onclick="Competence_del(this,{{ p.privilege.id }})" class="btn btn-xs btn-warning">
@@ -146,6 +146,7 @@
     /*修改权限*/
     function Competence_modify(id) {
         window.location.href = "{% url 'backmanage:competence' %}?=" + id;
+
     };
     /*字数限制*/
     function checkLength(which) {

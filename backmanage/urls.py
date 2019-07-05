@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^brand_manage/$', views.brand_manage, name='brand_manage'),
     url(r'^category_manage/$', views.category_manage, name='category_manage'),
     url(r'^competence/$', views.competence, name='competence'),
+    # url(r'^competence/(\d+)/$', views.competence, name='competence'),
     url(r'^cover_management/$', views.cover_management, name='cover_management'),
     url(r'^feedback/$', views.feedback, name='feedback'),
     url(r'^guestbook/$', views.guestbook, name='guestbook'),
