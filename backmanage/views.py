@@ -114,7 +114,7 @@ def administrator(request):
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        privilege = Privilege.objects.filter(id = request.POST.get( 'admin-role'))[0]
+        privilege = Privilege.objects.filter(id = request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
         admin = Admin(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=privilege)
         admin.save()
@@ -217,12 +217,18 @@ def category_update(request, cid=None):
 
 def competence(request):
     print('zxcvbnm')
+    print(request.method)
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
         add_prv.describe = request.POST.get('describe')
-
-        # add_prv.menu_list = request.POST.get()
+        add_prv.menu_list = request.POST.getlist('user-Character-0-0')
+        add_prv.save()
+        user = request.POST.getlist('username')
+        print(user)
+        for u in user:
+            Admin.objects.filter(id=u).update(privileges=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name')))
+        return redirect(reverse('backmanage:admin_competence'))
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
     return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges})
