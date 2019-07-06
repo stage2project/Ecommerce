@@ -84,7 +84,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django01',
         'HOST': '47.102.128.212',
-        # 'HOST': '127.0.0.1',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
         'PORT': 3306,
@@ -133,13 +132,29 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+
+
+# 阿里云短信验证码配置
+SMSCONFIG = {
+    'ACCESS_KEY_ID': "LTAIwJRC5pKyAD2r",
+    'ACCESS_KEY_SECRET': "2bimJuqryCKWQjy6oHLMY6SNyZEK3T",
+    'SignName': "歪秀购物",  # 签名
+    'TemplateCode': "SMS_169895734"
+}
+
+# TINYMCE_DEFAULT_CONFIG = {
+#     'theme': 'advanced',
+#     'width': 500,
+#     'height': 300
+# }
+
+
 TINYMCE_DEFAULT_CONFIG = {
     'theme': "advanced",
     'width': 500,
     'height': 300
 }
 
-#文件上传路径|
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
 # 允许上传的文件后缀
 ALLOWED_FILEEXTS = ['.png', '.jpeg', '.jpg', '.gif', '.bmp']

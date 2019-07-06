@@ -64,5 +64,6 @@ urlpatterns = [
     url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
     url(r'^sku_add/(?P<bcid>\d+)/(?P<scid>\d+)/(?P<unique_code>\d+)/$', views.sku_add, name='sku_add'),
     url(r'^sku_add/$', views.sku_add, name='sku_add'),
+
 ]
 
