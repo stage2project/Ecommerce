@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django03',
+        'NAME': 'django01',
         'HOST': '47.102.128.212',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
@@ -137,3 +137,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'width': 500,
     'height': 300
 }
+
+#文件上传路径|
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
+# 允许上传的文件后缀
+ALLOWED_FILEEXTS = ['.png', '.jpeg', '.jpg', '.gif', '.bmp']

@@ -27,10 +27,10 @@
                     {% for attribute in common_attribute %}
                         {% for value in attribute.values %}
                             <tr>
-                                <td>{{ attribute.name }}</td>
-                                <td>{{ value.value }}</td>
-                                <td>
-                                    <a href="javascript:void(0)" draggable="false" id="update_{{ value.id }}">修改</a>
+                                <td id="key_{{ attribute.id }}">{{ attribute.name }}</td>
+                                <td id="value_{{ value.id }}">{{ value.value }}</td>
+                                <td  id="op_{{ value.id }}">
+                                    <a href="javascript:void(0)" draggable="false" id="update_{{ value.id }}" onclick="update_fuc({{ value.id }})">修改</a>
 {#                                    todo 删除暂时屏蔽 #}
                                 </td>
                             </tr>

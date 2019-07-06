@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import TbSpu, TbSku, TbSkuPics, TbSkuAttr
+from .models import TbSpu, TbSku, TbSpuPics, TbSkuAttr
 
 
 # Create your views here.
