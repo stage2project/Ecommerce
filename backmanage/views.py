@@ -103,6 +103,13 @@ def admin_competence(request):
 
 
 def admin_info(request):
+    if request.method == 'POST':
+        oldpwd = request.POST.get('oldpwd')
+        newpwd = request.POST.get('newpwd')
+        confirm_newpwd = request.POST.get('confirm_newpwd')
+        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password = newpwd)
+        print(oldpwd,newpwd,confirm_newpwd,res)
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name = request.session.get('username'))
     return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'info':info})
@@ -218,9 +225,7 @@ def category_update(request, cid=None):
     return render(request, 'backmanage/Category_update.html', context={"category": category, 'all_big_category': all_big_category})
 
 
-def competence(request):
-    print('zxcvbnm')
-    print(request.method)
+def competence(request,index=0):
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
@@ -228,13 +233,15 @@ def competence(request):
         add_prv.menu_list = request.POST.getlist('user-Character-0-0')
         add_prv.save()
         user = request.POST.getlist('username')
-        print(user)
         for u in user:
-            Admin.objects.filter(id=u).update(privileges=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name')))
+            Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
         return redirect(reverse('backmanage:admin_competence'))
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges})
+    # for pr in privileges:
+    #     index = pr.id
+    #     print(index,pr.privilege_name)
+    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges,})
 
 
 def cover_management(request):

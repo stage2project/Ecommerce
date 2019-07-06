@@ -54,20 +54,6 @@
                                 {{ '女' }}
                             {% endif %}
                         </span>
-{#                        <div class="add_sex">#}
-{#                            <label>#}
-{#                                <input name="form-field-radio" type="radio" class="ace" checked="checked">#}
-{#                                <span class="lbl">保密</span>#}
-{#                            </label>&nbsp;&nbsp;#}
-{#                            <label>#}
-{#                                <input name="form-field-radio" type="radio" class="ace">#}
-{#                                <span class="lbl">男</span>#}
-{#                            </label>&nbsp;&nbsp;#}
-{#                            <label>#}
-{#                                <input name="form-field-radio" type="radio" class="ace">#}
-{#                                <span class="lbl">女</span>#}
-{#                            </label>#}
-{#                        </div>#}
                     </div>
                 </div>
                 <div class="form-group">
@@ -169,20 +155,23 @@
 </div>
 <!--修改密码样式-->
 <div class="change_Pass_style" id="change_Pass">
-    <ul class="xg_style">
-        <li>
-            <label class="label_name">原&nbsp;&nbsp;密&nbsp;码</label>
-            <input name="原密码" type="password" class="" id="password">
-        </li>
-        <li>
-            <label class="label_name">新&nbsp;&nbsp;密&nbsp;码</label>
-            <input name="新密码" type="password" class="" id="Nes_pas">
-        </li>
-        <li>
-            <label class="label_name">确认密码</label>
-            <input name="再次确认密码" type="password" class="" id="c_mew_pas">
-        </li>
-    </ul>
+    <form action="">
+        {% csrf_token %}
+        <ul class="xg_style">
+            <li>
+                <label class="label_name">原&nbsp;&nbsp;密&nbsp;码</label>
+                <input name="oldpwd" type="password" class="" id="password">
+            </li>
+            <li>
+                <label class="label_name">新&nbsp;&nbsp;密&nbsp;码</label>
+                <input name="newpwd" type="password" class="" id="Nes_pas">
+            </li>
+            <li>
+                <label class="label_name">确认密码</label>
+                <input name="confirm_newpwd" type="password" class="" id="c_mew_pas">
+            </li>
+        </ul>
+    </form>
 </div>
 </body>
 </html>
@@ -272,11 +261,13 @@
                     return false;
                 }
                 else {
-                    layer.alert('修改成功！', {
-                        title: '提示框',
-                        icon: 1,
-                    });
-                    layer.close(index);
+                    $.post('{% url "backmanage:admin_info" %}', $('form').serialize()),function() {
+                        layer.alert('修改成功！', {
+                            title: '提示框',
+                            icon: 1,
+                        });
+                        layer.close(index);
+                    }
                 }
             }
         });
