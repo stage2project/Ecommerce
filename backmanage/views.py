@@ -23,7 +23,7 @@ from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
-
+from users.models import User
 
 
 def add_competence(request):
@@ -61,8 +61,8 @@ def index(request):
     # [1,2,3]
     if 'uid' in request.session:
         username = request.session.get('username')
-        return render(request,'backmanage/index.html',context={'username':username})
-    return render(request, 'backmanage/index.html',context={'date':date})
+        return render(request, 'backmanage/index.html', context={'username': username})
+    return render(request, 'backmanage/index.html', context={'date': date})
 
 
 def login(request):
@@ -73,10 +73,10 @@ def login(request):
         code = request.POST.get('code')
         verficode = request.session['verficode']
         res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
-        if len(res)>0 and verficode == code:  # 登录成功
+        if len(res) > 0 and verficode == code:  # 登录成功
             request.session['uid'] = res[0]['id']
             request.session['username'] = res[0]['admin_name']
-            return JsonResponse({'code':1,'msg':'ok'},safe=False)
+            return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
         return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
 
@@ -94,15 +94,15 @@ def admin_competence(request):
     privilege = []
     privileges = Privilege.objects.all()
     for p in privileges:
-        privilege.append({'privilege':p, 'users':p.admin.values('admin_name'), 'usercount':p.admin.count()})
+        privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
 
-    return render(request, 'backmanage/admin_Competence.html',context={'number': number, 'privilege': privilege})
+    return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
 def admin_info(request):
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name = request.session.get('username'))
-    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'info':info})
+    return render(request, 'backmanage/admin_info.html', context={'admin_name':admin_name,'info':info})
 
 
 def administrator(request):
@@ -114,18 +114,18 @@ def administrator(request):
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        privilege = Privilege.objects.filter(id = request.POST.get( 'admin-role'))[0]
+        privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
-        admin = Admin(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=privilege)
+        admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
         admin.save()
-        return JsonResponse({'code':1,'msg':'ok'},safe=False)
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_total = Admin.objects.count()
     admin_super = Admin.objects.filter(privilege=13).count()
     admin_commom = Admin.objects.filter(privilege=14).count()
     admin_editor = Admin.objects.filter(privilege=15).count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admin_super':admin_super,'admin_commom':admin_commom,'admin_editor':admin_editor,'admins':admins,'privileges':privileges})
+    return render(request, 'backmanage/administrator.html', context={'admin_total': admin_total, 'admin_super': admin_super, 'admin_commom': admin_commom, 'admin_editor': admin_editor, 'admins': admins, 'privileges': privileges})
 
 
 def ads_list(request):
@@ -380,7 +380,9 @@ def transaction(request):
 
 
 def user_list(request):
-    return render(request, 'backmanage/user_list.html')
+
+    user = User.objects.all()
+    return render(request, 'backmanage/user_list.html', context={'user': user})
 
 
 def attribute_list(request, cid):
