@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html>
  <head>
@@ -6,12 +7,17 @@
 	<meta name="Author" content="">
 	<meta name="Keywords" content="">
 	<meta name="Description" content="">
-	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE"> 
+	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
 	<meta name="renderer" content="webkit">
 	<title>歪秀购物</title>
-    <link rel="shortcut icon" type="image/x-icon" href="theme/icon/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="theme/css/base.css">
-	<link rel="stylesheet" type="text/css" href="theme/css/home.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/goods/icon/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="/static/goods/css/base.css">
+	<link rel="stylesheet" type="text/css" href="/static/goods/css/home.css">
+     <style>
+         .cur {
+             border:1px solid #c40000; padding:4px 7px;
+         }
+     </style>
  </head>
  <body>
 
@@ -33,7 +39,7 @@
         </div>
     </div>
     <div class="container clearfix">
-        <div class="header-logo fl"><h1><a href="#"><img src="theme/icon/logo.png"></a> </h1></div>
+        <div class="header-logo fl"><h1><a href="#"><img src="/static/goods/icon/logo.png"></a> </h1></div>
         <div class="head-form fl">
             <form class="clearfix">
                 <input type="text" class="search-text" accesskey="" id="key" autocomplete="off"  placeholder="手机模型">
@@ -49,7 +55,7 @@
                 <a href="#">服装城</a>
             </div>
         </div>
-        <div class="header-cart fr"><a href="#"><img src="theme/icon/car.png"></a> <i class="head-amount">99</i></div>
+        <div class="header-cart fr"><a href="#"><img src="/static/goods/icon/car.png"></a> <i class="head-amount">99</i></div>
         <div class="head-mountain"></div>
     </div>
     <div class="yHeader">
@@ -73,75 +79,45 @@
 </header>
 <!-- header End -->
 
-<div class="containers"><div class="pc-nav-item"><a href="#">全部分类 </a> &gt; <a href="#">黑糖</a></div></div>
+<div class="containers"><div class="pc-nav-item"><a href="#">全部分类 </a> &gt; <a href="{% url 'goods:list_page'  category.id  %}">{{ category.name }}</a></div></div>
 
 <div class="containers clearfix">
     <div class="fl">
         <div id="firstpane" class="menu_list">
             <h2>所有类目</h2>
-            <h3 class="menu_head current">进口食品</h3>
-            <div style="display:block" class="menu_body">
-                <a href="#">冲调饮品</a>
-                <a href="#">糖果/巧克力</a>
-            </div>
-            <h3 class="menu_head">营养健康</h3>
-            <div style="display:none" class="menu_body">
-                <a href="#">营养健康</a>
-                <a href="#">营养健康</a>
-                <a href="#">营养健康</a>
-            </div>
+            {% for big_category in all_big_category %}
+                <h3 class="menu_head current">{{ big_category.name }}</h3>
+                <div style="display:block" class="menu_body">
+                    {% for small_category in all_small_category %}
+                        {% if small_category.parentid == big_category.id %}
+                            <a href="{% url 'goods:list_page'  small_category.id  %}">{{ small_category.name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
 
-            <h3 class="menu_head">粮油调味</h3>
-            <div style="display:none" class="menu_body">
-                <a href="#">粮油调味</a>
-                <a href="#">粮油调味</a>
-                <a href="#">粮油调味</a>
-                <a href="#">粮油调味</a>
-            </div>
         </div>
     </div>
     <div class="pc-info fr">
         <div class="pc-term">
             <dl class="pc-term-dl clearfix">
                 <dt>品牌：</dt>
-                <dd><a href="#">三星（SAMSUNG）</a></dd>
-                <dd><a href="#">华为（HUAWEI）</a></dd>
-                <dd><a href="#">联想（lenovo）</a></dd>
-                <dd><a href="#">索尼（SONY）</a></dd>
-                <dd><a href="#">飞利浦（Philips）</a></dd>
-                <dd><a href="#">Apple</a></dd>
-                <dd><a href="#">小米（MI）</a></dd>
-                <dd><a href="#">HTC</a></dd>
-                <dd><a href="#">酷派（Coolpad）</a></dd>
-                <dd><a href="#">诺基亚（NOKIA）</a></dd>
-                <dd><a href="#">中兴（ZTE）</a></dd>
+                {% for brand in all_brand %}
+                    <dd><a href="javascript:void(0);" name="brand" value="{{ brand.id }}" onclick="attrdiv_click('brand', {{ brand.id }})">{{ brand.name }}</a></dd>
+                {% endfor %}
             </dl>
-            <dl class="pc-term-dl clearfix">
-                <dt>尺寸：</dt>
-                <dd><a href="#">4.5英寸</a></dd>
-                <dd><a href="#">4.7英寸</a></dd>
-                <dd><a href="#">5.0英寸</a></dd>
-                <dd><a href="#">5.5英寸</a></dd>
-                <dd><a href="#">5.3英寸</a></dd>
-                <dd><a href="#">7.0英寸</a></dd>
-                <dd><a href="#">6.0英寸</a></dd>
-                <dd><a href="#">3.5英寸</a></dd>
-            </dl>
-            <dl class="pc-term-dl clearfix">
-                <dt>系统：</dt>
-                <dd><a href="#">iOS</a></dd>
-                <dd><a href="#">Android/安卓</a></dd>
-                <dd><a href="#">Windows Phone</a></dd>
-                <dd><a href="#">无操作系统</a></dd>
-                <dd><a href="#">YunOS</a></dd>
-                <dd><a href="#">FLyme</a></dd>
-                <dd><a href="#">MIUI</a></dd>
-                <dd><a href="#">MTK</a></dd>
-                <dd><a href="#">iOS</a></dd>
-            </dl>
-            <div>
-                <a href="#">更多</a>
-            </div>
+            {% for attr in attr_dict %}
+                <dl class="pc-term-dl clearfix">
+                    <dt>{{ attr }}：</dt>
+                    {% for attr_value in  attr_dict.values %}
+                        {% for values in attr_value %}
+                            {% if values.attr.name == attr %}
+                                <dd><a href="javascript:void(0);" name="{{ values.attr.id }}" value="{{ values.id }}" onclick="attrdiv_click({{ values.attr.id }}, {{ values.id }})">{{ values.value }}</a></dd>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </dl>
+            {% endfor %}
 
             <div class="pc-line"></div>
             <div class="pc-search clearfix">
@@ -177,66 +153,20 @@
         </div>
         <div class="time-border-list pc-search-list clearfix">
             <ul class="clearfix">
-                <li>
-                    <a href="#"> <img src="theme/img/pd/hot2.png"></a>
-                    <p class="head-name"><a href="#">小米 4 2GB内存版 白色 移动4G手机不锈钢金属边框</a> </p>
-                    <p><span class="price">￥138.00</span></p>
-                    <p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>
-                    <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
-                </li>
-                <li>
-                    <a href="#"> <img src="theme/img/pd/hot2.png"></a>
-                    <p class="head-name"><a href="#">小米 4 2GB内存版 白色 移动4G手机不锈钢金属边框</a> </p>
-                    <p><span class="price">￥138.00</span></p>
-                    <p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>
-                    <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
-                </li>
-                <li>
-                    <a href="#"> <img src="theme/img/pd/hot2.png"></a>
-                    <p class="head-name"><a href="#">小米 4 2GB内存版 白色 移动4G手机不锈钢金属边框</a> </p>
-                    <p><span class="price">￥138.00</span></p>
-                    <p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>
-                    <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
-                </li>
-                <li>
-                    <a href="#"> <img src="theme/img/pd/hot2.png"></a>
-                    <p class="head-name"><a href="#">小米 4 2GB内存版 白色 移动4G手机不锈钢金属边框</a> </p>
-                    <p><span class="price">￥138.00</span></p>
-                    <p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>
-                    <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
-                </li>
-
+                {% for spu in all_spu %}
+                     <li>
+                     {% for spu_pic in all_pic %}
+                         {% if spu_pic.spu == spu %}
+                            <a href="{% url 'goods:details' spu.unique_code %}"> <img src="{% static spu_pic.pic %}"></a>
+                         {% endif %}
+                     {% endfor %}
+                        <p class="head-name"><a href="{% url 'goods:details' spu.unique_code %}">{{ spu.title }}</a> </p>
+                        <p><span class="price">{{ spu.list_pirce }}</span></p>
+                        <p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>
+                        <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>
+                    </li>
+                {% endfor %}
             </ul>
-            <div class="clearfix">
-                <div class="fr pc-search-g">
-                    <a class="fl pc-search-f" href="#">上一页</a>
-                    <a href="#" class="current">1</a>
-                    <a href="javascript:;">2</a>
-                    <a href="javascript:;">3</a>
-                    <a href="javascript:;">4</a>
-                    <a href="javascript:;">5</a>
-                    <a href="javascript:;">6</a>
-                    <a href="javascript:;">7</a>
-                    <span class="pc-search-di">…</span>
-                    <a title="使用方向键右键也可翻到下一页哦！" class="pc-search-n" href="javascript:;" onClick="SEARCH.page(3, true)">下一页</a>
-                    <span class="pc-search-y">
-                        <em>  共20页    到第</em>
-                        <input type="text" class="pc-search-j" placeholder="1">
-                        <em>页</em>
-                        <a href="#" class="confirm">确定</a>
-                    </span>
-
-                </div>
-            </div>
-        </div>
-        <div class="pc-search-re clearfix">
-            <dl>
-                <dt>重新搜索</dt>
-                <dd>
-                    <input type="text" value="三星"  id="key-re-search" class="text">
-                    <input type="button" value="搜&nbsp;索" id="btn-re-search" class="button">
-                </dd>
-            </dl>
         </div>
     </div>
 </div>
@@ -347,3 +277,34 @@
 <!-- footer End -->
 </body>
 </html>
+<script type="text/javascript" src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
+<script>
+    function attrdiv_click(name, value){
+
+        $(".pc-term-dl a[name='"+name+"']").removeClass("cur");
+        $(".pc-term-dl a[name='"+name+"'][value='"+value+"']").addClass("cur");
+        items = $(".pc-term-dl a[class='cur']")
+        console.log(items)
+
+        temp = window.location.href.split('/')
+        cid = temp[temp.length-1]
+        post_json = {}
+        for(i = 0; i< items.length; i++ ){
+            post_json[$(items[i]).attr('name')] = $(items[i]).attr('value')
+        }
+        $.post('/spu_filter/'+cid,post_json, function (data) {
+            console.log(data)
+            $('ul[class="clearfix"]').empty()
+            for(i=0;i<data['spu_list'].length;i++){
+                inner_html = '<li><a href="/details/'+data['spu_list'][i].unique_code+'"> <img src="/static/'+data['spu_list'][i].spu_pic+'"></a>\n' +
+                    '<p class="head-name"><a href="/details/'+data['spu_list'][i].unique_code+'">'+data['spu_list'][i].spu_title+'</a> </p>\n' +
+                    '<p><span class="price">'+data['spu_list'][i].list_price+'</span></p>\n' +
+                    '<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>\n' +
+                    ' <p class="clearfix"><span class="label-default fl">抢购</span> <a href="#" class="fr pc-search-c">收藏</a> </p>\n' +
+                    '</li>'
+                $('ul[class="clearfix"]').append(inner_html)
+            }
+
+        })
+        };
+</script>

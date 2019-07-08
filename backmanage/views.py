@@ -28,7 +28,6 @@ from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
 
 
-
 def add_competence(request):
     comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站系统大部分使用权限,无权限管理功能','编辑管理员':'拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
     for key,value in comp.items():
@@ -301,6 +300,7 @@ def product_add(request):
         spu.brand = TbBrand.objects.get(pk=request.POST.get('brandid'))
         spu.category = TbCategory.objects.get(pk=request.POST.get('s_cid'))
         spu.unique_code = request.POST.get('unique_code')
+        spu.list_pirce = request.POST.get('list_pirce')
         spu.save()
         paths = upload_pictures(spu.unique_code, pictures)
         for path in paths:

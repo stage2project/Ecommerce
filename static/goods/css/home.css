@@ -200,8 +200,8 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .head-amount   { background:url("../icon/cart.png") no-repeat; width:22px;  height:29px;  position:absolute; left:-1em; top:-14px; font-size:11px; color:#fff; display:inline-block; text-align:center; line-height:24px; }
 .head-mountain { background:url("../icon/shan.png") no-repeat; width:312px; height:104px; position:absolute; right:0; bottom:-35px;}
 .time-title h2   { background:url("../icon/time.png") no-repeat left; height:34px; line-height:34px; font-size:18px; padding-left:40px; font-weight:normal; float:left;}
-.time-clear-f h2 { background:url("../icon/1f.png") no-repeat left;   height:28px; line-height:28px; font-size:18px; padding-left:84px; font-weight:normal; float:left;}
-.time-clear-f2 h2 {background:url("../icon/2f.png") no-repeat left;   height:28px; line-height:28px; font-size:18px; padding-left:84px; font-weight:normal; float:left;}
+.time-clear-f h2 { background:no-repeat left;   height:28px; line-height:28px; font-size:18px; padding-left:84px; font-weight:inherit; float:left; color: plum}
+.time-clear-f2 h2 {background:no-repeat left;   height:28px; line-height:28px; font-size:18px; padding-left:84px; font-weight:normal; float:left; color: plum}
 .search-text {border-color:#ea4949; border-style:solid; border-width:2px 0 2px 2px; color:#666; float:left; font-size:14px;  height:24px; line-height:24px; margin-bottom:4px; outline:none; padding:4px;  width:454px;}
 .words-text a {color:#666; font-size:12px; float: left;  margin-right:15px; white-space: nowrap;}
 .words-text a:hover { color:#ea4949;}

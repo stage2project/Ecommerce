@@ -55,14 +55,14 @@ function banner(){
     }
 }
 $(function(){
-    //限时抢购滚动
-    $('#demo-01').jCarouselLite({
-        btnPrev: '#prev-01',
-        btnNext: '#next-01',
-        visible:4
-    });
+    // //限时抢购滚动
+    // $('#demo-01').jCarouselLite({
+    //     btnPrev: '#prev-01',
+    //     btnNext: '#next-01',
+    //     visible:4
+    // });
     //商城快讯滚动
-    var a=new Marquee("MarqueeDiv",2,1,1000,20,20,0,0,0);
+    // var a=new Marquee("MarqueeDiv",2,1,1000,20,20,0,0,0);
 
     $("#H-table li").each(function(i){
         $(this).click((function(k){
