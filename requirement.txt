@@ -1,7 +1,8 @@
 aliyun-python-sdk-core-v3==2.13.3
-certifi==2019.6.16
 Django==1.11.16
+django-tinymce==2.8.0
 jmespath==0.9.4
+Pillow==6.1.0
 pycryptodome==3.8.2
 PyMySQL==0.9.3
 pytz==2019.1

@@ -492,7 +492,7 @@
 
 			if (valueRanges) {
 				each(valueRanges, function (range) {
-					from = range.from;
+					from = range.forms;
 					to = range.to;
 					
 					// Assemble the default name. This can be overridden by legend.options.labelFormatter
@@ -527,7 +527,7 @@
 
 			} else if (colorRange) {
 
-				from = colorRange.from;
+				from = colorRange.forms;
 				to = colorRange.to;
 				fromLabel = colorRange.fromLabel;
 				toLabel = colorRange.toLabel;
@@ -774,7 +774,7 @@
 				to;
 
 			if (colorRange) {
-				from = Color(colorRange.from);
+				from = Color(colorRange.forms);
 				to = Color(colorRange.to);
 			}
 			
@@ -789,7 +789,7 @@
 					i = valueRanges.length;
 					while (i--) {
 						range = valueRanges[i];
-						from = range.from;
+						from = range.forms;
 						to = range.to;
 						if ((from === UNDEFINED || value >= from) && (to === UNDEFINED || value <= to)) {
 							color = range.color;

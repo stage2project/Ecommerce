@@ -3,17 +3,18 @@ from datetime import datetime
 from django.db import models
 
 # Create your models here.
+from django.forms import forms
 
 
 class User(models.Model):                                          # user 用户表建模
     username = models.CharField(max_length=255, null=False)        # 姓名
     password = models.CharField(max_length=128, null=False)        # 密码
-    sex = models.BooleanField(default=0)                           # 性别（0=男，1=女，2=保密）
-    birthday = models.DateField(default=datetime.now)              # 生日
+    sex = models.SmallIntegerField(default=2, null=True)                           # 性别（0=男，1=女，2=保密）
+    birthday = models.DateField(null=True, default=datetime.now)              # 生日
     email = models.CharField(max_length=255, null=False)           # 电子邮箱
     picture = models.CharField(max_length=255, null=True)          # 头像
     phone = models.CharField(max_length=255, null=False)           # 电话号码
-    place = models.CharField(max_length=255, null=False)           # 所在地
+    place = models.CharField(max_length=255, null=True)            # 所在地
     grade = models.CharField(max_length=255, default=0)            # 积分
     problem = models.CharField(max_length=255, null=True)          # 问题
     answer = models.CharField(max_length=255, null=True)           # 答案

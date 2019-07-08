@@ -17,16 +17,12 @@
 <body>
 <div class="w">
 	<div id="logo">
-		<a href="index.html">
+		<a href="{% url 'goods:index' %}">
 			<img src="/static/goods/icon/logo.png" alt="">
 		</a>
 		<b></b>
 	</div>
 
-{#	<a href="#" class="q_link fr">#}
-{#		<b class="fl"></b>#}
-{#		登录页面，改进意见#}
-{#	</a>#}
 </div>
 <div id="content">
   <div class="login-wrap">
@@ -43,16 +39,17 @@
   			  <div class="msg-wrap"></div>
   			  <div class="mc">
   			  	<div class="form">
-  			  		<form action="" id="formlogin" method="post" onSubmit="return false;">
+  			  		<form action="{% url 'users:login' %}" id="loginForm" method="post">
+                        {% csrf_token %}
   			  			<div class="item item-fore1 item-error">
-  			  				<label for="loginname" class="login-label name-label"></label>
-  			  				<input type="text" name="loginname" id="loginname" class="itxt" tabindex="1" autocomplete="off" placeholder="邮箱/用户名/已验证手机">
+  			  				<label for="username" class="login-label name-label"></label>
+  			  				<input type="text" name="username" id="username" class="itxt" tabindex="1" autocomplete="off" placeholder="邮箱/用户名/已验证手机">
   			  				<span class="clear-btn" style="display:inline;"></span>
   			  			</div>
   			  			<!-- 密码输入框fore2 -->
   			  			<div id="entry" class="item item-fore2" style="visibility: visible">
-  			  				<label class="login-label pwd-label" for="nloginpwd"></label>
-  			  				<input type="password" name="" id="nloginpwd" name="nloginpwd" class="itxt itxt-error" tabindex="2" autocomplete="off" placeholder="密码">
+  			  				<label class="login-label pwd-label" for="password"></label>
+  			  				<input type="password"  id="password" name="password" class="itxt itxt-error" tabindex="2" autocomplete="off" placeholder="密码">
   			  				<span class="clear-btn" style="display: inline;"></span>
   			  				<span class="capslock" style="display: none;">
   			  					<b></b>
@@ -60,10 +57,10 @@
   			  				</span>
   			  			</div>
   			  			<!-- 图片验证码开始 fore3-->
-                        <div id="o-authcode" class="item item-vcode item-fore3 hide ">
+                        <div id="o-authcode" class="item item-vcode item-fore3 ">
                         	<input type="text" name="" id="authcode" class="itxt itxt02" name="authcode" tabindex="3">
-                        	<input type = "button" id="code"  class="verify-code">
-                        	<a href="javascript:;" onclick='createCode();'>看不清换一张</a>
+                            <input type = "button" id="code"  class="verify-code " style="height: 137px">
+                        	<a href="javascript:;" onclick='createCode();'>看不清</a>
                         </div>
                         <!-- 自动登录开始fore4 -->
                         <div class="item item-fore4">
@@ -80,7 +77,7 @@
                         <!-- 登录按钮开始 -->
                         <div class="item item-fore5">
                         	<div class="login-btn">
-                        		<a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" tabindex="6" onClick="validate()">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                        		<a href="javascript:void(0);" class="btn-img btn-entry" id="loginsubmit" tabindex="6" onclick="validate()">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
                         	</div>
                         </div>
   			  		</form>
@@ -130,7 +127,7 @@
   				<ul>
   					<li class="extra-r">
   					   <div class="regist-link">
-  						<a href="register.html" class="">
+  						<a href="{% url 'users:register' %}" class="">
   							<b></b>立即注册
   						</a>
   					   </div>
@@ -173,10 +170,12 @@
 		</div>
 	</div>
 </div>
-
 </body>
 
 <script type="text/javascript">
+    $(function () {
+       createCode();
+    });
 	//alert($)
 	$(".login-tab-r").click(function(){
 		$(".login-box").css({"display":"block","visibility":"visible"});
@@ -195,12 +194,11 @@
 		$(".qrcode-help").css({"display":"none"});
 	});
 	//确认输入用户名密码后，显示验证码
-	$("#nloginpwd").blur(function(){
-		if(($("#loginname").val() !="" )&&($("#nloginpwd").val() !="")){
+    /*
+	$("#password").blur(function(){
+		if(($("#username").val() !="" )&&($("#password").val() !="")){
 		$("#o-authcode").css({"display":"block"});
 	}
-	})
-	createCode();
-
+	})*/
 </script>
 </html>

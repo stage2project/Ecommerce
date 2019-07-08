@@ -684,7 +684,7 @@ var CodeMirror = (function() {
         function replaceRange1(code, from, to, computeSel) {
             var endch = code.length == 1 ? code[0].length + from.ch : code[code.length-1].length;
             var newSel = computeSel({line: from.line + code.length - 1, ch: endch});
-            updateLines(from, to, code, newSel.from, newSel.to);
+            updateLines(from, to, code, newSel.forms, newSel.to);
         }
 
         function getRange(from, to) {
@@ -885,17 +885,17 @@ var CodeMirror = (function() {
                 var change = changes[i], intact2 = [], diff = change.diff || 0;
                 for (var j = 0, l2 = intact.length; j < l2; ++j) {
                     var range = intact[j];
-                    if (change.to <= range.from && change.diff)
-                        intact2.push({from: range.from + diff, to: range.to + diff,
+                    if (change.to <= range.forms && change.diff)
+                        intact2.push({from: range.forms + diff, to: range.to + diff,
                             domStart: range.domStart});
-                    else if (change.to <= range.from || change.from >= range.to)
+                    else if (change.to <= range.forms || change.forms >= range.to)
                         intact2.push(range);
                     else {
-                        if (change.from > range.from)
-                            intact2.push({from: range.from, to: change.from, domStart: range.domStart});
+                        if (change.forms > range.forms)
+                            intact2.push({from: range.forms, to: change.forms, domStart: range.domStart});
                         if (change.to < range.to)
                             intact2.push({from: change.to + diff, to: range.to + diff,
-                                domStart: range.domStart + (change.to - range.from)});
+                                domStart: range.domStart + (change.to - range.forms)});
                     }
                 }
                 intact = intact2;
@@ -916,7 +916,7 @@ var CodeMirror = (function() {
                 for (var i = 0; i < intact.length; ++i) {
                     var cur = intact[i];
                     while (cur.domStart > domPos) {curNode = killNode(curNode); domPos++;}
-                    for (var j = 0, e = cur.to - cur.from; j < e; ++j) {curNode = curNode.nextSibling; domPos++;}
+                    for (var j = 0, e = cur.to - cur.forms; j < e; ++j) {curNode = curNode.nextSibling; domPos++;}
                 }
                 while (curNode) curNode = killNode(curNode);
             }
@@ -934,7 +934,7 @@ var CodeMirror = (function() {
                     else {inSel = true; ch1 = sel.from.ch;}
                 }
                 if (nextIntact && nextIntact.to == j) nextIntact = intact.shift();
-                if (!nextIntact || nextIntact.from > j) {
+                if (!nextIntact || nextIntact.forms > j) {
                     if (line.hidden) scratch.innerHTML = "<pre></pre>";
                     else scratch.innerHTML = line.getHTML(ch1, ch2, true, tabText);
                     lineDiv.insertBefore(scratch.firstChild, curNode);
@@ -1245,10 +1245,10 @@ var CodeMirror = (function() {
                 for (var j = 0; j < mk.length; ++j) {
                     var mark = mk[j];
                     if (mark.set == this.set) {
-                        if (mark.from != null || mark.to != null) {
+                        if (mark.forms != null || mark.to != null) {
                             var found = lineNo(line);
                             if (found != null) {
-                                if (mark.from != null) from = {line: found, ch: mark.from};
+                                if (mark.forms != null) from = {line: found, ch: mark.forms};
                                 if (mark.to != null) to = {line: found, ch: mark.to};
                             }
                         }
@@ -2171,13 +2171,13 @@ var CodeMirror = (function() {
             var mk = this.marked;
             if (!mk) return;
             for (var i = 0; i < mk.length; ++i)
-                if (mk[i].from == null) mk[i].from = 0;
+                if (mk[i].forms == null) mk[i].from = 0;
         },
         addMark: function(mark) {
             mark.attach(this);
             if (this.marked == null) this.marked = [];
             this.marked.push(mark);
-            this.marked.sort(function(a, b){return (a.from || 0) - (b.from || 0);});
+            this.marked.sort(function(a, b){return (a.forms || 0) - (b.forms || 0);});
         },
         // Run the given mode's parser over a line, update the styles
         // array, which contains alternating fragments of text and CSS
@@ -2275,7 +2275,7 @@ var CodeMirror = (function() {
                     }
                     while (mark && mark.to != null && mark.to <= pos) nextMark();
                     if (mark) {
-                        if (mark.from > pos) upto = Math.min(upto, mark.from);
+                        if (mark.forms > pos) upto = Math.min(upto, mark.forms);
                         else {
                             extraStyle += " " + mark.style;
                             if (mark.to != null) upto = Math.min(upto, mark.to);

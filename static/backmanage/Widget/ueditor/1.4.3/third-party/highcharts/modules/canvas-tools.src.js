@@ -1987,7 +1987,7 @@ if(!Array.prototype.indexOf){
 			this.base(node);
 			
 			this.calcValue = function() {
-				var from = this.attribute('from').numValue();
+				var from = this.attribute('forms.py').numValue();
 				var to = this.attribute('to').numValue();
 				
 				// tween value linearly
@@ -2002,7 +2002,7 @@ if(!Array.prototype.indexOf){
 			this.base(node);
 
 			this.calcValue = function() {
-				var from = new RGBColor(this.attribute('from').value);
+				var from = new RGBColor(this.attribute('forms.py').value);
 				var to = new RGBColor(this.attribute('to').value);
 				
 				if (from.ok && to.ok) {
@@ -2012,7 +2012,7 @@ if(!Array.prototype.indexOf){
 					var b = from.b + (to.b - from.b) * this.progress();
 					return 'rgb('+parseInt(r,10)+','+parseInt(g,10)+','+parseInt(b,10)+')';
 				}
-				return this.attribute('from').value;
+				return this.attribute('forms.py').value;
 			};
 		}
 		svg.Element.animateColor.prototype = new svg.Element.AnimateBase;
