@@ -380,7 +380,18 @@ def transaction(request):
 
 
 def user_list(request):
-
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        sex = request.POST.get('form-field-radio')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        place = request.POST.get('place')
+        birthday = request.POST.get('birthday')
+        user = User(username=username, password=password, sex=sex, phone=phone,
+                    email=email, birthday=birthday, place=place)
+        user.save()
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     user = User.objects.all()
     return render(request, 'backmanage/user_list.html', context={'user': user})
 
