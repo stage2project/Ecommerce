@@ -226,6 +226,12 @@ def category_update(request, cid=None):
 
 
 def competence(request,index=0):
+    if index:
+        privilege = Privilege.objects.get(pk=index)
+        checked_admins = privilege.admin.all()
+        print(privilege,checked_admins)
+        admins = Admin.objects.all()
+        return render(request, 'backmanage/Competence.html', context={'admins': admins,'checked_admins': checked_admins, 'privilege': privilege})
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
@@ -235,13 +241,9 @@ def competence(request,index=0):
         user = request.POST.getlist('username')
         for u in user:
             Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
-        return redirect(reverse('backmanage:admin_competence'))
+        return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
-    privileges = Privilege.objects.all()
-    # for pr in privileges:
-    #     index = pr.id
-    #     print(index,pr.privilege_name)
-    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges,})
+    return render(request, 'backmanage/Competence.html',context={'admins':admins,})
 
 
 def cover_management(request):

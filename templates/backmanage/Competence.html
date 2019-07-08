@@ -30,8 +30,6 @@
 <form action="" method="">
 <div class="Competence_add_style clearfix" id="add_privileges">
     {% csrf_token %}
-{#    {% for pr in privileges %}#}
-{#        {% if pr.id == index %}#}
         <div class="left_Competence_add">
             <div class="title_name">添加权限</div>
             <div class="Competence_add">
@@ -40,17 +38,14 @@
                         权限名称
                     </label>
                     <div class="col-sm-9">
-                        <input type="text" id="form-field-1" placeholder="" name="privilege_name" class="col-xs-10 col-sm-5"                           {% for pr in privileges %}
-                            {% if pr.id == index %}
-                               value="{{ pr.privilege_name }}"
-                            {% endif %}
-                        {% endfor %} >
+                        <input type="text" id="form-field-1" placeholder="" name="privilege_name" class="col-xs-10 col-sm-5"  value="{{ privilege.privilege_name }}" >
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label no-padding-right" for="form-field-1">权限描述 </label>
                     <div class="col-sm-9">
                         <textarea name="describe" class="form-control" id="form_textarea" placeholder="" onkeyup="checkLength(this);">
+                            {{ privilege.describe }}
                         </textarea>
                         <span class="wordage">剩余字数：
                             <span id="sy" style="color:Red;">200</span>字
@@ -62,7 +57,7 @@
                     <div class="col-sm-9">
                         {% for admin in admins %}
                             <label class="middle">
-                                <input class="ace" type="checkbox" id="id-disable-check" name="username" value="{{ admin.id }}">
+                                <input class="ace" type="checkbox" id="id-disable-check" name="username" value="{{ admin.id }}" {% if admin in checked_admins %} checked {% endif %}>
                                 <span class="lbl" > {{ admin.admin_name }} </span>
                             </label>
                         {% endfor %}
@@ -73,6 +68,7 @@
         <!--权限分配-->
         <div class="Assign_style">
             <div class="title_name">权限分配</div>
+
             <div class="Select_Competence">
 
                 <!--产品管理-->
@@ -85,17 +81,17 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="1" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="1" class="ace" name="user-Character-0-0" id="id-disable-check" {% for menu_list in privilege.menu_list %} checked {% endfor %} >
                             <span class="lbl">产品列表</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="2" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="2" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% for menu_list in privilege.menu_list %} checked{% endfor %}>
                             <span class="lbl">品牌管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="3" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="3" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% for menu in privilege.menu_list %} checked{% endfor %}>
                             <span class="lbl">分类管理</span>
                         </label>
                     </dd>
@@ -110,12 +106,12 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="4" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="4" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">广告管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="5" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="5" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">广告分类</span>
                         </label>
                     </dd>
@@ -130,32 +126,32 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="6" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="6" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">交易信息</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="7" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="7" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">交易订单(图)</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="8" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="8" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">订单管理</span>
                         </label>
                         <br>
                         <label class="middle">
-                            <input type="checkbox" value="9" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="9" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">交易金额</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="10" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="10" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">订单处理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="11" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="11" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">退款操作</span>
                         </label>
                     </dd>
@@ -170,17 +166,17 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="12" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="12" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">账户管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="13" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="13" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">支付方式</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="14" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="14" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">支付配置</span>
                         </label>
                     </dd>
@@ -195,17 +191,17 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="15" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="15" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">会员信息</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="16" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="16" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">等级管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="17" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="17" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">会员记录管理</span>
                         </label>
                     </dd>
@@ -220,12 +216,12 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="18" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="18" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">留言列表</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="19" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="19" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">意见反馈</span>
                         </label>
                     </dd>
@@ -240,12 +236,12 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="20" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="20" class="ace" name="user-Character-0-0" id="id-disable-check" {% if 1 in privilege.menu_list %} checked {% endif %}>
                             <span class="lbl">文章列表</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="21" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="21" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if value in privilege.menu_list %} checked {% endif %}>
                             <span class="lbl">分类管理</span>
                         </label>
                     </dd>
@@ -260,17 +256,17 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="22" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="22" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">系统设置</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="23" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="23" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">系统栏目管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="24" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="24" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">系统日志</span>
                         </label>
                     </dd>
@@ -285,17 +281,17 @@
                     </dt>
                     <dd>
                         <label class="middle">
-                            <input type="checkbox" value="25" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <input type="checkbox" value="25" class="ace" name="user-Character-0-0" id="id-disable-check" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">权限管理</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="26" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="26" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">管理员列表</span>
                         </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="middle">
-                            <input type="checkbox" value="27" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <input type="checkbox" value="27" class="ace" name="user-Character-0-0" id="user-Character-0-1" {% if menu_list in privilege.menu_list %} checked{% endif %}>
                             <span class="lbl">个人信息</span>
                         </label>
                     </dd>
@@ -380,7 +376,13 @@
 
     /*提交事件*/
     function article_save_submit() {
-        $.post('{% url "backmanage:competence" %}', $('form').serialize())
+        $.post('{% url "backmanage:competence" %}', $('form').serialize(),function(data){
+           if(data['code'] == 0){
+               window.location.href = '{% url "backmanage:admin_competence" %}'
+           }else{
+               alert(data['msg'])
+           }
+        })
     };
 {#    $('#save_submit').on('click', function () {#}
 {#        $.post('{% url "backmanage:competence" %}', $('#add_privileges').serialize())#}
