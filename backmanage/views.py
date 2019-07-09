@@ -74,7 +74,7 @@ def login(request):
         password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
         code = request.POST.get('code')
         verficode = request.session['verficode']
-        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
+        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id', 'admin_name')
         if len(res) > 0 and verficode == code:  # 登录成功
             request.session['uid'] = res[0]['id']
             request.session['username'] = res[0]['admin_name']
@@ -114,10 +114,13 @@ def admin_competence(request):
 def admin_info(request):
     if request.method == 'POST':
         oldpwd = request.POST.get('oldpwd')
+        oldpassword_hash = hashlib.sha1(oldpwd.encode('utf8')).hexdigest()
         newpwd = request.POST.get('newpwd')
+        newpassword_hash = hashlib.sha1(newpwd.encode('utf8')).hexdigest()
         confirm_newpwd = request.POST.get('confirm_newpwd')
-        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpwd)
-        print(oldpwd, newpwd, confirm_newpwd, res)
+        confirm_pwd = hashlib.sha1(confirm_newpwd.encode('utf8')).hexdigest()
+        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpassword_hash)
+        print(oldpwd, oldpassword_hash, newpwd, newpassword_hash, confirm_newpwd, confirm_pwd, res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name=request.session.get('username'))
