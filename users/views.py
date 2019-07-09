@@ -89,7 +89,6 @@ def send_sms(request, phone, templateParam, **kwargs):
     request.add_query_param('TemplateCode', kwargs['TemplateCode'])
     request.add_query_param('TemplateParam', templateParam)
     response = client.do_action_with_exception(request)
-    print(str(response, encoding='utf-8'))
 
     if request.method == 'POST':
         num = randint(100000, 999999)
@@ -98,3 +97,26 @@ def send_sms(request, phone, templateParam, **kwargs):
         return JsonResponse({'code': 1})
 
 
+def address_manage(request):
+    return render(request, 'goods/my-add.html')
+
+
+def evaluation_manage(request):
+    return render(request, 'goods/my-p.html')
+
+
+def order_manage(request):
+    return render(request, 'goods/my-d.html')
+
+
+def collection_manage(request):
+    return render(request, 'goods/my-s.html')
+
+
+def order_info(request):
+    return render(request, 'goods/my-d-info.html')
+
+
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('goods:index'))

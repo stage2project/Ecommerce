@@ -247,9 +247,10 @@ div{
     text-align:center;
 }
 .form .verify-code{/*验证码*/
+    background: whitesmoke;
+    height: 33px;
     cursor:pointer;
     width:90px;
-    height:63px;
     vertical-align:middle;
 }
 .form .item-vcode .placeholder{left:25px}
