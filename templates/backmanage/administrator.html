@@ -202,7 +202,7 @@
                 <label class="form-label "><span class="c-red">*</span>qq：</label>
                 <div class="formControls ">
                     <input type="text" class="input-text" value="" placeholder="" id="user-tel" name="user-qq"
-                           nullmsg="qq手不能为空">
+                           nullmsg="qq不能为空">
                 </div>
                 <div class="col-4"><span class="Validform_checktip"></span></div>
             </div>
@@ -386,7 +386,7 @@
             } else {
                 layer.msg(data.info, {icon: data.status, time: 3000});
             }
-            var index = parent.$("#iframe").attr("src");
+            var qindex = parent.$("#iframe").attr("src");
             parent.layer.close(index);
             //
         }

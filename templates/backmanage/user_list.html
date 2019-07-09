@@ -58,23 +58,23 @@
         <div class="d_Confirm_Order_style">
             <div class="search_style">
 
-                <ul class="search_content clearfix">
-                    <li><label class="l_f">会员名称</label><input name="" type="text" class="text_add"
-                                                              placeholder="输入会员名称、电话、邮箱" style=" width:400px"/></li>
-                    <li><label class="l_f">添加时间</label><input class="inline laydate-icon" id="start"
-                                                              style=" margin-left:10px;"></li>
-                    <li style="width:90px;">
-                        <button type="button" class="btn_search"><i class="icon-search"></i>查询</button>
-                    </li>
-                </ul>
+{#                <ul class="search_content clearfix">#}
+{#                    <li><label class="l_f">会员名称</label><input name="" type="text" class="text_add"#}
+{#                                                              placeholder="输入会员名称、电话、邮箱" style=" width:400px"/></li>#}
+{#                    <li><label class="l_f">添加时间</label><input class="inline laydate-icon" id="start"#}
+{#                                                              style=" margin-left:10px;"></li>#}
+{#                    <li style="width:90px;">#}
+{#                        <button type="button" class="btn_search"><i class="icon-search"></i>查询</button>#}
+{#                    </li>#}
+{#                </ul>#}
             </div>
             <!---->
             <div class="border clearfix">
-       <span class="l_f">
-        <a href="javascript:ovid()" id="member_add" class="btn btn-warning"><i class="icon-plus"></i>添加用户</a>
-        <a href="javascript:ovid()" class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
-       </span>
-                <span class="r_f">共：<b>2345</b>条</span>
+               <span class="l_f">
+                <a href="javascript:ovid()" id="member_add" class="btn btn-warning"><i class="icon-plus"></i>添加用户</a>
+                <a href="javascript:ovid()" class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
+               </span><span class="r_f">共：<b>2345</b>条</span>
+
             </div>
             <!---->
             <div class="table_menu_list">
@@ -100,7 +100,15 @@
                         <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
                         <td>{{ all.id }}</td>
                         <td>{{ all.username }}</td>
-                        <td>{{ all.sex }}</td>
+                        <td>
+                            {% if all.sex == 0 %}
+                                 男
+                            {% elif all.sex == 1 %}
+                                 女
+                            {% else %}
+                                 保密
+                            {% endif %}
+                        </td>
                         <td>{{ all.phone }}</td>
                         <td>{{ all.email }}</td>
                         <td class="text-l">{{ all.place }}</td>
@@ -224,13 +232,13 @@
             area: ['800px', ''],
             content: $('#add_menber_style'),
             btn: ['提交', '取消'],
-            yes: function (index, layero) {
+            yes: function (index, layer) {
                 var num = 0;
                 var str = "";
                 $(".add_menber input[type$='text']").each(function (n) {
                     if ($(this).val() == "") {
 
-                        layer.alert(str += "" + $(this).attr("name") + "不能为空！\r\n", {
+                        layer.alert(str += "" + $(this).attr("username") + "不能为空！\r\n", {
                             title: '提示框',
                             icon: 0,
                         });
@@ -239,16 +247,14 @@
                     }
                 });
                 if (num > 0) {
-                    $('#add_menber').on('click', function () {
-                    $.post('{% url "users:register" %}', $('form').serialize())
-    })
-                    {#return false;#}
+                    return false;
                 }
                 else {
-                    layer.alert('添加成功！', {
-                        title: '提示框',
-                        icon: 1,
-                    });
+
+                    $.post("{% url 'backmanage:user_list' %}", {'username': username, 'password': password, 'email': email, 'phone': phone, 'sex': sex, 'birthday': birthday, 'place': place}, function (data) {
+                        {#if (data.status) #}
+
+                    })
                     layer.close(index);
                 }
             }

@@ -27,8 +27,8 @@ from users.models import User
 
 
 def add_competence(request):
-    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站系统大部分使用权限,无权限管理功能','编辑管理员':'拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
-    for key,value in comp.items():
+    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限', '普通管理员': '拥有网站系统大部分使用权限,无权限管理功能', '编辑管理员': '拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
+    for key, value in comp.items():
         res = Privilege()
         res.privilege_name = key
         res.describe = value
@@ -101,8 +101,8 @@ def admin_competence(request):
 
 def admin_info(request):
     admin_name = request.session.get('username')
-    info = Admin.objects.get(admin_name = request.session.get('username'))
-    return render(request, 'backmanage/admin_info.html', context={'admin_name':admin_name,'info':info})
+    info = Admin.objects.get(admin_name=request.session.get('username'))
+    return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
 
 
 def administrator(request):
@@ -225,7 +225,7 @@ def competence(request):
         # add_prv.menu_list = request.POST.get()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/Competence.html',context={'admins':admins,'privileges':privileges})
+    return render(request, 'backmanage/Competence.html', context={'admins': admins, 'privileges': privileges})
 
 
 def cover_management(request):
@@ -251,11 +251,26 @@ def integration(request):
 
 
 def member_grading(request):
-    return render(request, 'backmanage/member-Grading.html')
+    user = User.objects.all()
+    return render(request, 'backmanage/member-Grading.html', context={'user': user})
 
 
-def member_show(request):
-    return render(request, 'backmanage/member-show.html')
+def member_show(request, type):
+    user = User.objects.all()
+    if int(type) == 0:
+        user = user.all()
+    elif int(type) == 1:
+        user = user.filter(grade__lt=1000)
+    elif int(type) == 2:
+        user = user.filter(grade__gte=1000, grade__lt=2500)
+        print(user.query)
+    elif int(type) == 3:
+        user = user.filter(grade__gte=2500, grade__lt=5000)
+    elif int(type) == 4:
+        user = user.filter(grade__gte=5000, grade__lt=10000)
+    else:
+        user = user.filter(grade__gte=10000)
+    return render(request, 'backmanage/member-Grading.html', context={'user': user})
 
 
 def order_chart(request):
@@ -289,7 +304,7 @@ def payment_method(request):
 @csrf_exempt
 def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
-    all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
     if request.method == 'POST':
         spu = TbSpu()
         spu.title = request.POST.get('title')
@@ -325,7 +340,8 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
                 sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
                 sku_attr.save()
         return JsonResponse({'code': 0})
-    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category,
+    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category,
+                                                                'all_big_category': all_big_category,
                                                                 'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
@@ -379,7 +395,7 @@ def transaction(request):
     return render(request, 'backmanage/transaction.html')
 
 
-def user_list(request):
+def user_list(request):        # 会员列表
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -525,6 +541,6 @@ def attribute_get(request):
     brands = []
     data = category.brand.all()
     for brand in data:
-        brands.append({"id":brand.id, "name": brand.name})
+        brands.append({"id": brand.id, "name": brand.name})
     return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
 

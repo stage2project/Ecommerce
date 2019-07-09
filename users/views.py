@@ -49,7 +49,7 @@ def login(request):
     return render(request, 'goods/login.html')
 
 
-# 注册
+# 注册--form表单
 def register(request):
     form = UserRegisterForm
     if request.method == 'POST':
@@ -112,17 +112,5 @@ def sale(request):
 
 def retreat(request):
     return render(request, 'goods/retreat-cha.html')
-
-
-
-
-
-
-
-
-
-
-
-
 
 

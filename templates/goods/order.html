@@ -122,11 +122,11 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li><a href="#">登录</a> </li>
+                <li><a href="{% url 'users:login' %}">登录</a> </li>
                 <li class="headerul">|</li>
-                <li><a href="#">订单查询</a> </li>
+                <li><a href="{% url 'users:order' %}">订单查询</a> </li>
                 <li class="headerul">|</li>
-                <li><a href="#">我的收藏</a> </li>
+                <li><a href="{% url 'users:collect' %}">我的收藏</a> </li>
                 <li class="headerul">|</li>
                 <li id="pc-nav" class="menu"><a href="#" class="tit">我的商城</a>
                     <div class="subnav">
