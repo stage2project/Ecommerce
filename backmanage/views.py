@@ -88,7 +88,17 @@ def account_detail(request):
 
 
 def add_brand(request):
-    return render(request, 'backmanage/Add_Brand.html')
+    all_second_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
+    print(all_second_category)
+    if request.method == "POST":
+        brand = TbBrand()
+        brand.name = request.POST['bname']
+        brand.logo = request.POST['blogo']
+        brand.yn = request.POST['checkbox']
+        brand.category = request.POST['description']
+        brand.save()
+        return redirect(reverse('backmanage:brand_manage'))
+    return render(request, 'backmanage/Add_Brand.html',context={'all_second_category':all_second_category})
 
 
 def admin_competence(request):
@@ -163,7 +173,9 @@ def brand_details(request):
 
 
 def brand_manage(request):
-    return render(request, 'backmanage/Brand_Manage.html')
+    brands = TbBrand.objects.all()
+
+    return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
 
 
 def category_manage(request):
@@ -296,6 +308,7 @@ def payment_method(request):
 @csrf_exempt
 def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    print(all_big_category)
     all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
     if request.method == 'POST':
         pictures = request.FILES.getlist('pictures')
