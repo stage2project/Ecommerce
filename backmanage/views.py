@@ -26,11 +26,11 @@ from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey, TbSpuPics
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
-
+from users.models import User
 
 def add_competence(request):
-    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限','普通管理员':'拥有网站系统大部分使用权限,无权限管理功能','编辑管理员':'拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
-    for key,value in comp.items():
+    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限', '普通管理员': '拥有网站系统大部分使用权限,无权限管理功能', '编辑管理员': '拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
+    for key, value in comp.items():
         res = Privilege()
         res.privilege_name = key
         res.describe = value
@@ -63,8 +63,8 @@ def index(request):
     # [1,2,3]
     if 'uid' in request.session:
         username = request.session.get('username')
-        return render(request,'backmanage/index.html',context={'username':username})
-    return render(request, 'backmanage/index.html',context={'date':date})
+        return render(request, 'backmanage/index.html', context={'username': username})
+    return render(request, 'backmanage/index.html', context={'date': date})
 
 
 def login(request):
@@ -75,10 +75,10 @@ def login(request):
         code = request.POST.get('code')
         verficode = request.session['verficode']
         res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
-        if len(res)>0 and verficode == code:  # 登录成功
+        if len(res) > 0 and verficode == code:  # 登录成功
             request.session['uid'] = res[0]['id']
             request.session['username'] = res[0]['admin_name']
-            return JsonResponse({'code':1,'msg':'ok'},safe=False)
+            return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
         return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
 
@@ -106,9 +106,9 @@ def admin_competence(request):
     privilege = []
     privileges = Privilege.objects.all()
     for p in privileges:
-        privilege.append({'privilege':p, 'users':p.admin.values('admin_name'), 'usercount':p.admin.count()})
+        privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
 
-    return render(request, 'backmanage/admin_Competence.html',context={'number': number, 'privilege': privilege})
+    return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
 def admin_info(request):
@@ -120,8 +120,8 @@ def admin_info(request):
         print(oldpwd,newpwd,confirm_newpwd,res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_name = request.session.get('username')
-    info = Admin.objects.get(admin_name = request.session.get('username'))
-    return render(request, 'backmanage/admin_info.html',context={'admin_name':admin_name,'info':info})
+    info = Admin.objects.get(admin_name=request.session.get('username'))
+    return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
 
 
 def administrator(request):
@@ -135,9 +135,9 @@ def administrator(request):
         user_qq = request.POST.get('user-qq')
         privilege = Privilege.objects.filter(id = request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
-        admin = Admin(admin_name = user_name,admin_password = userpassword,admin_sex = user_sex,admin_phone = user_tel,admin_email = email,admin_reg_date = reg_date,admin_login_ip = login_ip,admin_qq = user_qq,privilege=privilege)
+        admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
         admin.save()
-        return JsonResponse({'code':1,'msg':'ok'},safe=False)
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_total = Admin.objects.count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
@@ -270,11 +270,26 @@ def integration(request):
 
 
 def member_grading(request):
-    return render(request, 'backmanage/member-Grading.html')
+    user = User.objects.all()
+    return render(request, 'backmanage/member-Grading.html', context={'user': user})
 
 
-def member_show(request):
-    return render(request, 'backmanage/member-show.html')
+def member_show(request, type):
+    user = User.objects.all()
+    if int(type) == 0:
+        user = user.all()
+    elif int(type) == 1:
+        user = user.filter(grade__lt=1000)
+    elif int(type) == 2:
+        user = user.filter(grade__gte=1000, grade__lt=2500)
+        print(user.query)
+    elif int(type) == 3:
+        user = user.filter(grade__gte=2500, grade__lt=5000)
+    elif int(type) == 4:
+        user = user.filter(grade__gte=5000, grade__lt=10000)
+    else:
+        user = user.filter(grade__gte=10000)
+    return render(request, 'backmanage/member-Grading.html', context={'user': user})
 
 
 def order_chart(request):
@@ -377,7 +392,8 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
                 sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
                 sku_attr.save()
         return JsonResponse({'code': 0})
-    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category,
+    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category,
+                                                                'all_big_category': all_big_category,
                                                                 'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
@@ -432,8 +448,21 @@ def transaction(request):
     return render(request, 'backmanage/transaction.html')
 
 
-def user_list(request):
-    return render(request, 'backmanage/user_list.html')
+def user_list(request):        # 会员列表
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        sex = request.POST.get('form-field-radio')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        place = request.POST.get('place')
+        birthday = request.POST.get('birthday')
+        user = User(username=username, password=password, sex=sex, phone=phone,
+                    email=email, birthday=birthday, place=place)
+        user.save()
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
+    user = User.objects.all()
+    return render(request, 'backmanage/user_list.html', context={'user': user})
 
 
 def attribute_list(request, cid):
@@ -562,6 +591,6 @@ def attribute_get(request):
     brands = []
     data = category.brand.all()
     for brand in data:
-        brands.append({"id":brand.id, "name": brand.name})
+        brands.append({"id": brand.id, "name": brand.name})
     return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
 

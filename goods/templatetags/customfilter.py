@@ -11,3 +11,8 @@ def get_split_0(value):
 @register.filter(name='get_split_1')
 def get_split_1(value):
     return value.split("_")[1]
+
+
+@register.filter(name='str2int')
+def str_2_int(value):
+    return int(value)

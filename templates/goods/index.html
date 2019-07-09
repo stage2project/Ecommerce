@@ -74,9 +74,14 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#"
-                                                                                       style="float:left;">退出</a></li>
-                <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a></li>
+                <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#" style="float:left;">退出</a> </li>
+                {% if username == None %}
+                    <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a> </li>
+                {% else %}
+                    {% for name in user %}
+                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ name.username }}</a> </li>
+                    {% endfor %}
+                {% endif %}
                 <li class="headerul">|</li>
                 <li><a href="{% url 'users:register' %}">免费注册</a></li>
                 <li class="headerul">|</li>

@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^home/$', views.home, name='home'),
     url(r'^integration/$', views.integration, name='integration'),
     url(r'^member_grading/$', views.member_grading, name='member_grading'),
-    url(r'^member_show/$', views.member_show, name='member_show'),
+    url(r'^member_show/(?P<type>\d+)/$', views.member_show, name='member_show'),
     url(r'^order_chart/$', views.order_chart, name='order_chart'),
     url(r'^order_detailed/$', views.order_detailed, name='order_detailed'),
     url(r'^order_handling/$', views.order_handling, name='order_handling'),
@@ -64,6 +64,7 @@ urlpatterns = [
     url(r'^attribute_get/$', views.attribute_get, name='attribute_get'),
     url(r'^sku_add/(?P<bcid>\d+)/(?P<scid>\d+)/(?P<unique_code>\d+)/$', views.sku_add, name='sku_add'),
     url(r'^sku_add/$', views.sku_add, name='sku_add'),
+
 
 ]
 
