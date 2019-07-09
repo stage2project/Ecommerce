@@ -114,3 +114,11 @@ def retreat(request):
     return render(request, 'goods/retreat-cha.html')
 
 
+def evaluation(request):
+    return render(request, 'goods/my-p.html')
+
+
+def address(request):
+    return render(request, 'goods/my-add.html')
+
+
