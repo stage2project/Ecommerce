@@ -72,8 +72,9 @@
             <div class="border clearfix">
                <span class="l_f">
 {#                <a href="javascript:void()" id="member_add" class="btn btn-warning"><i class="icon-plus"></i>添加用户</a>#}
-                <a href="javascript:void(0)" id="member_del" class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
-               </span><span class="r_f">共：<b>2345</b>条</span>
+                <a href="javascript:;" onclick="member_del(this,'1')"  class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
+               </span>
+{#                <span class="r_f">共：<b>2345</b>条</span>#}
 
             </div>
             <!---->
@@ -314,6 +315,7 @@
                     return false;
                 }
                 else {
+
                     layer.alert('添加成功！', {
                         title: '提示框',
                         icon: 1,
