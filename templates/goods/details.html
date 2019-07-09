@@ -43,6 +43,7 @@
          })
      </script>
     <script>
+        var sku_id = {{ sku_id }}
         function attrdiv_click(name, value){
          		$(".attrdiv a[name='"+name+"']").removeClass("cur");
                 $(".attrdiv a[value='"+value+"']").addClass("cur");
@@ -54,9 +55,21 @@
                     post_json[$(items[i]).attr('name')] = $(items[i]).attr('value')
                 }
                 $.post('/get_price/'+spuid,post_json, function (data) {
+                    sku_id = data['sku_id']
                     document.getElementById('price').innerHTML ='<strong>'+data['price']+'</strong>';
                 })
          	};
+        function add_cart() {
+            console.log('开始加入购物车')
+            console.log(sku_id)
+            product_number = $('#subnum').val()
+            if(!product_number){
+                product_number=1
+            }
+            $.post('{% url "goods:add_cart" %}', {'sku_id': sku_id, 'product_number': product_number}, function (data) {
+                    $('i[class="head-amount"]')[0].innerText = data['amount']
+            })
+        };
          $(function(){
          	$("#pro_detail a").click(function(){
          		$("#pro_detail a").removeClass("cur");
@@ -281,7 +294,7 @@
                         </div>
                         <div class="pc-emption">
                             <a href="#">立即购买</a>
-                            <a href="javascript:void(0);" class="join">加入购物车</a>
+                            <a href="javascript:void(0);" class="join" onclick="add_cart()">加入购物车</a>
                         </div>
                     </div>
                     <div class="pc-product-s">
@@ -821,9 +834,3 @@
 <!-- footer End -->
 </body>
 </html>
-<script type="text/javascript" src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
-<script>
-    $('a[class="join"]').click(function () {
-        console.log('开始加入购物车')
-    })
-</script>

@@ -46,9 +46,9 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                {% if  request.session.uid %}
-                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
-                {% endif %}
+                <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
+                <li class="headerul">|</li>
+                <li><a href="{% url 'users:logout' %}">退出</a> </li>
                 <li class="headerul">|</li>
                 <li><a href="{% url 'users:order_manage' %}">订单查询</a> </li>
                 <li class="headerul">|</li>
@@ -104,12 +104,8 @@
             <div class="member-apart clearfix">
                 <div class="fl"><a href="#"><img src="/static/goods/img/bg/mem.png"></a></div>
                 <div class="fl">
-                    {% for all in user %}
                     <p>用户名：</p>
-                    <p><a href="#">{{ all.username }}</a></p>
-{#                    <p>搜悦号：</p>#}
-{#                    <p>389323080</p>#}
-                    {% endfor %}
+                    <p><a href="#">{{ request.session.username }}</a></p>
                 </div>
             </div>
             <div class="member-lists">
@@ -329,7 +325,9 @@
         </div>
     </div>
 </div>
-<!-- footer End -->
  {% endblock footer %}
+<!-- footer End -->
 </body>
 </html>
+{% block script %}
+{% endblock script %}

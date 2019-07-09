@@ -1,112 +1,116 @@
 <!DOCTYPE html>
-<!-- saved from url=(0036)http://www.cnchenchen.cn/come/myCart -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-	<meta name="Generator" content="EditPlus®">
-	<meta name="Author" content="">
-	<meta name="Keywords" content="">
-	<meta name="Description" content="">
-	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
-	<meta name="renderer" content="webkit">
-	<title>购物车</title>
-	<link rel="shortcut icon" type="image/x-icon" href="http://www.cnchenchen.cn/home/theme/icon/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="/static/goods/css/base.css">
-	<link rel="stylesheet" type="text/css" href="/static/goods/css/home.css">
-	<script type="text/javascript" src="/static/goods/js/jquery.js"></script>
-	<script src="/static/goods/js/layer.js"></script><link rel="stylesheet" href="/static/goods/css/layer.css" id="layuicss-layer">
-	<script type="text/javascript">
-		(function(a){
-			a.fn.hoverClass=function(b){
-				var a=this;
-				a.each(function(c){
-					a.eq(c).hover(function(){
-						$(this).addClass(b)
-					},function(){
-						$(this).removeClass(b)
-					})
-				});
-				return a
-			};
-		})(jQuery);
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-		$(function(){
-			$("#pc-nav").hoverClass("current");
-		});
+    <meta name="Generator" content="EditPlus®">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta name="renderer" content="webkit">
+    <title>购物车</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://www.cnchenchen.cn/home/theme/icon/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/goods/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/goods/css/home.css">
+    <script type="text/javascript" src="/static/goods/js/jquery.js"></script>
+    <script src="/static/goods/js/layer.js"></script>
+    <link rel="stylesheet" href="/static/goods/css/layer.css" id="layuicss-layer">
+    <script type="text/javascript">
+        (function (a) {
+            a.fn.hoverClass = function (b) {
+                var a = this;
+                a.each(function (c) {
+                    a.eq(c).hover(function () {
+                        $(this).addClass(b)
+                    }, function () {
+                        $(this).removeClass(b)
+                    })
+                });
+                return a
+            };
+        })(jQuery);
+
+        $(function () {
+            $("#pc-nav").hoverClass("current");
+        });
 
 
+        $(document).ready(function ($) {
 
+            $(".btn1").click(function (event) {
+                $(".hint").css({"display": "block"});
+                $(".box").css({"display": "block"});
+            });
 
-		$(document).ready(function($){
+            $(".hint-in3").click(function (event) {
+                $(".hint").css({"display": "none"});
+                $(".box").css({"display": "none"});
+            });
 
-			$(".btn1").click(function(event){
-				$(".hint").css({"display":"block"});
-				$(".box").css({"display":"block"});
-			});
+            $(".hint3").click(function (event) {
+                $(this).parent().parent().css({"display": "none"});
+                $(".box").css({"display": "none"});
+            });
 
-			$(".hint-in3").click(function(event) {
-				$(".hint").css({"display":"none"});
-				$(".box").css({"display":"none"});
-			});
+            $("#H-table li").each(function (i) {
+                $(this).click((function (k) {
+                    var _index = k;
+                    return function () {
+                        $(this).addClass("cur").siblings().removeClass("cur");
+                        $(".H-over").hide();
+                        $(".H-over:eq(" + _index + ")").show();
+                    }
+                })(i));
+            });
 
-			$(".hint3").click(function(event) {
-				$(this).parent().parent().css({"display":"none"});
-				$(".box").css({"display":"none"});
-			});
+        });
+    </script>
+    <style>
 
-			$("#H-table li").each(function(i){
-				$(this).click((function(k){
-					var _index = k;
-					return function(){
-						$(this).addClass("cur").siblings().removeClass("cur");
-						$(".H-over").hide();
-						$(".H-over:eq(" + _index + ")").show();
-					}
-				})(i));
-			});
+        .btn1 {
+            width: 30px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 25px;
+            color: #666;
+            text-align: center;
+        }
 
-		});
-	</script>
-	<style>
+        .goodsNum {
+            width: 35px;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+        }
 
-		.btn1{
-			width: 30px;
-			height: 28px;
-			line-height: 28px;
-			font-size: 25px;
-			color: #666;
-			text-align: center;
-		}
-		.goodsNum{
-			width: 35px;
-			height: 28px;
-			text-align: center;
-			line-height: 28px;
-		}
-		.btn2{
-			width: 30px;
-			height: 28px;
-			line-height: 28px;
-			font-size: 25px;
-			color: #666;
-			text-align: center;
-		}
-		.del{
-			cursor: pointer;
-		}
-		button{
-			cursor: pointer;
-		}
+        .btn2 {
+            width: 30px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 25px;
+            color: #666;
+            text-align: center;
+        }
 
-	</style>
+        .del {
+            cursor: pointer;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+    </style>
 
 </head>
 <body style="">
 
 <!--- header begin-->
 <header id="pc-header">
-	<div class="BHeader">
-		<div class="yNavIndex">
-			<ul class="BHeaderl">
+    <div class="BHeader">
+        <div class="yNavIndex">
+            <ul class="BHeaderl">
                 <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#"
                                                                                        style="float:left;">退出</a></li>
                 {% if  not request.session.uid %}
@@ -114,7 +118,8 @@
                     <li class="headerul">|</li>
                     <li><a href="{% url 'users:register' %}">免费注册</a></li>
                 {% else %}
-                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
+                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a>
+                    </li>
                     <li class="headerul">|</li>
                     <li><a href="{% url 'users:logout' %}">退出</a></li>
                 {% endif %}
@@ -133,270 +138,277 @@
                     </div>
                 </li>
 
-				<li class="headerul">|</li>
-			</ul>
-		</div>
-	</div>
-	<div class="container clearfix">
-		<div class="header-logo fl" style="width:212px;"><h1><a href="http://www.cnchenchen.cn/"><img src="/static/goods/icon/logo.png"></a></h1></div>
-		<div class="pc-order-titlei fl"><h2>编辑购物车</h2></div>
-		<div class="pc-step-title fl">
-			<ul>
-				<li class="cur"><a href="http://www.cnchenchen.cn/come/myCart#">1 . 我的购物车</a></li>
-				<li class="cur2"><a href="http://www.cnchenchen.cn/come/myCart#">2 . 填写核对订单</a></li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">3 . 成功提交订单</a></li>
-			</ul>
-		</div>
-	</div>
+                <li class="headerul">|</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container clearfix">
+        <div class="header-logo fl" style="width:212px;"><h1><a href="http://www.cnchenchen.cn/"><img
+                src="/static/goods/icon/logo.png"></a></h1></div>
+        <div class="pc-order-titlei fl"><h2>编辑购物车</h2></div>
+        <div class="pc-step-title fl">
+            <ul>
+                <li class="cur"><a href="http://www.cnchenchen.cn/come/myCart#">1 . 我的购物车</a></li>
+                <li class="cur2"><a href="http://www.cnchenchen.cn/come/myCart#">2 . 填写核对订单</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">3 . 成功提交订单</a></li>
+            </ul>
+        </div>
+    </div>
 
 </header>
 <!-- header End -->
 
 <!-- 订单提交成功 begin-->
 <section>
-	<div class="containers">
-		<div class="pc-space">
-			<div class="pc-order-title clearfix"><h3 class="fl">全部商品</h3></div>
-			<div class="pc-border">
-			<table border="0" width="1200px" cellspacing="0" cellpadding="0" style="border-color: #98a4a9">
-				<tbody><tr style="font-size: 20px;height: 30px;background-color:#F7F7F7">
-					<td width="100px"><input type="checkbox" id="chk">全选</td>
-					<td style="text-align: center">商品名称</td>
-					<td style="text-align: center">图片展示</td>
-					<td style="text-align: center">商品单价</td>
-					<td style="text-align: center">数量</td>
-					<td style="text-align: center">小计</td>
-					<td style="text-align: center">操作</td>
-				</tr>
-									<tr style="height: 120px;font-size: 18px;background-color: #EDFFF9">
-						<td width="100px"><input type="checkbox" class="ch" cid="99"></td>
-						<td style="text-align: center">中长裙</td>
-						<td style="text-align: center"><img src="/static/goods/icon/0.jpg" width="110px"></td>
-						<td style="text-align: center">234</td>
-						<td style="text-align: center">
+    <div class="containers">
+        <div class="pc-space">
+            <div class="pc-order-title clearfix"><h3 class="fl">全部商品</h3></div>
+            <div class="pc-border">
+                <table border="0" width="1200px" cellspacing="0" cellpadding="0" style="border-color: #98a4a9">
+                    <tbody>
+                    <tr style="font-size: 20px;height: 30px;background-color:#F7F7F7">
+                        <td width="100px"><input type="checkbox" id="chk">全选</td>
+                        <td colspan="2" style="text-align: center">商品名称</td>
+                        <td style="text-align: center">商品单价</td>
+                        <td style="text-align: center">数量</td>
+                        <td style="text-align: center">小计</td>
+                        <td style="text-align: center">操作</td>
+                    </tr>
+                    {% for cart in cart_list %}
+                    <tr style="height: 120px;font-size: 18px;background-color: #EDFFF9">
+                        <td width="100px"><input type="checkbox" class="ch" cid="{{cart.id}}"></td>
+                        <td colspan="2" style="text-align: center">{{ cart.product.title }}</td>
+                        <td style="text-align: center">{{ cart.unit_price }}</td>
+                        <td style="text-align: center">
 
-								<button class="btn1">-</button>
-								<span class="goodsNum">1</span>
-								<button class="btn2">+</button>
+                            <button class="btn1">-</button>
+                            <span class="goodsNum">{{ cart.product_count }}</span>
+                            <button class="btn2">+</button>
 
-						</td>
-						<td style="text-align: center " class="s" id="sub_total_99">234</td>
-						<td style="text-align: center" class="del">删除</td>
-						<input type="hidden" value="99">
-					</tr>
-												<tr style="height: 50px;font-size: 20px;background-color: #FFF4E8">
-					<td width="100px" style="text-align: center">总计:</td>
-					<td colspan="5" style="text-align: right;color: #1b961b">合计(不含运费)：<span>¥</span><em id="money">234</em></td>
-					<td style="text-align: center;background-color: #00CC66"><a href="http://www.cnchenchen.cn/come/orderAction">去结算</a></td>
-				</tr>
-							</tbody></table>
-			</div>
-		</div>
-	</div>
+                        </td>
+                        <td style="text-align: center " class="s" id="sub_total_{{ cart.id }}">{{ cart.total_price }}</td>
+                        <td style="text-align: center" class="del">删除</td>
+                        <input type="hidden" value="{{ cart.id }}">
+                    </tr>
+                    {% endfor %}
+                    <tr style="height: 50px;font-size: 20px;background-color: #FFF4E8">
+                        <td width="100px" style="text-align: center">总计:</td>
+                        <td colspan="5" style="text-align: right;color: #1b961b">合计(不含运费)：<span>¥</span><em id="money">{{ total_price }}</em>
+                        </td>
+                        <td style="text-align: center;background-color: #00CC66"><a
+                                href="">去结算</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- 订单提交成功 End-->
 
 
 <!--- footer begin-->
 <div class="aui-footer-bot">
-	<div class="time-lists aui-footer-pd clearfix">
-		<div class="aui-footer-list clearfix">
-			<h4>
-				<span><img src="/static/goods/icon/icon-d1.png"></span>
-				<em>消费者权益</em>
-			</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">保障范围 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>
-				<span><img src="/static/goods/icon/icon-d2.png"></span>
-				<em>新手上路</em>
-			</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>
-				<span><img src="/static/goods/icon/icon-d3.png"></span>
-				<em>保障正品</em>
-			</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>
-				<span><img src="/static/goods/icon/icon-d1.png"></span>
-				<em>消费者权益</em>
-			</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-	</div>
-	<div style="border-bottom:1px solid #dedede"></div>
-	<div class="time-lists aui-footer-pd time-lists-ls clearfix">
-		<div class="aui-footer-list clearfix">
-			<h4>购物指南</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">保障范围 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">购物流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">会员介绍 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">生活旅行</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 常见问题 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 联系客服购物指南 </a> </li>
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>特色服务</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
+    <div class="time-lists aui-footer-pd clearfix">
+        <div class="aui-footer-list clearfix">
+            <h4>
+                <span><img src="/static/goods/icon/icon-d1.png"></span>
+                <em>消费者权益</em>
+            </h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">保障范围 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>
+                <span><img src="/static/goods/icon/icon-d2.png"></span>
+                <em>新手上路</em>
+            </h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>
+                <span><img src="/static/goods/icon/icon-d3.png"></span>
+                <em>保障正品</em>
+            </h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>
+                <span><img src="/static/goods/icon/icon-d1.png"></span>
+                <em>消费者权益</em>
+            </h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+    </div>
+    <div style="border-bottom:1px solid #dedede"></div>
+    <div class="time-lists aui-footer-pd time-lists-ls clearfix">
+        <div class="aui-footer-list clearfix">
+            <h4>购物指南</h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">保障范围 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">购物流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">会员介绍 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">生活旅行</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 常见问题 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 联系客服购物指南 </a></li>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>特色服务</h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
 
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>帮助中心</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-		<div class="aui-footer-list clearfix">
-			<h4>新手指导</h4>
-			<ul>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心 </a> </li>
-				<li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a> </li>
-			</ul>
-		</div>
-	</div>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>帮助中心</h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+        <div class="aui-footer-list clearfix">
+            <h4>新手指导</h4>
+            <ul>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">退货退款流程</a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#">服务中心 </a></li>
+                <li><a href="http://www.cnchenchen.cn/come/myCart#"> 更多特色服务 </a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 <!-- footer End -->
 
 
 <script>
-	// 1.全选;
-	//加载完页面 复选框全部选中 总价等于全部商品单价乘数量的总和;
-	$(':checkbox').prop('checked','checked');
-	//当全选按钮被点击时;
-	$('#chk').click(function () {
-		//判断是选中,还是取消选中;
-		if($('#chk').is(':checked')){
-			//被选中,所以让每个框都选中
-			$('.ch').prop('checked','checked');
-			//遍历每一个单选框;
-			var t = 0;
-			$('.ch').each(function () {
-				//算总价  这里借用 单选框的cid属性 拼接了id 直接拿到小计的值;
-				t += parseFloat($('#sub_total_'+$(this).attr('cid')).text());
-			});
-			$('#money').text(t);
+    // 1.全选;
+    //加载完页面 复选框全部选中 总价等于全部商品单价乘数量的总和;
+    $(':checkbox').prop('checked', 'checked');
+    //当全选按钮被点击时;
+    $('#chk').click(function () {
+        //判断是选中,还是取消选中;
+        if ($('#chk').is(':checked')) {
+            //被选中,所以让每个框都选中
+            $('.ch').prop('checked', 'checked');
+            //遍历每一个单选框;
+            var t = 0;
+            $('.ch').each(function () {
+                //算总价  这里借用 单选框的cid属性 拼接了id 直接拿到小计的值;
+                t += parseFloat($('#sub_total_' + $(this).attr('cid')).text());
+            });
+            $('#money').text(t);
 
-		}else {
-			//被取消选中 所以让每个框都取消选中;
-			$('.ch').removeAttr('checked');
-			$('#money').text(0);
-		}
-	});
-	//对于单选框 当任意一个单选框被点击时;
-	$('.ch').click(function () {
-		//先定义一个变量  作用是最后根据这个变量决定全选按钮是否需要选中;
-		var bool = true;
-		var x = 0;
-		//遍历每一个单选框;
-		$('.ch').each(function () {
-			//判断当前单选框是否选中 如果没选中 就执行bool = false 取消全选框;
-			if($(this).is(':checked')){
-				//算总价
-				x += parseFloat($('#sub_total_'+$(this).attr('cid')).text());
-			}else{
-				bool = false;
-				$('#chk').removeAttr('checked');
-			}
-		});
-		//算总价 仅累加单选框被选中的商品;
-		$('#money').text(x);
-		//在这里判断bool 如果还是true 就是单选框都选中了 那就选中全选框;
-		if(bool){
-			$('#chk').prop('checked','checked');
-		}
-	});
-	//2.删除;
-	//当删除按钮被点击时;
-	$('.del').click(function () {
-		//用隐藏域拿到这个商品的id 再传到数据库去删除 在删除键本身上好像拿不到;
-		var d = $(this).next().val();
+        } else {
+            //被取消选中 所以让每个框都取消选中;
+            $('.ch').removeAttr('checked');
+            $('#money').text(0);
+        }
+    });
+    //对于单选框 当任意一个单选框被点击时;
+    $('.ch').click(function () {
+        //先定义一个变量  作用是最后根据这个变量决定全选按钮是否需要选中;
+        var bool = true;
+        var x = 0;
+        //遍历每一个单选框;
+        $('.ch').each(function () {
+            //判断当前单选框是否选中 如果没选中 就执行bool = false 取消全选框;
+            if ($(this).is(':checked')) {
+                //算总价
+                x += parseFloat($('#sub_total_' + $(this).attr('cid')).text());
+            } else {
+                bool = false;
+                $('#chk').removeAttr('checked');
+            }
+        });
+        //算总价 仅累加单选框被选中的商品;
+        $('#money').text(x);
+        //在这里判断bool 如果还是true 就是单选框都选中了 那就选中全选框;
+        if (bool) {
+            $('#chk').prop('checked', 'checked');
+        }
+    });
+    //2.删除;
+    //当删除按钮被点击时;
+    $('.del').click(function () {
+        //用隐藏域拿到这个商品的id 再传到数据库去删除 在删除键本身上好像拿不到;
+        var d = $(this).next().val();
 
-		//下面接ajax ---
-		var bool = confirm('确认删除吗?');
-		if(bool){
-			$(this).parent().remove();
-			$.get("http://www.cnchenchen.cn/come/del",{id:d});
-			location.reload()
-		}
-		history.go(0)
-		//有改动 再算一次总价;
-		var t = 0;
-		$('.s').each(function () {
-			t += parseFloat($(this).text());
-		});
-		$('#money').text(t);
-	});
-	//3.数量控制 4.小计;
-	//当点击减号;
-	$('.btn1').click(function () {
-		var num = $(this).next().text();
-		if(num > 1){
-			num -=1;
-			$(this).next().text(num);
-		}
-		var m = $(this).parent().prev().text();
-		var n = m*num;
-		$(this).parent().next().text(n);
-		//ajax--
-		var dd = $(this).parent().next().next().next().val();
-		$.get("http://www.cnchenchen.cn/come/cartCut",{id:dd,num:num})
-		//有改动 再算一次总价;
-		var t = 0;
-		$('.s').each(function () {
-			t += parseFloat($(this).text());
-		});
-		$('#money').text(t);
-	});
-	//当点击加号;
-	$('.btn2').click(function () {
-		var num2 = parseInt($(this).prev().text());
-		num2 += 1;
-		$(this).prev().text(num2);
-		var x = $(this).parent().prev().text();
-		var y = x*num2;
-		$(this).parent().next().text(y);
-		//ajax--
-		var dd = $(this).parent().next().next().next().val();
-		$.get("http://www.cnchenchen.cn/come/cartCut",{id:dd,num:num2});
-		//有改动 再算一次总价
-		var t = 0;
-		$('.s').each(function () {
-			t += parseFloat($(this).text());
-		});
-		$('#money').text(t);
-	});
+        //下面接ajax ---
+        var bool = confirm('确认删除吗?');
+        if (bool) {
+            $(this).parent().remove();
+            $.get("", {id: d});
+            location.reload()
+        }
+        history.go(0)
+        //有改动 再算一次总价;
+        var t = 0;
+        $('.s').each(function () {
+            t += parseFloat($(this).text());
+        });
+        console.log(t)
+        $('#money').text(t);
+    });
+    //3.数量控制 4.小计;
+    //当点击减号;
+    $('.btn1').click(function () {
+        var num = $(this).next().text();
+        if (num > 1) {
+            num -= 1;
+            $(this).next().text(num);
+        }
+        var m = $(this).parent().prev().text();
+        var n = m * num;
+        $(this).parent().next().text(n.toFixed(2));
+        //ajax--
+        var dd = $(this).parent().next().next().next().val();
+        $.get("", {id: dd, num: num})
+        //有改动 再算一次总价;
+        var t = 0;
+        $('.s').each(function () {
+            t += parseFloat($(this).text());
+        });
+        $('#money').text(t.toFixed(2));
+    });
+    //当点击加号;
+    $('.btn2').click(function () {
+        var num2 = parseInt($(this).prev().text());
+        num2 += 1;
+        $(this).prev().text(num2);
+        var x = $(this).parent().prev().text();
+        var y = x * num2;
+        $(this).parent().next().text(y.toFixed(2));
+        //ajax--
+        var dd = $(this).parent().next().next().next().val();
+        $.get("", {id: dd, num: num2});
+        //有改动 再算一次总价
+        var t = 0;
+        $('.s').each(function () {
+            t += parseFloat($(this).text());
+        });
+        $('#money').text(t.toFixed(2));
+    });
 
 
-
-</script></body></html>
+</script>
+</body>
+</html>

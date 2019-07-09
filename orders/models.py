@@ -43,7 +43,7 @@ class OrderInfo(models.Model):
     product_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='总价格')
     transit_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='运费')
     user = models.ForeignKey('users.User', verbose_name='用户')
-    addr = models.ForeignKey('users.Address', verbose_name='地址')
+    addr = models.ForeignKey('users.Address',on_delete=models.SET_NULL, verbose_name='地址', null=True, default=None)
     trance_num = models.CharField(max_length=100, default='', verbose_name='支付编号')
 
     class Meta:
