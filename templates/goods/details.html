@@ -188,7 +188,7 @@
                 <a href="#">服装城</a>
             </div>
         </div>
-        <div class="header-cart fr"><a href="#"><img src="/static/goods/icon/car.png"></a> <i class="head-amount">99</i></div>
+        <div class="header-cart fr"><a href="{% url 'goods:cart_manage' %}"><img src="/static/goods/icon/car.png"></a> <i class="head-amount">{{ amount }}</i></div>
         <div class="head-mountain"></div>
     </div>
     <div class="yHeader">
@@ -281,7 +281,7 @@
                         </div>
                         <div class="pc-emption">
                             <a href="#">立即购买</a>
-                            <a href="#" class="join">加入购物车</a>
+                            <a href="javascript:void(0);" class="join">加入购物车</a>
                         </div>
                     </div>
                     <div class="pc-product-s">
@@ -821,3 +821,9 @@
 <!-- footer End -->
 </body>
 </html>
+<script type="text/javascript" src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
+<script>
+    $('a[class="join"]').click(function () {
+        console.log('开始加入购物车')
+    })
+</script>
