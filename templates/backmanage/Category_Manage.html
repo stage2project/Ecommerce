@@ -1,6 +1,5 @@
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -10,13 +9,12 @@
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'backmanage/Widget/zTree/css/zTreeStyle/zTreeStyle.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/font-awesome.min.css' %}"/>
-
     <!--[if IE 7]>
 		  <link rel="stylesheet" href="{% static 'backmanage/assets/css/font-awesome-ie7.min.css' %}" />
     <![endif]-->
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="{% static 'backmanage/assets/css/ace-ie.min.css' %}" />
-		<![endif]-->
+	<![endif]-->
     <script src="{% static 'backmanage/assets/js/jquery.min.js' %}"></script>
     <!-- <![endif]-->
     <!--[if IE]>
@@ -44,17 +42,22 @@
 <div class=" clearfix">
     <div id="category">
         <div id="scrollsidebar" class="left_Treeview">
-            <div class="show_btn" id="rightArrow"><span></span></div>
+            <div class="show_btn" id="rightArrow">
+                <span></span>
+            </div>
             <div class="widget-box side_content">
-                <div class="side_title"><a title="隐藏" class="close_btn"><span></span></a></div>
+                <div class="side_title">
+                    <a title="隐藏" class="close_btn">
+                        <span></span>
+                    </a>
+                </div>
                 <div class="side_list">
                     <div class="widget-header header-color-green2">
                         <h4 class="lighter smaller">产品类型列表</h4>
                     </div>
                     <div class="widget-body">
                         <div class="widget-main padding-8">
-                            <div id="treeDemo" class="ztree">
-                            </div>
+                            <div id="treeDemo" class="ztree"></div>
                         </div>
                     </div>
                 </div>
