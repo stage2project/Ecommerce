@@ -97,7 +97,6 @@ def person(request):
 #         send_sms(phone, {'code': str(num), **SMSCONFIG})
 #         return JsonResponse({'code': 1})
 #
-
 def order(request):
     return render(request, 'goods/my-d.html')
 
@@ -122,3 +121,26 @@ def address(request):
     return render(request, 'goods/my-add.html')
 
 
+def address_manage(request):
+    return render(request, 'goods/my-add.html')
+
+
+def evaluation_manage(request):
+    return render(request, 'goods/my-p.html')
+
+
+def order_manage(request):
+    return render(request, 'goods/my-d.html')
+
+
+def collection_manage(request):
+    return render(request, 'goods/my-s.html')
+
+
+def order_info(request):
+    return render(request, 'goods/my-d-info.html')
+
+
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('goods:index'))

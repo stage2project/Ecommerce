@@ -74,28 +74,30 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#" style="float:left;">退出</a> </li>
-                {% if username == None %}
-                    <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a> </li>
+                <li style="display:none;"><a href="#" style="float:left;">嘻哈杂货铺</a> <a href="#"
+                                                                                       style="float:left;">退出</a></li>
+                {% if  not request.session.uid %}
+                    <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a></li>
+                    <li class="headerul">|</li>
+                    <li><a href="{% url 'users:register' %}">免费注册</a></li>
                 {% else %}
-                    {% for name in user %}
-                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ name.username }}</a> </li>
-                    {% endfor %}
+                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
+                    <li class="headerul">|</li>
+                    <li><a href="{% url 'users:logout' %}">退出</a></li>
                 {% endif %}
+
                 <li class="headerul">|</li>
-                <li><a href="{% url 'users:register' %}">免费注册</a></li>
+                <li><a href="{% url 'users:order_manage' %}">订单查询</a></li>
                 <li class="headerul">|</li>
-                <li><a href="my-d.html">订单查询</a></li>
-                <li class="headerul">|</li>
-                <li><a href="my-s.html">我的收藏</a></li>
+                <li><a href="{% url 'users:collection_manage' %}">我的收藏</a></li>
                 <li class="headerul">|</li>
                 <li id="pc-nav" class="menu"><a href="{% url 'users:person' %}" class="tit">我的商城</a>
                     <div class="subnav">
-                        <a href="my-d.html">我的订单</a>
-                        <a href="my-s.html">我的收藏</a>
+                        <a href="{% url 'users:order_manage' %}">我的订单</a>
+                        <a href="{% url 'users:collection_manage' %}">我的收藏</a>
                         <a href="{% url 'users:person' %}">账户安全</a>
-                        <a href="my-add.html">地址管理</a>
-                        <a href="my-p.html">我要评价</a>
+                        <a href="{% url 'users:address_manage' %}">地址管理</a>
+                        <a href="{% url 'users:evaluation_manage' %}">我要评价</a>
                     </div>
                 </li>
                 <li class="headerul">|</li>

@@ -145,17 +145,25 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li><a href="#">登录</a> </li>
+                {% if  not request.session.uid %}
+                    <li><a href="{% url 'users:login' %}" style="color:#ea4949;">请登录</a></li>
+                    <li class="headerul">|</li>
+                    <li><a href="{% url 'users:register' %}">免费注册</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
+                {% endif %}
                 <li class="headerul">|</li>
-                <li><a href="#">订单查询</a> </li>
+                <li><a href="{% url 'users:order_manage' %}">订单查询</a> </li>
                 <li class="headerul">|</li>
-                <li><a href="#">我的收藏</a> </li>
+                <li><a href="{% url 'users:collection_manage' %}">我的收藏</a> </li>
                 <li class="headerul">|</li>
-                <li id="pc-nav" class="menu"><a href="#" class="tit">我的商城</a>
+                <li id="pc-nav" class="menu"><a href="{% url 'users:person' %}" class="tit">我的商城</a>
                     <div class="subnav">
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
+                        <a href="{% url 'users:order_manage' %}">我的订单</a>
+                        <a href="{% url 'users:collection_manage' %}">我的收藏</a>
+                        <a href="#">账户安全</a>
+                        <a href="{% url 'users:address_manage' %}">地址管理</a>
+                        <a href="{% url 'users:evaluation_manage' %}">我要评价</a>
                     </div>
                 </li>
                 <li class="headerul">|</li>
