@@ -28,6 +28,7 @@
         <div class="form-group">
           <label for="category-fname">父节点</label>
           <select id="category-fname" class="form-control" name="parentid">
+              <option value="0">根节点</option>
               {% for big_category in all_big_category %}
                  <option value="{{ big_category.id }}">{{ big_category.name }}</option>
               {% endfor %}

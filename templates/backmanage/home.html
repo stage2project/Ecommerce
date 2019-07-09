@@ -181,7 +181,9 @@
     <div class="clearfix">
         <div class="home_btn">
             <div>
-                <a href="{% url 'backmanage:article_add' %}" title="添加商品" class="btn  btn-info btn-sm no-radius">
+
+                <a href="{% url 'backmanage:product_add' %}" title="添加商品" class="btn  btn-info btn-sm no-radius">
+
                     <i class="bigger-200"><img src="{% static 'backmanage/images/icon-addp.png' %}"/></i>
                     <h5 class="margin-top">添加商品</h5>
                 </a>
@@ -190,7 +192,8 @@
                     <h5 class="margin-top">产品分类</h5>
                 </a>
                 <a href="{% url 'backmanage:admin_info' %}" title="个人信息" class="btn  btn-success btn-sm no-radius">
-                    <i class="{% url 'backmanage:article_add' %}bigger-200"><img src="{% static 'backmanage/images/icon-grxx.png' %}"/></i>
+
+                    <i class="bigger-200"><img src="{% static 'backmanage/images/icon-grxx.png' %}"/></i>
                     <h5 class="margin-top">个人信息</h5>
                 </a>
                 <a href="{% url 'backmanage:systems' %}" title="系统设置" class="btn  btn-info btn-sm no-radius">

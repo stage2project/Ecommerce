@@ -1,7 +1,9 @@
 import hashlib
 import json
+import os
 from datetime import datetime
 from itertools import count
+from random import randint
 
 from django.contrib.messages.storage import session
 from django.db.models import Q
@@ -12,6 +14,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from Ecommerce import settings
 from Ecommerce.settings import SECRET_KEY
 from backmanage.models import *
 
@@ -20,11 +23,10 @@ import json
 
 # Create your views here.
 from backmanage.verfiCode import VerfiCode
-from goods.models import TbCategory, TbAttributeKey
+from goods.models import TbCategory, TbAttributeKey, TbSpuPics
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
 from users.models import User
-
 
 def add_competence(request):
     comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限', '普通管理员': '拥有网站系统大部分使用权限,无权限管理功能', '编辑管理员': '拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
@@ -216,7 +218,6 @@ def category_update(request, cid=None):
 
 
 def competence(request):
-    print('zxcvbnm')
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
@@ -306,16 +307,49 @@ def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
     if request.method == 'POST':
+        pictures = request.FILES.getlist('pictures')
+
         spu = TbSpu()
         spu.title = request.POST.get('title')
         spu.detail = request.POST.get('content')
         spu.brand = TbBrand.objects.get(pk=request.POST.get('brandid'))
         spu.category = TbCategory.objects.get(pk=request.POST.get('s_cid'))
         spu.unique_code = request.POST.get('unique_code')
+        spu.list_pirce = request.POST.get('list_pirce')
         spu.save()
-        file = request.FILES.get('photo')
+        paths = upload_pictures(spu.unique_code, pictures)
+        for path in paths:
+            spu_pic = TbSpuPics()
+            spu_pic.spu = spu
+            spu_pic.pic = path
+            spu_pic.save()
         return redirect(reverse('backmanage:sku_add', kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'), 'unique_code': spu.unique_code}))
     return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
+
+
+def upload_pictures(spuid, pictures):
+    paths = []
+    for picture in pictures:
+        path = os.path.join(settings.MEDIA_ROOT, str(spuid))
+        # 文件类型过滤
+        ext = os.path.splitext(picture.name)
+        if len(ext) < 1 or not ext[1] in settings.ALLOWED_FILEEXTS:
+            return redirect(reverse('backmanage:product_add'))
+
+        # 解决文件重名
+        if not os.path.exists(path):
+            os.makedirs(path) # 递归创建目录
+        path = os.path.join(path, picture.name)
+        paths.append('upload/'+str(spuid)+'/'+picture.name)
+        # 创建新文件
+        with open(path, 'wb') as fp:
+            # 如果文件超过2.5M,则分块读写
+            if picture.multiple_chunks():
+                for block1 in picture.chunks():
+                    fp.write(block1)
+            else:
+                fp.write(picture.read())
+    return paths
 
 
 @csrf_exempt
@@ -351,7 +385,6 @@ def pruduct_list(request):
     skus = []
     for sku in sku_list:
         skus.append({'sku': sku, 'unique_code': sku.spu.unique_code})
-    print(skus)
     return render(request, 'backmanage/Products_List.html', context={'categorys': category, 'sku_list': skus})
 
 
@@ -413,7 +446,6 @@ def user_list(request):        # 会员列表
 
 
 def attribute_list(request, cid):
-    print(cid)
     category = TbCategory.objects.get(pk=cid)
     attribute_key_all = category.attr_key.all()
     common_attribute = []
@@ -461,7 +493,6 @@ def attribute_add(request):
         is_common = request.POST.get('is_common')
         attribute_name = request.POST.get("attribute_name")
         attribute_value = request.POST.get("attribute_value")
-        print(is_common, attribute_name, attribute_value)
         if is_common is None or attribute_value is None or attribute_name is None or attribute_name.strip() == '' or attribute_value.strip() =='':
             return JsonResponse({'code': 1, 'msg': '参数错误'})
         if is_common == '1':
@@ -513,7 +544,6 @@ def verficode(request):
     vc = VerfiCode()
     res = vc.output()
     request.session['verficode'] = vc.code
-    print(request.session['verficode'])
     return HttpResponse(res)
 
 
