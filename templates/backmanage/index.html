@@ -291,7 +291,7 @@
             <div id="menu_style" class="menu_style">
                 <ul class="nav nav-list" id="nav_list">
                     <li class="home">
-                        <a href="{% url 'backmanage:index' %}" name="home.html" class="iframeurl" title="">
+                        <a href="javascript:void(0)" name="{% url 'backmanage:home' %}" class="iframeurl" title="">
                             <i class="icon-home"></i><span class="menu-text"> 系统首页 </span>
                         </a>
                     </li>
@@ -518,7 +518,7 @@
                         </a>
                         <ul class="submenu">
                             <li class="home">
-                                <a href="javascript:void(0)" name="{% url 'backmanage:admain_competence' %}" title="权限管理" class="iframeurl">
+                                <a href="javascript:void(0)" name="{% url 'backmanage:admin_competence' %}" title="权限管理" class="iframeurl">
                                     <i class="icon-double-angle-right"></i>权限管理
                                 </a>
                             </li>

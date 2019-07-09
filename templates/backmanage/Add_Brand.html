@@ -1,6 +1,5 @@
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -36,14 +35,19 @@
             <div class="title_name">添加品牌</div>
             <ul class="add_conent">
                 <li class=" clearfix">
-                    <label class="label_name"><i>*</i>品牌名称：</label>
-                    <input name="" type="text" class="add_text"/>
+                    <label class="label_name">
+                        <i>*</i>品牌名称：
+                    </label>
+                    <input name="bname" type="text" class="add_text"/>
                 </li>
                 <li class=" clearfix">
-                    <label class="label_name"><i>*</i>品牌序号：</label>
-                    <input name="" type="text" class="add_text" style="width:80px"/>
+                    <label class="label_name">
+                        <i>*</i>品牌序号：
+                    </label>
+                    <input name="blogo" type="text" class="add_text" style="width:80px"/>
                 </li>
-                <li class=" clearfix"><label class="label_name">品牌图片：</label>
+                <li class=" clearfix">
+                    <label class="label_name">品牌图片：</label>
                     <div class="demo l_f">
                         <div class="logobox">
                             <div class="resizebox">
@@ -52,32 +56,35 @@
                         </div>
                         <div class="logoupload">
                             <div class="btnbox">
-                                <a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">上传替换</a>
+                                <a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">
+                                    上传替换
+                                </a>
                             </div>
                             <div style="clear:both;height:0;overflow:hidden;"></div>
                             <div class="progress-box" style="display:none;">
-                                <div class="progress-num">上传进度：<b>0%</b></div>
+                                <div class="progress-num">
+                                    上传进度：
+                                    <b>0%</b>
+                                </div>
                                 <div class="progress-bar">
                                     <div style="width:0%;" class="bar-line"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="prompt"><p>图片大小<b>120px*60px</b>图片大小小于5MB,</p>
+                    <div class="prompt">
+                        <p>图片大小
+                            <b>120px*60px</b>图片大小小于5MB,
+                        </p>
                         <p>支持.jpg;.gif;.png;.jpeg格式的图片</p>
                     </div>
                 </li>
                 <li class=" clearfix">
-                    <label class="label_name"><i>*</i>所属地区：</label>
-                    <input name="" type="text" class="add_text" style="width:120px"/>
-                </li>
-                <li class=" clearfix"><label class="label_name">品牌描述：</label>
-                    <textarea name="" cols="" rows="" class="textarea" onkeyup="checkLength(this);">
-                    </textarea>
-                    <span class="wordage">剩余字数：<span id="sy" style="color:Red;">500</span>字</span>
-                </li>
-                <li class=" clearfix"><label class="label_name"><i>*</i>显示状态：</label>
-                    <label><input name="checkbox" type="radio" class="ace" checked="checked">
+                    <label class="label_name">
+                        <i>*</i>显示状态：
+                    </label>
+                    <label>
+                        <input name="checkbox" type="radio" class="ace" checked="checked">
                         <span class="lbl">显示</span>
                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label><input type="radio" class="ace" name="checkbox">
@@ -112,7 +119,8 @@
                 </div>
                 <div class="right_product produt_select_style">
                     <div class="title_name">归类商品</div>
-                    <select multiple="multiple" id="select2" class="select"></select>
+                    <select multiple="multiple" id="select2" class="select">
+                    </select>
                 </div>
             </div>
         </div>
@@ -141,23 +149,23 @@
         });
     })
 
-    function checkLength(which) {
-        var maxChars = 500;
-        if (which.value.length > maxChars) {
-            layer.open({
-                icon: 2,
-                title: '提示框',
-                content: '您出入的字数超多限制!',
-            });
-            // 超过限制的字数了就将 文本框中的内容按规定的字数 截取
-            which.value = which.value.substring(0, maxChars);
-            return false;
-        } else {
-            var curr = maxChars - which.value.length; // 减去 当前输入的
-            document.getElementById("sy").innerHTML = curr.toString();
-            return true;
-        }
-    }
+{#    function checkLength(which) {#}
+{#        var maxChars = 500;#}
+{#        if (which.value.length > maxChars) {#}
+{#            layer.open({#}
+{#                icon: 2,#}
+{#                title: '提示框',#}
+{#                content: '您出入的字数超多限制!',#}
+{#            });#}
+{#            // 超过限制的字数了就将 文本框中的内容按规定的字数 截取#}
+{#            which.value = which.value.substring(0, maxChars);#}
+{#            return false;#}
+{#        } else {#}
+{#            var curr = maxChars - which.value.length; // 减去 当前输入的#}
+{#            document.getElementById("sy").innerHTML = curr.toString();#}
+{#            return true;#}
+{#        }#}
+{#    }#}
 
     //下拉框交换JQuery
     $(function () {
@@ -189,7 +197,10 @@
             $("option:selected", this).appendTo('#select1');
         });
     });
-    var user = [{"id": 1, "name": "贝德玛（Bioderma）温和卸妆水净妍/舒妍洁肤液卸妆水 ", "status": "关闭"},
+
+    var user = [
+
+        {"id": 1, "name": "贝德玛（Bioderma）温和卸妆水净妍/舒妍洁肤液卸妆水 ", "status": "关闭"},
         {"id": 2, "name": "欧诗漫 OSM 奢华金萃臻贵娇宠礼盒", "status": "关闭"},
         {"id": 3, "name": "舒蕾洗发水奢养精油套装", "status": "关闭"},
         {"id": 4, "name": "雅芳小黑裙香体乳150g", "status": "关闭"},
@@ -208,7 +219,11 @@
         {"id": 17, "name": "华为 Mate 8 3GB+32GB版 月光银 移动联通电信4G手机 双卡双待", "status": "启用"},
         {"id": 18, "name": "努比亚(nubia)【3+64GB】小牛5 Z11mini 白色 移动联通电信4G手机 双卡双待", "status": "启用"},
         {"id": 19, "name": "三星 Galaxy A9 (SM-A9100) 魔幻金 全网通4G手机 双卡双待 ", "status": "启用"},
-        {"id": 20, "name": "华为 畅享5 梦幻金 移动联通电信4G手机 双卡双待", "status": "关闭"}];
+        {"id": 20, "name": "华为 畅享5 梦幻金 移动联通电信4G手机 双卡双待", "status": "关闭"}
+{#        {% for second_category in all_second_category %}#}
+{#            {"id": "{{ second_category.id }}", "name": "{{ second_category.name }}", "status": "{{second_category.status}}"}#}
+{#        {% endfor %}#}
+        ];
     $(document).ready(function () {
         var seach = $("#seach");
         seach.keyup(function (event) {

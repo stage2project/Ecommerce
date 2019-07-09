@@ -30,287 +30,280 @@
 <form action="" method="">
 <div class="Competence_add_style clearfix" id="add_privileges">
     {% csrf_token %}
-    <div class="left_Competence_add">
-        <div class="title_name">添加权限</div>
-        <div class="Competence_add">
-            <div class="form-group">
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
-                    权限名称
-                </label>
-                <div class="col-sm-9">
-                    <input type="text" id="form-field-1" placeholder="" name="privilege_name" class="col-xs-10 col-sm-5">
+        <div class="left_Competence_add">
+            <div class="title_name">添加权限</div>
+            <div class="Competence_add">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+                        权限名称
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="form-field-1" placeholder="" name="privilege_name" class="col-xs-10 col-sm-5"  value="{{ privilege.privilege_name }}" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1">权限描述 </label>
+                    <div class="col-sm-9">
+                        <textarea name="describe" class="form-control" id="form_textarea" placeholder="" onkeyup="checkLength(this);">
+                            {{ privilege.describe }}
+                        </textarea>
+                        <span class="wordage">剩余字数：
+                            <span id="sy" style="color:Red;">200</span>字
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1">用户选择 </label>
+                    <div class="col-sm-9">
+                        {% for admin in admins %}
+                            <label class="middle">
+                                <input class="ace" type="checkbox" id="id-disable-check" name="username" value="{{ admin.id }}" {% if admin in checked_admins %} checked {% endif %}>
+                                <span class="lbl" > {{ admin.admin_name }} </span>
+                            </label>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1">权限描述 </label>
-                <div class="col-sm-9">
-                    <textarea name="describe" class="form-control" id="form_textarea" placeholder="" onkeyup="checkLength(this);">
-                    </textarea>
-                    <span class="wordage">剩余字数：
-                        <span id="sy" style="color:Red;">200</span>字
-                    </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1">用户选择 </label>
-                <div class="col-sm-9">
-                    {% for admin in admins %}
+        </div>
+        <!--权限分配-->
+        <div class="Assign_style">
+            <div class="title_name">权限分配</div>
+
+            <div class="Select_Competence">
+
+                <!--产品管理-->
+                <dl class="permission-list">
+                    <dt>
                         <label class="middle">
-                            <input class="ace" type="checkbox" id="id-disable-check">
-                            <span class="lbl"> {{ admin.admin_name }} </span>
+                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                        <span class="lbl">产品管理</span>
                         </label>
-                    {% endfor %}
-                </div>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="1" class="ace" name="user-Character-0-0" id="id-disable-check" >
+                            <span class="lbl">产品列表</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="2" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">品牌管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="3" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">分类管理</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--图片管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">图片管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="4" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">广告管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="5" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">广告分类</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--交易管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">交易管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="6" class="ace" name="user-Character-0-0" id="id-disable-check" >
+                            <span class="lbl">交易信息</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="7" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">交易订单(图)</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="8" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">订单管理</span>
+                        </label>
+                        <br>
+                        <label class="middle">
+                            <input type="checkbox" value="9" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">交易金额</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="10" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">订单处理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="11" class="ace" name="user-Character-0-0" id="user-Character-0-1" >
+                            <span class="lbl">退款操作</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--支付管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">支付管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="12" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">账户管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="13" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">支付方式</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="14" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">支付配置</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--会员管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">会员管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="15" class="ace" name="user-Character-0-0" id="id-disable-check" >
+                            <span class="lbl">会员信息</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="16" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">等级管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="17" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">会员记录管理</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--消息管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">消息管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="18" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">留言列表</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="19" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">意见反馈</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--文章管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">文章管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="20" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">文章列表</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="21" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">分类管理</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--系统管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">系统管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="22" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">系统设置</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="23" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">系统栏目管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="24" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">系统日志</span>
+                        </label>
+                    </dd>
+                </dl>
+                <!--管理员管理-->
+                <dl class="permission-list">
+                    <dt>
+                        <label class="middle">
+                            <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
+                            <span class="lbl">管理员管理</span>
+                        </label>
+                    </dt>
+                    <dd>
+                        <label class="middle">
+                            <input type="checkbox" value="25" class="ace" name="user-Character-0-0" id="id-disable-check">
+                            <span class="lbl">权限管理</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="26" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">管理员列表</span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="middle">
+                            <input type="checkbox" value="27" class="ace" name="user-Character-0-0" id="user-Character-0-1">
+                            <span class="lbl">个人信息</span>
+                        </label>
+                    </dd>
+                </dl>
             </div>
-{#                <!--按钮操作-->#}
-{#                <div class="Button_operation">#}
-{#                    <button onclick="article_save_submit();" class="btn btn-primary radius" type="submit" id="save_submit">#}
-{#                        <i class="fa fa-save "></i> 保存并提交#}
-{#                    </button>#}
-{#                    <button onclick="article_save();" class="btn btn-secondary  btn-warning" type="button" id="backout">#}
-{#                        <i class="fa fa-reply"></i> 返回上一步#}
-{#                    </button>#}
-{#                    <button onclick="layer_close();" class="btn btn-default radius" type="button">#}
-{#                        &nbsp;&nbsp;取消&nbsp;&nbsp;#}
-{#                    </button>#}
-{#                </div>#}
         </div>
-    </div>
-    <!--权限分配-->
-    <div class="Assign_style">
-        <div class="title_name">权限分配</div>
-        <div class="Select_Competence">
-            <!--产品管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                    <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                    <span class="lbl">产品管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">产品列表</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">品牌管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-2" id="user-Character-0-1">
-                        <span class="lbl">分类管理</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--图片管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">图片管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">广告管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">广告分类</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--交易管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">交易管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">交易信息</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">交易订单(图)</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">订单管理</span>
-                    </label>
-                    <br>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">交易金额</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">订单处理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">退款操作</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--支付管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">支付管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">账户管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">支付方式</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">支付配置</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--会员管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">会员管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">会员信息</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">等级管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">会员记录管理</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--消息管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">消息管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">留言列表</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">意见反馈</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--文章管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">文章管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">文章列表</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">分类管理</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--系统管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">系统管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">系统设置</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">系统栏目管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">系统日志</span>
-                    </label>
-                </dd>
-            </dl>
-            <!--管理员管理-->
-            <dl class="permission-list">
-                <dt>
-                    <label class="middle">
-                        <input name="user-Character-0" class="ace" type="checkbox" id="id-disable-check">
-                        <span class="lbl">管理员管理</span>
-                    </label>
-                </dt>
-                <dd>
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-0" id="id-disable-check">
-                        <span class="lbl">权限管理</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">管理员列表</span>
-                    </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label class="middle">
-                        <input type="checkbox" value="" class="ace" name="user-Character-0-1" id="user-Character-0-1">
-                        <span class="lbl">个人信息</span>
-                    </label>
-                </dd>
-            </dl>
-        </div>
-    </div>
+{#        {% endif %}#}
+{#    {% endfor %}#}
 </div>
 <!--按钮操作-->
 <div class="Button_operation">
-    <button onclick="article_save_submit();" class="btn btn-primary radius" type="submit" id="save_submit">
+    <button onclick="article_save_submit();" class="btn btn-primary radius" type="button" id="save_submit">
         <i class="fa fa-save "></i> 保存并提交
     </button>
     <button onclick="article_save();" class="btn btn-secondary  btn-warning" type="button" id="backout">
@@ -383,7 +376,13 @@
 
     /*提交事件*/
     function article_save_submit() {
-        $.post('{% url "backmanage:competence" %}', $('form').serialize())
+        $.post('{% url "backmanage:competence" %}', $('form').serialize(),function(data){
+           if(data['code'] == 0){
+               window.location.href = '{% url "backmanage:admin_competence" %}'
+           }else{
+               alert(data['msg'])
+           }
+        })
     };
 {#    $('#save_submit').on('click', function () {#}
 {#        $.post('{% url "backmanage:competence" %}', $('#add_privileges').serialize())#}
@@ -410,5 +409,20 @@
 {##}
 {#            })#}
 {#    };#}
-
+$(function () {
+    {% autoescape off %}
+        select_list = eval("("+"{{ privilege.menu_list}}"+")")
+        child_inputs = $('input[name="user-Character-0-0"]')
+        for(i=0; i<child_inputs.length; i++){
+            if($.inArray(child_inputs[i].value, select_list) >= 0 ){
+                $(child_inputs[i]).attr('checked', 'checked')
+            }
+        }
+        parents_inputs = $('input[name="user-Character-0"]')
+        for(i=0; i<parents_inputs.length;i++){
+            console.log($(parents_inputs[i]).parent('dl'))
+            break;
+        }
+    {% endautoescape %}
+})
 </script>

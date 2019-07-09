@@ -24,7 +24,6 @@
     <script src="{% static 'backmanage/assets/laydate/laydate.js' %}" type="text/javascript"></script>
     <title>管理权限</title>
 </head>
-
 <body>
 <div class="margin clearfix">
     <div class="border clearfix">
@@ -32,7 +31,7 @@
             <a href="{% url 'backmanage:competence' %}" id="Competence_add" class="btn btn-warning" title="添加权限">
                 <i class="fa fa-plus"></i> 添加权限
             </a>
-            <a href="javascript:ovid()" class="btn btn-danger">
+            <a href="javascript:ovid()" class="btn btn-danger" onclick="batch_del()">
                 <i class="fa fa-trash"></i> 批量删除
             </a>
         </span>
@@ -136,16 +135,27 @@
 {#            }#}
 {#        });#}
 {#     });#}
+
     /*权限-删除*/
     function Competence_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
+            if (id) {
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!', {icon: 1, time: 1000});
+            }
         });
     }
+    function batch_del() {
+        to_del = $('input[type="checkbox"]:checked')
+        console.log(to_del.length)
+        for(i=0;i<to_del.length;i++){
+            $(to_del[i]).parents("tr").remove();
+        }
+        layer.msg('已删除!', {icon: 1, time: 1000});
+    }
     /*修改权限*/
-    function Competence_modify(id) {
-        window.location.href = "{% url 'backmanage:competence' %}?=" + id;
+    function Competence_modify(index) {
+        window.location.href = "{% url 'backmanage:competence' %}" + index +'/';
 
     };
     /*字数限制*/

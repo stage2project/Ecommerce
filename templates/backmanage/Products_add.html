@@ -34,7 +34,9 @@
                 <select id="big_category">
                 <option>选择产品分类</option>
                 {% for big_category in all_big_category %}
-                   <option value="{{ big_category.id }}">{{ big_category.name }}</option>
+                   <option value="{{ big_category.id }}">
+                       {{ big_category.name }}
+                   </option>
                 {% endfor %}
                 </select>
                 <select id="small_category">

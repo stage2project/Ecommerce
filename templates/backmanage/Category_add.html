@@ -1,56 +1,83 @@
+{% load static %}
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>修改栏目 - 异清轩博客管理系统</title>
-<link rel="stylesheet" type="text/css" href="/static/backmanage/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/static/backmanage/css/style.css">
-<link rel="stylesheet" type="text/css" href="/static/backmanage/css/font-awesome.min.css">
-<script src="/static/backmanage/js/jquery-1.9.1.min.js"></script>
-
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>新增类目</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'backmanage/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'backmanage/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'backmanage/assets/css/font-awesome.min.css' %}">
+    <script src="{% static 'backmanage/js/jquery-1.9.1.min.js' %}"></script>
 </head>
-
 <body class="user-select">
 <section class="container-fluid">
-
-  <div class="row">
-
-    <div class="" id="main">
-      <h1 class="page-header">添加类目</h1>
-      <form action="{% url 'backmanage:category_add' %}" method="post">
-        <div class="form-group">
-          <label for="category-name">类目名称</label>
-          <input type="text" id="category-name" name="name" class="form-control" placeholder="在此处输入栏目名称" required autocomplete="off">
-          <span class="prompt-text">这是类目名称，显示商品分类。</span> </div>
-        <div class="form-group">
-          <label for="category-fname">父节点</label>
-          <select id="category-fname" class="form-control" name="parentid">
-              <option value="0">根节点</option>
-              {% for big_category in all_big_category %}
-                 <option value="{{ big_category.id }}">{{ big_category.name }}</option>
-              {% endfor %}
-          </select>
-          <span class="prompt-text">类目是有层级关系的，您可以有一个“手机”分类目录，在这个目录下可以有叫做“智能手机”和“老年手机”的子类目。</span> </div>
-          <div class="form-group">
-          <label for="category-fname">显示顺序</label>
-          <input type="number" id="category-name" min="0" max="100" name="order" class="form-control" placeholder="在此处输入类目顺序" required autocomplete="off">
-          <span class="prompt-text">类目是有层级关系的，此字段用来控制前台的显示顺序。</span> </div>
-        <div class="form-group">
-          <label for="category-describe">描述</label>
-          <textarea class="form-control" id="category-describe" name="description" rows="4" autocomplete="off"></textarea>
+    <div class="row">
+        <div class="" id="main">
+            <h1 class="page-header">添加类目</h1>
+            <form action="{% url 'backmanage:category_add' %}" method="post">
+                <div class="form-group">
+                    <label for="category-name">
+                        类目名称
+                    </label>
+                    <input type="text" id="category-name" name="name" class="form-control" placeholder="在此处输入栏目名称" required autocomplete="off">
+                    <span class="prompt-text">
+                    这是类目名称，显示商品分类
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="category-fname">
+                        父节点
+                    </label>
+                    <select id="category-fname" class="form-control" name="parentid">
+                        <option value="0">
+                            根节点
+                        </option>
+                        {% for big_category in all_big_category %}
+                            <option value="{{ big_category.id }}">
+                                {{ big_category.name }}
+                                {% for second_category in all_second_category %}
+                                    {% if second_category.parentid == big_category.id %}
+                                        <option value="{{ second_category.id }}">
+                                            {{ second_category.name }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <span class="prompt-text">
+                        类目是有层级关系的，您可以有一个“手机”分类目录，在这个目录下可以有叫做“智能手机”和“老年手机”的子类目
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="category-fname">
+                        显示顺序
+                    </label>
+                    <input type="number" id="category-name" min="0" max="100" name="order" class="form-control" placeholder="在此处输入类目顺序" required autocomplete="off">
+                    <span class="prompt-text">
+                        类目是有层级关系的，此字段用来控制前台的显示顺序
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label for="category-describe">
+                        描述
+                    </label>
+                    <textarea class="form-control" id="category-describe" name="description" rows="4" autocomplete="off">
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">
+                        添加
+                    </button>
+                </div>
+            </form>
         </div>
-          <div  class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
-          </div>
-      </form>
     </div>
-  </div>
 </section>
-
-<script src="/static/backmanage/js/bootstrap.min.js"></script>
-<script src="/static/backmanage/js/admin-scripts.js"></script>
+<script src="{% static 'backmanage/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'backmanage/js/admin-scripts.js' %}"></script>
 </body>
 </html>

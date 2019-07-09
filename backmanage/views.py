@@ -88,7 +88,17 @@ def account_detail(request):
 
 
 def add_brand(request):
-    return render(request, 'backmanage/Add_Brand.html')
+    all_second_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
+    print(all_second_category)
+    if request.method == "POST":
+        brand = TbBrand()
+        brand.name = request.POST['bname']
+        brand.logo = request.POST['blogo']
+        brand.yn = request.POST['checkbox']
+        brand.category = request.POST['description']
+        brand.save()
+        return redirect(reverse('backmanage:brand_manage'))
+    return render(request, 'backmanage/Add_Brand.html',context={'all_second_category':all_second_category})
 
 
 def admin_competence(request):
@@ -102,6 +112,13 @@ def admin_competence(request):
 
 
 def admin_info(request):
+    if request.method == 'POST':
+        oldpwd = request.POST.get('oldpwd')
+        newpwd = request.POST.get('newpwd')
+        confirm_newpwd = request.POST.get('confirm_newpwd')
+        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password = newpwd)
+        print(oldpwd,newpwd,confirm_newpwd,res)
+        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name=request.session.get('username'))
     return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
@@ -116,18 +133,16 @@ def administrator(request):
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
+        privilege = Privilege.objects.filter(id = request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
         admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
         admin.save()
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_total = Admin.objects.count()
-    admin_super = Admin.objects.filter(privilege=13).count()
-    admin_commom = Admin.objects.filter(privilege=14).count()
-    admin_editor = Admin.objects.filter(privilege=15).count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/administrator.html', context={'admin_total': admin_total, 'admin_super': admin_super, 'admin_commom': admin_commom, 'admin_editor': admin_editor, 'admins': admins, 'privileges': privileges})
+    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admins':admins,'privileges':privileges})
+
 
 
 def ads_list(request):
@@ -159,7 +174,9 @@ def brand_details(request):
 
 
 def brand_manage(request):
-    return render(request, 'backmanage/Brand_Manage.html')
+    brands = TbBrand.objects.all()
+
+    return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
 
 
 def category_manage(request):
@@ -178,34 +195,27 @@ def category_list(request):
 @csrf_exempt
 def category_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_second_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
     if request.method == "POST":
         category = TbCategory()
-        name = request.POST['name']
-        order = request.POST['order']
-        parentid = request.POST['parentid']
-        description = request.POST['description']
-        category.name = name
-        category.parentid = parentid
-        category.description = description
-        category.order = order
+        category.name = request.POST['name']
+        category.parentid = request.POST['parentid']
+        category.order = request.POST['order']
+        category.description = request.POST['description']
         category.save()
         # todo 增加小类目时，列表未更新
         return redirect(reverse('backmanage:category_list'))
-    return render(request, 'backmanage/Category_add.html', context={'all_big_category': all_big_category})
+    return render(request, 'backmanage/Category_add.html', context={'all_big_category': all_big_category,'all_second_category':all_second_category})
 
 
 @csrf_exempt
 def category_update(request, cid=None):
     if request.method == 'POST':
         category = TbCategory.objects.get(pk=request.POST.get('cid'))
-        name = request.POST.get('name')
-        parentid = request.POST.get('parentid')
-        description = request.POST.get('description')
-        order = request.POST.get('order')
-        category.name = name
-        category.parentid = parentid
-        category.description = description
-        category.order = order
+        category.name = request.POST.get('name')
+        category.parentid = request.POST.get('parentid')
+        category.description = request.POST.get('description')
+        category.order = request.POST.get('order')
         category.save()
         # todo 修改所属分类时，列表未更新
         return redirect(reverse('backmanage:category_list'))
@@ -217,16 +227,25 @@ def category_update(request, cid=None):
     return render(request, 'backmanage/Category_update.html', context={"category": category, 'all_big_category': all_big_category})
 
 
-def competence(request):
+def competence(request,index=0):
+    if index:
+        privilege = Privilege.objects.get(pk=index)
+        checked_admins = privilege.admin.all()
+        print(privilege,checked_admins)
+        admins = Admin.objects.all()
+        return render(request, 'backmanage/Competence.html', context={'admins': admins,'checked_admins': checked_admins, 'privilege': privilege})
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
         add_prv.describe = request.POST.get('describe')
-
-        # add_prv.menu_list = request.POST.get()
+        add_prv.menu_list = request.POST.getlist('user-Character-0-0')
+        add_prv.save()
+        user = request.POST.getlist('username')
+        for u in user:
+            Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
+        return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
-    privileges = Privilege.objects.all()
-    return render(request, 'backmanage/Competence.html', context={'admins': admins, 'privileges': privileges})
+    return render(request, 'backmanage/Competence.html',context={'admins':admins,})
 
 
 def cover_management(request):
@@ -308,7 +327,6 @@ def product_add(request):
     all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
     if request.method == 'POST':
         pictures = request.FILES.getlist('pictures')
-
         spu = TbSpu()
         spu.title = request.POST.get('title')
         spu.detail = request.POST.get('content')
@@ -380,6 +398,8 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
 
 
 def pruduct_list(request):
+    # if request.method == 'POST':
+
     category = TbCategory.objects.values('id', 'name', 'parentid').filter(status=0).order_by('order').all()
     sku_list = TbSku.objects.all()
     skus = []

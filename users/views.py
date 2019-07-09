@@ -144,3 +144,7 @@ def order_info(request):
 def logout(request):
     request.session.flush()
     return redirect(reverse('goods:index'))
+
+
+def send_sms(request):
+    return None
