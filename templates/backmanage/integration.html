@@ -22,22 +22,12 @@
     <script src="{% static 'backmanage/assets/js/jquery.dataTables.bootstrap.js' %}"></script>
     <script src="{% static 'backmanage/assets/layer/layer.js' %}" type="text/javascript"></script>
     <script src="{% static 'backmanage/assets/laydate/laydate.js' %}" type="text/javascript"></script>
-    <title>积分管理</title>
+    <title>会员记录管理</title>
 </head>
 
 <body>
 <div class="margin clearfix">
     <div class="" id="Other_Management">
-{#        <div class="search_style">#}
-{##}
-{#            <ul class="search_content clearfix">#}
-{#                <li><label class="l_f">会员名称</label><input name="" type="text" class="text_add"#}
-{#                                                          placeholder="输入会员名称、电话、邮箱" style=" width:400px"></li>#}
-{#                <li style="width:90px;">#}
-{#                    <button type="button" class="btn_search"><i class="fa fa-search"></i>查询</button>#}
-{#                </li>#}
-{#            </ul>#}
-{#        </div>#}
         <div class="border clearfix">
        <span class="l_f">
         <a href="javascript:ovid()" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;批量删除</a>
@@ -52,52 +42,26 @@
                     <th width="80">用户ID</th>
                     <th width="100">用户名</th>
                     <th width="80">积分</th>
-                    <th width="120">浏览(条)</th>
-                    <th width="120">购物(比)</th>
+                    <th width="120">浏览记录(条)</th>
+                    <th width="120">购物记录(单)</th>
                     <th width="250">操作</th>
                 </tr>
                 </thead>
                 <tbody>
+                {% for all in user %}
                 <tr>
                     <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                    <td>4577566</td>
-                    <td>花海iatiant</td>
-                    <td><a href="javascript:ovid()" onclick="integration_history('23')">3434</a></td>
+                    <td>{{ all.id }}</td>
+                    <td>{{ all.username }}</td>
+                    <td><a href="javascript:ovid()" onclick="integration_history('23')">{{ all.grade }}</a></td>
                     <td><a href="javascript:ovid()" onclick="Browse_history('13')">3434</a></td>
                     <td><a href="javascript:ovid()" onclick="Order_history('33')">34</a></td>
                     <td><a title="删除" href="javascript:;" onclick="member_del(this,'1')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a></td>
+                            class="fa fa-trash  bigger-120"></i>删除</a>
+                    </td>
                 </tr>
-                <tr>
-                    <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                    <td>4543232</td>
-                    <td>花海iatiant</td>
-                    <td><a href="javascript:ovid()" onclick="integration_history('43')">45</a></td>
-                    <td><a href="javascript:ovid()" onclick="Browse_history('53')">11</a></td>
-                    <td><a href="javascript:ovid()" onclick="Order_history('23')">45</a></td>
-                    <td><a title="删除" href="javascript:;" onclick="member_del(this,'2')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                    <td>4543232</td>
-                    <td>花海</td>
-                    <td><a href="javascript:ovid()" onclick="integration_history('5')">45</a></td>
-                    <td><a href="javascript:ovid()" onclick="Browse_history('4')">11</a></td>
-                    <td><a href="javascript:ovid()" onclick="Order_history('5')">45</a></td>
-                    <td><a title="删除" href="javascript:;" onclick="member_del(this,'3')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                    <td>4543232</td>
-                    <td>张小泉</td>
-                    <td><a href="javascript:ovid()" onclick="integration_history('5')">245</a></td>
-                    <td><a href="javascript:ovid()" onclick="Browse_history('4')">131</a></td>
-                    <td><a href="javascript:ovid()" onclick="Order_history('7')">45</a></td>
-                    <td><a title="删除" href="javascript:;" onclick="member_del(this,'5')" class="btn btn-xs btn-warning"><i
-                            class="fa fa-trash  bigger-120"></i></a></td>
-                </tr>
+                {% endfor %}
+
                 </tbody>
             </table>
         </div>
@@ -124,76 +88,7 @@
             <td>1234</td>
             <td>2016-7-12 12:23:34</td>
         </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 畅享5S 金色 移动联通电信4G手机 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>345</td>
-            <td>232</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">乐视（Le）乐2Pro 32GB 金色 移动联通</a></td>
-            <td>4566</td>
-            <td>3455</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 P9 plus 64GB 琥珀金 移动联通电信卡双待 </a></td>
-            <td>231</td>
-            <td>11</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 P9 plus 64GB 琥珀金 移动联通电信 </a></td>
-            <td>23</td>
-            <td>12</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
+
         </tbody>
     </table>
 
@@ -218,76 +113,7 @@
             <td>1234</td>
             <td>2016-7-12 12:23:34</td>
         </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 畅享5S 金色 移动联通电信4G手机 </a></td>
-            <td>2565</td>
-            <td>1234</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">荣耀7i 海岛蓝 移动4G手机 双卡双待 </a></td>
-            <td>345</td>
-            <td>232</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">乐视（Le）乐2Pro 32GB 金色 移动联通</a></td>
-            <td>4566</td>
-            <td>3455</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 P9 plus 64GB 琥珀金 移动联通电信卡双待 </a></td>
-            <td>231</td>
-            <td>11</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">华为 P9 plus 64GB 琥珀金 移动联通电信 </a></td>
-            <td>23</td>
-            <td>12</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
+
         </tbody>
     </table>
 
@@ -320,13 +146,6 @@
             <td><a href="#">hd23342354534534</a></td>
             <td>2</td>
             <td>待收货</td>
-            <td>2016-7-12 12:23:34</td>
-        </tr>
-        <tr>
-            <td>花海天天</td>
-            <td><a href="#">hd23342354534534 </a></td>
-            <td>3</td>
-            <td>已完成</td>
             <td>2016-7-12 12:23:34</td>
         </tr>
         <tr>

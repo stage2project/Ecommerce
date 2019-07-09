@@ -64,7 +64,7 @@ def register(request):
             user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
                                        email=email, phone=phone)
             user.save()
-            return redirect(reverse('goods:index'))
+            return redirect(reverse('users:login'))
 
     return render(request, 'goods/register.html', context={
             'form': form

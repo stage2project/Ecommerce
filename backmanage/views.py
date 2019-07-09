@@ -116,8 +116,8 @@ def admin_info(request):
         oldpwd = request.POST.get('oldpwd')
         newpwd = request.POST.get('newpwd')
         confirm_newpwd = request.POST.get('confirm_newpwd')
-        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password = newpwd)
-        print(oldpwd,newpwd,confirm_newpwd,res)
+        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpwd)
+        print(oldpwd, newpwd, confirm_newpwd, res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name=request.session.get('username'))
@@ -267,7 +267,8 @@ def home(request):
 
 
 def integration(request):
-    return render(request, 'backmanage/integration.html')
+    user = User.objects.all()
+    return render(request, 'backmanage/integration.html', context={'user': user})
 
 
 def member_grading(request):
@@ -449,18 +450,8 @@ def transaction(request):
 
 
 def user_list(request):        # 会员列表
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        sex = request.POST.get('form-field-radio')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        place = request.POST.get('place')
-        birthday = request.POST.get('birthday')
-        user = User(username=username, password=password, sex=sex, phone=phone,
-                    email=email, birthday=birthday, place=place)
-        user.save()
-        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
+    # del = User.objects.get(pk)
+    # del.delete()
     user = User.objects.all()
     return render(request, 'backmanage/user_list.html', context={'user': user})
 

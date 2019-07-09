@@ -30,14 +30,14 @@
 <div class="margin clearfix">
     <div class="cover_style" id="cover_style">
         <div class="search_style">
-
-            <ul class="search_content clearfix">
-                <li><label class="l_f">用户</label><input name="" type="text" class="text_add" placeholder="用户名称"
-                                                        style=" width:250px"></li>
-                <li style="width:90px;">
-                    <button type="button" class="btn_search"><i class="fa fa-search"></i>查询</button>
-                </li>
-            </ul>
+{##}
+{#            <ul class="search_content clearfix">#}
+{#                <li><label class="l_f">用户</label><input name="" type="text" class="text_add" placeholder="用户名称"#}
+{#                                                        style=" width:250px"></li>#}
+{#                <li style="width:90px;">#}
+{#                    <button type="button" class="btn_search"><i class="fa fa-search"></i>查询</button>#}
+{#                </li>#}
+{#            </ul>#}
         </div>
         <!--操作-->
         <div class="border clearfix">
@@ -69,19 +69,23 @@
                     <td>1</td>
                     <td><u style="cursor:pointer" class="text-primary"
                            onclick="member_show('张小泉','member-show.html','1031','500','400')">张奶奶</u></td>
-                    <td>345.2</td>
+                    <td>9999</td>
                     <td>0.00</td>
-                    <td>无</td>
-                    <td>购买商品消费122元</td>
+                    <td>2019-8-8 12:21</td>
+                    <td>购买商品消费132元</td>
                     <td>2016-7-21 12:45</td>
                     <td class="td-status"><span class="label label-success radius">启用</span></td>
                     <td class="td-manage">
                         <a onClick="member_stop(this,'10001')" href="javascript:;" title="启用"
-                           class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i></a>
-                        <a href="javascript:ovid()" name="Account_Details.html"
-                           class="btn btn-xs  btn-warning Account_Details" onclick="generateOrders('511');"
-                           title="张奶奶账户详细">
-                            <i class="fa fa-list-ul bigger-120"></i></a>
+                           class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i>停用</a>
+{#                        <a href="javascript:ovid()" name="Account_Details.html"#}
+{#                           class="btn btn-xs  btn-warning Account_Details" onclick="generateOrders('511');"#}
+{#                           title="张奶奶账户详细">#}
+{#                            <i class="fa fa-list-ul bigger-120"></i>删除</a>#}
+                        <a title="删除" href="javascript:;" onclick="member_del(this,'1')"
+                                       class="btn btn-xs btn-warning">
+                            <i class="fa fa-list-ul bigger-120"></i>删除
+                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -97,11 +101,14 @@
                     <td class="td-status"><span class="label label-success radius">启用</span></td>
                     <td class="td-manage">
                         <a onClick="member_stop(this,'10001')" href="javascript:;" title="启用"
-                           class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i></a>
-                        <a href="javascript:ovid()" name="Account_Details.html"
-                           class="btn btn-xs  btn-warning Account_Details" onclick="generateOrders('561');"
-                           title="张小泉账户详细">
-                            <i class="fa fa-list-ul bigger-120"></i></a>
+                           class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i>停用</a>
+{#                        <a href="javascript:ovid()" name="Account_Details.html"#}
+{#                           class="btn btn-xs  btn-warning Account_Details" onclick="generateOrders('561');"#}
+{#                           title="张小泉账户详细">#}
+{#                            <i class="fa fa-list-ul bigger-120"></i>删除</a>#}
+                        <a title="删除" href="javascript:;" onclick="member_del(this,'1')"
+                                       class="btn btn-xs btn-warning">
+                            <i class="fa fa-list-ul bigger-120"></i>删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -187,4 +194,13 @@
     function generateOrders(id) {
         window.location.href = "Account_Details.html?=" + id;
     };
+
+     /*用户-删除*/
+    function member_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!', {icon: 1, time: 1000});
+        });
+    }
+
 </script>
