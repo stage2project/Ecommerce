@@ -18,8 +18,9 @@ class PayMethod(models.Model):
 
 class Advertisement(models.Model):
     pic = models.CharField(max_length=100, null=False)
-    yn = models.SmallIntegerField()
-    order = models.SmallIntegerField()
+    yn = models.SmallIntegerField(default=0)
+    order = models.SmallIntegerField(default=0)
+    type = models.SmallIntegerField(default=0)
     create_time = models.DateTimeField(default=datetime.now)
 
     class Meta:

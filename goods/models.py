@@ -125,3 +125,16 @@ class TbSpuAttr(models.Model):
 
     class Meta:
         db_table = "tb_spu_attr"
+
+
+class TbCategoryPics(models.Model):
+    """商品展示图表
+    商品id，图像路径，是否是默认图片
+    """
+    category = models.ForeignKey(TbCategory, models.CASCADE, db_column='cid', related_name='category_pic')
+    pic = models.CharField(max_length=1000, blank=True, null=True)
+    yn = models.IntegerField(default=0)
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'tb_category_pics'
