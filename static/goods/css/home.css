@@ -590,8 +590,8 @@ body{min-width: 1200px; _width:expression(document.documentElement.clientWidth>1
 .pc-adults ul li .cur {border:2px solid #c40000; padding:4px 7px;}
 .pc-adults-p {width:68px;}
 .pc-adults-p input {width:40px; height:30px; border:1px solid #a4a3a9; padding-left:3px; float:left;}
-.pc-adults-p .amount1 {width:18px; height:14px; display:block; background:url("../icon/a-top.png") no-repeat; float:left; margin-left:4px; margin-bottom:4px;}
-.pc-adults-p .amount2 {width:18px; height:14px; display:block; background:url("../icon/a-bop.png") no-repeat; float:left; margin-left:4px;}
+.pc-adults-p .amount1 {width:27px; height:16px; display:block; background:url("../icon/pro_left.png") no-repeat; float:left; margin-left:-6px; margin-bottom:4px;}
+.pc-adults-p .amount2 {width:27px; height:16px; display:block; background:url("../icon/pro_down.png") no-repeat; float:left; margin-left:-6px; margin-top: -4px}
 .pc-letter {height:30px; line-height:30px; padding-left:10px;}
 .pc-stock {height:30px; line-height:30px; padding-left:40px;}
 .pc-number {padding-top:15px; color:#999;}

@@ -6,9 +6,10 @@ from aliyunsdkcore.request import CommonRequest
 from aliyunsdkcore.vendored.requests import auth
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from Ecommerce.settings import SMSCONFIG
-from users.models import User
+from users.models import User, Address
 from users.forms import UserRegisterForm
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
@@ -97,7 +98,6 @@ def person(request):
 #         send_sms(phone, {'code': str(num), **SMSCONFIG})
 #         return JsonResponse({'code': 1})
 #
-
 def order(request):
     return render(request, 'goods/my-d.html')
 
@@ -118,7 +118,84 @@ def evaluation(request):
     return render(request, 'goods/my-p.html')
 
 
-def address(request):
-    return render(request, 'goods/my-add.html')
+def address_manage(request):
+    user = User.objects.get(pk=request.session.get('uid'))
+    address_list = Address.objects.filter(user=user).order_by('-is_default').all()
+    count = Address.objects.filter(user=user).count()
+    return render(request, 'goods/my-add.html', context={'address_list': address_list, 'count': count})
 
 
+def evaluation_manage(request):
+    return render(request, 'goods/my-p.html')
+
+
+def order_manage(request):
+    return render(request, 'goods/my-d.html')
+
+
+def collection_manage(request):
+    return render(request, 'goods/my-s.html')
+
+
+def order_info(request):
+    return render(request, 'goods/my-d-info.html')
+
+
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('goods:index'))
+
+
+def send_sms(request):
+    return None
+
+
+@csrf_exempt
+def add_address(request):
+    user = User.objects.get(pk=request.session.get('uid'))
+    if Address.objects.filter(user=user).count() > 20:
+        return JsonResponse({'code': 1, 'msg': '只能添加20个地址'})
+    if not request.POST.get('a_email') or not request.POST.get('a_phone') or not request.POST.get('a_region') or not request.POST.get('a_place') or not request.POST.get('a_name') or not request.POST.get('fixed_telephone'):
+        return JsonResponse({'code': 1, 'msg': '参数错误'})
+    address = Address()
+    address.a_email = request.POST.get('a_email')
+    address.a_phone = request.POST.get('a_phone')
+    address.a_region = request.POST.get('a_region')
+    address.a_place = request.POST.get('a_place')
+    address.a_name = request.POST.get('a_name')
+    address.fixed_telephone = request.POST.get('fixed_telephone')
+    address.user = user
+    if Address.objects.filter(user=user).count() == 0:
+        address.is_default = True
+    address.save()
+    return JsonResponse({'code': 0})
+
+
+def set_default_address(request, address_id):
+    user = User.objects.get(pk=request.session.get('uid'))
+    old_default_address = Address.objects.filter(user=user, is_default=True).first()
+    old_default_address.is_default = False
+    old_default_address.save()
+    address = Address.objects.get(pk=address_id)
+    address.is_default = True
+    address.save()
+    return redirect(reverse('users:address_manage'))
+
+
+@csrf_exempt
+def edit_address(request):
+    address = Address.objects.get(pk=request.POST.get('address_id'))
+    address.a_email = request.POST.get('a_email')
+    address.a_phone = request.POST.get('a_phone')
+    address.a_region = request.POST.get('a_region')
+    address.a_place = request.POST.get('a_place')
+    address.a_name = request.POST.get('a_name')
+    address.fixed_telephone = request.POST.get('fixed_telephone')
+    address.save()
+    return JsonResponse({'code': 0})
+
+
+def del_address(request, address_id):
+    address = Address.objects.get(pk=address_id)
+    address.delete()
+    return redirect(reverse('users:address_manage'))

@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^admin/', include('backmanage.urls', namespace='backmanage')),
     url(r'^', include('goods.urls', namespace='goods')),
     url(r'^', include('users.urls', namespace='users')),
+    url(r'^', include('orders.urls', namespace='orders')),
 ]

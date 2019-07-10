@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from backmanage.models import Advertisement
+from cart.models import CartInfo
+from users.models import User
 from .models import TbSpu, TbSku, TbSpuPics, TbSkuAttr, TbCategory, TbBrand
 
 
@@ -21,10 +23,14 @@ def index(request):
     banner_advertisement = Advertisement.objects.filter(yn=0, type=2).order_by('order', '-create_time').all()[:1]
     all_spu = TbSpu.objects.all()
     all_pics = TbSpuPics.objects.all()
+    if request.session.get('uid'):
+        amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
+    else:
+        amount = 0
     return render(request, 'goods/index.html', context={"all_big_category": all_big_category, "all_small_category": all_small_category,
                                                         "all_brand": all_brand, 'carousel_advertisement': carousel_advertisement,
                                                         'static_advertisement': static_advertisement, "banner_advertisement": banner_advertisement,
-                                                        "all_spu": all_spu, 'all_pics': all_pics})
+                                                        "all_spu": all_spu, 'all_pics': all_pics, 'amount': amount})
 
 
 def details(request, spu_id):
@@ -50,7 +56,11 @@ def details(request, spu_id):
         attr_dict[key] = value_list
 
     price = sku_default.price
-    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': spu.title, 'price': price})
+    if request.session.get('uid'):
+        amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
+    else:
+        amount = 0
+    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': spu.title, 'price': price, 'amount': amount, 'sku_id': sku_default.id})
 
 
 @csrf_exempt
@@ -70,7 +80,7 @@ def get_price(request, spu_id):
 
         sku_id = [key for key, value in res.items()if value == len(attr_list)][0]
         price = TbSku.objects.get(pk=sku_id).price
-        return JsonResponse({'code': 0, 'msg': '成功', 'price': price})
+        return JsonResponse({'code': 0, 'msg': '成功', 'price': price, 'sku_id': sku_id})
     return redirect(reverse('goods:index'))
 
 
@@ -85,7 +95,13 @@ def list_page(request, cid):
     all_attr_key = category.attr_key.all()
     for attr_key in all_attr_key:
         attr_dict[attr_key.name] = attr_key.attr_value.all()
-    return render(request, 'goods/all-class.html', context={'all_brand': all_brand, "all_big_category": all_big_category, "all_small_category": all_small_category, "attr_dict": attr_dict, "all_spu": all_spu, "all_pic": all_pic, "category": category})
+    if request.session.get('uid'):
+        amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
+    else:
+        amount = 0
+    return render(request, 'goods/all-class.html', context={'all_brand': all_brand, "all_big_category": all_big_category,
+                                                            "all_small_category": all_small_category, "attr_dict": attr_dict,
+                                                            "all_spu": all_spu, "all_pic": all_pic, "category": category, 'amount': amount})
 
 
 @csrf_exempt
@@ -125,3 +141,46 @@ def spu_filter(request, cid):
             res_spu_list.append({'unique_code': spu.unique_code, 'spu_title': spu.title, 'list_price': spu.list_pirce, 'spu_pic': spu.spu_pic.all().first().pic})
 
         return JsonResponse({'code': 0, 'msg': '成功', 'spu_list': res_spu_list})
+
+
+def cart_manage(request):
+    user = User.objects.get(pk=request.session.get('uid'))
+    cart_list = CartInfo.objects.filter(user=user).all()
+    total_price = 0
+    for cart in cart_list:
+        total_price += cart.total_price
+    return render(request, 'goods/my-Cart.html', context={'cart_list': cart_list, 'total_price': total_price})
+
+
+@csrf_exempt
+def add_cart(request):
+    sku = TbSku.objects.get(pk=request.POST.get('sku_id'))
+    user = User.objects.get(pk=request.session.get('uid'))
+    cart = CartInfo.objects.filter(product=sku, user=user).first()
+    if cart:
+        cart.product_count += int(request.POST.get('product_number'))
+        cart.total_price = cart.product_count * cart.unit_price
+    else:
+        cart = CartInfo()
+        cart.user = user
+        cart.product = sku
+        cart.product_count = int(request.POST.get('product_number'))
+        cart.unit_price = TbSku.objects.get(pk=request.POST.get('sku_id')).price
+        cart.total_price = cart.unit_price * cart.product_count
+    cart.save()
+    amount = CartInfo.objects.filter(user=user).count()
+    return JsonResponse({'code': 0, 'msg': 'success', 'amount': amount})
+
+
+def update_cart(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.product_count = request.GET.get('num')
+    cart.total_price = cart.unit_price * int(request.GET.get('num'))
+    cart.save()
+    return JsonResponse({'code': 0, 'msg': 'success'})
+
+
+def del_cart_item(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.delete()
+    return JsonResponse({'code': 0, 'msg': 'success'})

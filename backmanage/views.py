@@ -325,8 +325,7 @@ def payment_method(request):
 @csrf_exempt
 def product_add(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
-    print(all_big_category)
-    all_small_category = TbCategory.objects.filter(~Q(parentid=0)&Q(status=0)).all()
+    all_small_category = TbCategory.objects.filter(~Q(parentid=0) & Q(status=0)).all()
     if request.method == 'POST':
         pictures = request.FILES.getlist('pictures')
         spu = TbSpu()
