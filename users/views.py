@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from Ecommerce.settings import SMSCONFIG
+from orders.models import OrderProduct, OrderInfo
+from orders.views import check_pay_status
 from users.models import User, Address
 from users.forms import UserRegisterForm
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -130,15 +132,19 @@ def evaluation_manage(request):
 
 
 def order_manage(request):
-    return render(request, 'goods/my-d.html')
+    order_list = check_pay_status(request)
+    order_product_list = OrderProduct.objects.all()
+    return render(request, 'goods/my-d.html', context={'order_list': order_list, "order_product_list": order_product_list})
 
 
 def collection_manage(request):
     return render(request, 'goods/my-s.html')
 
 
-def order_info(request):
-    return render(request, 'goods/my-d-info.html')
+def order_info(request, order_id):
+    order = OrderInfo.objects.get(order_id=order_id)
+    order_product_list = order.orderproduct_set.all()
+    return render(request, 'goods/my-d-info.html', context={'order': order, 'order_product_list': order_product_list})
 
 
 def logout(request):

@@ -57,6 +57,7 @@
                 $.post('/get_price/'+spuid,post_json, function (data) {
                     sku_id = data['sku_id']
                     document.getElementById('price').innerHTML ='<strong>'+data['price']+'</strong>';
+                    document.getElementById('title').innerText = data['title']
                 })
          	};
         function add_cart() {
@@ -70,6 +71,16 @@
                     $('i[class="head-amount"]')[0].innerText = data['amount']
             })
         };
+        function buy_now(){
+            console.log(sku_id)
+            product_number = $('#subnum').val()
+            if(!product_number){
+                product_number=1
+            }
+            $.post('{% url "goods:buy_now" %}', {'sku_id': sku_id, 'product_number': product_number}, function (data) {
+                window.location.href = '{% url "orders:confirm_order" %}'
+            })
+        }
          $(function(){
          	$("#pro_detail a").click(function(){
          		$("#pro_detail a").removeClass("cur");
@@ -233,20 +244,19 @@
             <div class="pc-details-l">
                 <div class="pc-product clearfix">
                     <div class="pc-product-h">
-                        <div class="pc-product-top"><img src="/static/goods/img/pd/product.png" id="big_img" width="418" height="418"></div>
+                        <div class="pc-product-top"><img src="{{ pic_default.pic }}" id="big_img" width="418" height="418"></div>
                         <div class="pc-product-bop clearfix" id="pro_detail">
                             <ul>
-                                <li><a href="javascript:void(0);" class="cur" simg="/static/goods/img/pd/product.png"><img src="/static/goods/img/pd/product.png" width="58" height="58"></a> </li>
-                                <li><a href="javascript:void(0);" simg="/static/goods/img/pd/product2.png"><img src="/static/goods/img/pd/product1.png" width="58" height="58"></a> </li>
-                                <li><a href="javascript:void(0);" simg="/static/goods/img/pd/product3.png"><img src="/static/goods/img/pd/product2.png" width="58" height="58"></a> </li>
-                                <li><a href="javascript:void(0);" simg="/static/goods/img/pd/produc4.png"><img src="/static/goods/img/pd/product3.png" width="58" height="58"></a> </li>
-                                <li><a href="javascript:void(0);" simg="/static/goods/img/pd/product5.png"><img src="/static/goods/img/pd/product4.png" width="58" height="58"></a> </li>
+                                {% for Pic in pic_list %}
+
+                                    <li><a href="javascript:void(0);" {% if forloop.counter == 1 %}class="cur"{% endif %}  simg="{{ Pic.pic }}"><img src="{{ Pic.pic }}" width="58" height="58"></a> </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
                     <div class="pc-product-t">
                         <div class="pc-name-info">
-                            <h1>{{ title }}</h1>
+                            <h1 id="title">{{ title }}</h1>
                             <p class="clearfix pc-rate" id="price"><strong>{{ price }}</strong></p>
 {#                                <span><em>限时抢购</em>抢购将于<b class="reds">18</b>小时<b class="reds">57</b>分<b class="reds">34</b>秒后结束</span></p>#}
 {#                            <p>由<a href="#" class="reds">神游官方旗舰店</a> 负责发货，并提供售后服务。</p>#}
@@ -287,13 +297,12 @@
                                         <a href="javascript:void(0);" class="amount2"></a>
                                     </div>
                                     <div class="fl pc-letter ">件</div>
-                                    <div class="fl pc-stock ">库存<em>988</em>件</div>
                                 </div>
                             </div>
                             <div class="pc-number clearfix"><span class="fl">商品编号：1654456   </span> <span class="fr">分享 收藏</span></div>
                         </div>
                         <div class="pc-emption">
-                            <a href="#">立即购买</a>
+                            <a href="javascript:void(0);" onclick="buy_now()">立即购买</a>
                             <a href="javascript:void(0);" class="join" onclick="add_cart()">加入购物车</a>
                         </div>
                     </div>
