@@ -14,8 +14,14 @@
 	<link rel="stylesheet" type="text/css" href="/static/goods/css/home.css">
 	<script type="text/javascript" src="/static/goods/js/jquery.js"></script>
 	<script type="text/javascript" src="/static/goods/js/js-tab.js"></script>
-    <script>
-         $(function(){
+    <script>function pay_order() {
+        $.get('{% url "orders:pay_order" %}',function (data) {
+            window.open(data['pay_url'])
+            window.location.href = "{% url "users:order_manage" %}"
+        })
+    }
+
+    $(function(){
 
              $("#H-table li").each(function(i){
                  $(this).click((function(k){
@@ -67,17 +73,21 @@
     <div class="BHeader">
         <div class="yNavIndex">
             <ul class="BHeaderl">
-                <li><a href="#">登录</a> </li>
+                <<li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
                 <li class="headerul">|</li>
-                <li><a href="#">订单查询</a> </li>
+                <li><a href="{% url 'users:logout' %}">退出</a> </li>
                 <li class="headerul">|</li>
-                <li><a href="#">我的收藏</a> </li>
+                <li><a href="{% url 'users:order_manage' %}">订单查询</a> </li>
                 <li class="headerul">|</li>
-                <li id="pc-nav" class="menu"><a href="#" class="tit">我的商城</a>
+                <li><a href="{% url 'users:collection_manage' %}">我的收藏</a> </li>
+                <li class="headerul">|</li>
+                <li id="pc-nav" class="menu"><a href="{% url 'users:person' %}" class="tit">我的商城</a>
                     <div class="subnav">
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
-                        <a href="#">我的山城</a>
+                        <a href="{% url 'users:order_manage' %}">我的订单</a>
+                        <a href="{% url 'users:collection_manage' %}">我的收藏</a>
+                        <a href="#">账户安全</a>
+                        <a href="{% url 'users:address_manage' %}">地址管理</a>
+                        <a href="{% url 'users:evaluation_manage' %}">我要评价</a>
                     </div>
                 </li>
                 <li class="headerul">|</li>
@@ -126,30 +136,30 @@
 
 <div class="pc-buying clearfix" style="margin-top:30px">
     <div class="time-list time-list-w fl">
-        <div class="time-title">
-            <ul class="brand-tab H-table H-table-shop clearfix fl" id="H-table">
-                <li class="cur"><a href="javascript:void(0);" class="cur">支付宝</a></li>
-                <li><a href="javascript:void(0);">储蓄卡</a></li>
-                <li><a href="javascript:void(0);">信用卡</a></li>
-            </ul>
-            <span class="pc-order-price">总价：￥{{ orderinfo.product_price }}</span>
-        </div>
-        <div class="time-border time-border-h clearfix">
-            <div class="time-border-list pc-shop-clear pc-order-clear H-over clearfix">
-                <ul class="pc-order-list clearfix">
-                    </ul>
-            </div>
-            <div style="display:none;" class="time-border-list  pc-shop-clear pc-order-clear H-over clearfix">
-                <ul class="pc-order-list">
-
-                </ul>
-            </div>
-            <div style="display:none;" class="time-border-list  pc-shop-clear pc-order-clear H-over clearfix">
-                <ul class="pc-order-list">
-
-                </ul>
-            </div>
-            <div class="pc-order-go"><a href="#">去网银支付</a></div>
+{#        <div class="time-title">#}
+{#            <ul class="brand-tab H-table H-table-shop clearfix fl" id="H-table">#}
+{#                <li class="cur"><a href="javascript:void(0);" class="cur">支付宝</a></li>#}
+{#                <li><a href="javascript:void(0);">储蓄卡</a></li>#}
+{#                <li><a href="javascript:void(0);">信用卡</a></li>#}
+{#            </ul>#}
+{#            <span class="pc-order-price">总价：￥{{ orderinfo.product_price }}</span>#}
+{#        </div>#}
+{#        <div class="time-border time-border-h clearfix">#}
+{#            <div class="time-border-list pc-shop-clear pc-order-clear H-over clearfix">#}
+{#                <ul class="pc-order-list clearfix">#}
+{#                    </ul>#}
+{#            </div>#}
+{#            <div style="display:none;" class="time-border-list  pc-shop-clear pc-order-clear H-over clearfix">#}
+{#                <ul class="pc-order-list">#}
+{##}
+{#                </ul>#}
+{#            </div>#}
+{#            <div style="display:none;" class="time-border-list  pc-shop-clear pc-order-clear H-over clearfix">#}
+{#                <ul class="pc-order-list">#}
+{##}
+{#                </ul>#}
+{#            </div>#}
+            <div class="pc-order-go"><a href="javascript:void(0)" onclick="pay_order()">支付宝支付</a></div>
         </div>
     </div>
 </div>

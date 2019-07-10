@@ -60,7 +60,9 @@ def details(request, spu_id):
         amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
     else:
         amount = 0
-    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': spu.title, 'price': price, 'amount': amount, 'sku_id': sku_default.id})
+    pic_default = spu.spu_pic.order_by('id').first()
+    pic_list = spu.spu_pic.order_by('id').all()
+    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': sku_default.title, 'price': price, 'amount': amount, 'sku_id': sku_default.id, 'spu': spu , 'pic_default': pic_default, "pic_list": pic_list})
 
 
 @csrf_exempt
@@ -80,7 +82,8 @@ def get_price(request, spu_id):
 
         sku_id = [key for key, value in res.items()if value == len(attr_list)][0]
         price = TbSku.objects.get(pk=sku_id).price
-        return JsonResponse({'code': 0, 'msg': '成功', 'price': price, 'sku_id': sku_id})
+        title = TbSku.objects.get(pk=sku_id).title
+        return JsonResponse({'code': 0, 'msg': '成功', 'price': price, 'sku_id': sku_id, 'title': title})
     return redirect(reverse('goods:index'))
 
 
@@ -90,7 +93,9 @@ def list_page(request, cid):
     category = TbCategory.objects.get(pk=cid)
     all_brand = category.brand.all()
     all_spu = category.spus.all()
-    all_pic = TbSpuPics.objects.all()
+    spu_pic_list = []
+    for spu in all_spu:
+        spu_pic_list.append({"spu": spu, "spu_pic": spu.spu_pic.first()})
     attr_dict = {}
     all_attr_key = category.attr_key.all()
     for attr_key in all_attr_key:
@@ -101,7 +106,7 @@ def list_page(request, cid):
         amount = 0
     return render(request, 'goods/all-class.html', context={'all_brand': all_brand, "all_big_category": all_big_category,
                                                             "all_small_category": all_small_category, "attr_dict": attr_dict,
-                                                            "all_spu": all_spu, "all_pic": all_pic, "category": category, 'amount': amount})
+                                                            "spu_pic_list": spu_pic_list, "category": category, 'amount': amount})
 
 
 @csrf_exempt
@@ -183,4 +188,22 @@ def update_cart(request):
 def del_cart_item(request):
     cart = CartInfo.objects.get(pk=request.GET.get('id'))
     cart.delete()
+    return JsonResponse({'code': 0, 'msg': 'success'})
+
+
+@csrf_exempt
+def buy_now(request):
+    sku = TbSku.objects.get(pk=request.POST.get('sku_id'))
+    if sku.cartinfo_set.exists():
+        cart = sku.cartinfo_set.all()[0]
+        cart.delete()
+    user = User.objects.get(pk=request.session.get('uid'))
+    cart = CartInfo()
+    cart.user = user
+    cart.product = sku
+    cart.product_count = int(request.POST.get('product_number'))
+    cart.unit_price = TbSku.objects.get(pk=request.POST.get('sku_id')).price
+    cart.total_price = cart.unit_price * cart.product_count
+    cart.save()
+    request.session["cart_info_list"] = [cart.id]
     return JsonResponse({'code': 0, 'msg': 'success'})

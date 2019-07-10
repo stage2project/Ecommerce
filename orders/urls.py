@@ -5,4 +5,5 @@ from orders import views
 urlpatterns = [
     url(r'^confirm_order/$', views.confirm_order, name='confirm_order'),
     url(r'^commit_order/$', views.commit_order, name='commit_order'),
+    url(r'^pay_order/$', views.pay_order, name='pay_order'),
 ]
