@@ -93,7 +93,9 @@ def list_page(request, cid):
     category = TbCategory.objects.get(pk=cid)
     all_brand = category.brand.all()
     all_spu = category.spus.all()
-    all_pic = TbSpuPics.objects.all()
+    spu_pic_list = []
+    for spu in all_spu:
+        spu_pic_list.append({"spu": spu, "spu_pic": spu.spu_pic.first()})
     attr_dict = {}
     all_attr_key = category.attr_key.all()
     for attr_key in all_attr_key:
@@ -104,7 +106,7 @@ def list_page(request, cid):
         amount = 0
     return render(request, 'goods/all-class.html', context={'all_brand': all_brand, "all_big_category": all_big_category,
                                                             "all_small_category": all_small_category, "attr_dict": attr_dict,
-                                                            "all_spu": all_spu, "all_pic": all_pic, "category": category, 'amount': amount})
+                                                            "spu_pic_list": spu_pic_list, "category": category, 'amount': amount})
 
 
 @csrf_exempt
