@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'backmanage',
     'tinymce',
 ]
-CORS_ORIGIN_ALLOW_ALL = True
- 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
