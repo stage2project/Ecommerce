@@ -170,3 +170,17 @@ def add_cart(request):
     cart.save()
     amount = CartInfo.objects.filter(user=user).count()
     return JsonResponse({'code': 0, 'msg': 'success', 'amount': amount})
+
+
+def update_cart(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.product_count = request.GET.get('num')
+    cart.total_price = cart.unit_price * int(request.GET.get('num'))
+    cart.save()
+    return JsonResponse({'code': 0, 'msg': 'success'})
+
+
+def del_cart_item(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.delete()
+    return JsonResponse({'code': 0, 'msg': 'success'})

@@ -13,11 +13,29 @@
     <link rel="shortcut icon" type="image/x-icon" href="http://www.cnchenchen.cn/home/theme/icon/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/static/goods/css/base.css">
     <link rel="stylesheet" type="text/css" href="/static/goods/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/static/goods/css/demo.css">
+    <link rel="stylesheet" type="text/css" href="/static/goods/css/jsstyle.css">
+    <link rel="stylesheet" type="text/css" href="/static/goods/css/cartstyle.css">
+    <script type="text/javascript" src="/static/goods/js/address.js"></script>
     <script type="text/javascript" src="/static/goods/js/jquery.js"></script>
     <script src="/static/goods/js/layer.js"></script>
     <link rel="stylesheet" href="/static/goods/css/layer.css" id="layuicss-layer">
     <script type="text/javascript">
-        (function (a) {
+        function save_order() {
+            var address
+            address_list = $(".user-addresslist");
+            for(i=0;i<address_list.length;i++){
+                if($(address_list[i])[0].classList.length==2){
+                    address = $(address_list[i]).val()
+                }
+
+            }
+            $.post('{% url "orders:commit_order" %}', {"address_id": address},function (data) {
+                window.location.href = {% url "orders:commit_order" %}
+            })
+    }
+
+    (function (a) {
             a.fn.hoverClass = function (b) {
                 var a = this;
                 a.each(function (c) {
@@ -148,8 +166,8 @@
         <div class="pc-order-titlei fl"><h2>编辑购物车</h2></div>
         <div class="pc-step-title fl">
             <ul>
-                <li class="cur"><a href="{% url 'goods:cart_manage' %}">1 . 我的购物车</a></li>
-                <li class="cur2"><a href="javascript:void(0)">2 . 填写核对订单</a></li>
+                <li class="cur2"><a href="{% url 'goods:cart_manage' %}">1 . 我的购物车</a></li>
+                <li class="cur"><a href="{% url 'goods:cart_manage' %}">2 . 填写核对订单</a></li>
                 <li><a href="javascript:void(0)">3 . 成功提交订单</a></li>
             </ul>
         </div>
@@ -161,45 +179,121 @@
 <!-- 订单提交成功 begin-->
 <section>
     <div class="containers">
-        <div class="pc-space">
-            <div class="pc-order-title clearfix"><h3 class="fl">全部商品</h3></div>
-            <div class="pc-border">
-                <table border="0" width="1200px" cellspacing="0" cellpadding="0" style="border-color: #98a4a9">
-                    <tbody>
-                    <tr style="font-size: 20px;height: 30px;background-color:#F7F7F7">
-                        <td width="100px"><input type="checkbox" id="chk">全选</td>
-                        <td colspan="2" style="text-align: center">商品名称</td>
-                        <td style="text-align: center">商品单价</td>
-                        <td style="text-align: center">数量</td>
-                        <td style="text-align: center">小计</td>
-                        <td style="text-align: center">操作</td>
-                    </tr>
-                    {% for cart in cart_list %}
-                    <tr style="height: 120px;font-size: 18px;background-color: #EDFFF9">
-                        <td width="100px"><input type="checkbox" class="ch" cid="{{cart.id}}"></td>
-                        <td colspan="2" style="text-align: center">{{ cart.product.title }}</td>
-                        <td style="text-align: center">{{ cart.unit_price }}</td>
-                        <td style="text-align: center">
+        <div class="paycont">
+            <div class="address">
+                <h3>确认收货地址 </h3>
+                {#                <div class="control">#}
+                {#                    <div class="tc-btn createAddr theme-login am-btn am-btn-danger">使用新地址</div>#}
+                {#                </div>#}
+                <div class="clear"></div>
+                <ul>
+                    {% for address in address_list %}
+                        <div class="per-border"></div>
+                        <li class="user-addresslist {% if address.is_default %} defaultAddr {% endif %}" value="{{ address.id }}">
 
-                            <button class="btn1">-</button>
-                            <span class="goodsNum">{{ cart.product_count }}</span>
-                            <button class="btn2">+</button>
+                            <div class="address-left">
+                                <div class="user DefaultAddr">
 
-                        </td>
-                        <td style="text-align: center " class="s" id="sub_total_{{ cart.id }}">{{ cart.total_price }}</td>
-                        <td style="text-align: center" class="del">删除</td>
-                        <input type="hidden" value="{{ cart.id }}">
-                    </tr>
+										<span class="buy-address-detail">
+                                            <span class="buy-user">{{ address.a_name }} </span>
+										    <span class="buy-phone">{{ address.a_phone }}</span>
+										</span>
+                                </div>
+                                <div class="default-address DefaultAddr">
+                                    <span class="buy-line-title buy-line-title-type">收货区域：</span>
+                                    <span class="buy--address-detail">{{ address.a_region }}</span>
+                                    </span>
+                                </div>
+                                <div class="default-address DefaultAddr">
+                                    <span class="buy-line-title buy-line-title-type">收货地址：</span>
+                                    <span class="buy--address-detail">{{ address.a_place }}</span>
+                                    </span>
+                                </div>
+                                {% if address.is_default %}
+                                    <ins class="deftip">默认地址</ins>
+                                {% endif %}
+                            </div>
+
+
+                        </li>
                     {% endfor %}
-                    <tr style="height: 50px;font-size: 20px;background-color: #FFF4E8">
-                        <td width="100px" style="text-align: center">总计:</td>
-                        <td colspan="5" style="text-align: right;color: #1b961b">合计(不含运费)：<span>¥</span><em id="money">{{ total_price }}</em>
-                        </td>
-                        <td style="text-align: center;background-color: #00CC66"><a
-                                href='javascript:void(0)' onclick="confirm_order()">去结算</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                </ul>
+
+                <div class="clear"></div>
+            </div>
+
+
+            <div class="concent">
+                <div id="payTable">
+                    <h3>确认订单信息</h3>
+                    <div class="cart-table-th">
+                        <div class="wp">
+
+                            <div class="th th-item">
+                                <div class="td-inner">商品信息</div>
+                            </div>
+                            <div class="th th-price">
+                                <div class="td-inner">单价</div>
+                            </div>
+                            <div class="th th-amount">
+                                <div class="td-inner">数量</div>
+                            </div>
+                            <div class="th th-sum">
+                                <div class="td-inner">金额</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+
+
+                    <div class="cart-table-th">
+                        <div class="wp">
+                            {% for cart in cart_list %}
+                                <div class="th th-item">
+                                    <div class="td-inner"><a
+                                            href="/details/{{ cart.product.spu.unique_code }}">{{ cart.product.title }}</a>
+                                    </div>
+                                </div>
+                                <div class="th th-price">
+                                    <div class="td-inner">{{ cart.unit_price }}</div>
+                                </div>
+                                <div class="th th-amount">
+                                    <div class="td-inner">{{ cart.product_count }}</div>
+                                </div>
+                                <div class="th th-sum">
+                                    <div class="td-inner">{{ cart.total_price }}</div>
+                                </div>
+                                <div class="clear"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <!--含运费小计 -->
+                    <div class="buy-point-discharge ">
+                        <p class="price g_price ">
+                            合计 <span>¥</span><em class="pay-sum">{{ total_amount }}</em>
+                        </p>
+                    </div>
+
+                    <!--信息 -->
+                    <div class="order-go clearfix">
+                        <div class="pay-confirm clearfix">
+
+                            <div id="holyshit269" class="submitOrder">
+                                <div class="go-btn-wrap">
+                                    <a id="J_Go" href="javascript:void(0)" class="btn-go" tabindex="0"
+                                       title="点击此按钮，提交订单" onclick="save_order()">提交订单</a>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
             </div>
         </div>
     </div>
@@ -356,9 +450,10 @@
         var bool = confirm('确认删除吗?');
         if (bool) {
             $(this).parent().remove();
-            $.get("{% url 'goods:del_cart_item' %}", {id: d});
+            $.get("", {id: d});
             location.reload()
         }
+        history.go(0)
         //有改动 再算一次总价;
         var t = 0;
         $('.s').each(function () {
@@ -380,8 +475,7 @@
         $(this).parent().next().text(n.toFixed(2));
         //ajax--
         var dd = $(this).parent().next().next().next().val();
-        console.log(dd, num)
-        $.get("{% url 'goods:update_cart' %}", {id: dd, num: num})
+        $.get("", {id: dd, num: num})
         //有改动 再算一次总价;
         var t = 0;
         $('.s').each(function () {
@@ -399,7 +493,7 @@
         $(this).parent().next().text(y.toFixed(2));
         //ajax--
         var dd = $(this).parent().next().next().next().val();
-        $.get("{% url 'goods:update_cart' %}", {id: dd, num: num2})
+        $.get("", {id: dd, num: num2});
         //有改动 再算一次总价
         var t = 0;
         $('.s').each(function () {
@@ -407,18 +501,6 @@
         });
         $('#money').text(t.toFixed(2));
     });
-    
-    function confirm_order() {
-        sku_list = $('input[type="checkbox"][cid]:checked')
-        cart_id_list = []
-        for(i=0;i<sku_list.length;i++){
-            cart_id_list.push(sku_list[i].attributes['cid']['value'])
-        }
-        $.post('{% url "orders:confirm_order" %}', {"cart_info": JSON.stringify(cart_id_list)}, function (data) {
-            window.location.href = '/confirm_order/'
-        })
-        console.log(cart_id_list)
-    }
 
 
 </script>
