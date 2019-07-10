@@ -13,4 +13,8 @@ urlpatterns = [
     url(r'^collection_manage/$', views.collection_manage, name='collection_manage'),
     url(r'^order_info/$', views.order_info, name='order_info'),
     url(r'^logout/$', views.logout, name='logout'),
+    url(r'^add_address/$', views.add_address, name='add_address'),
+    url(r'^set_default_address/(?P<address_id>\d+)/$', views.set_default_address, name='set_default_address'),
+    url(r'^edit_address/$', views.edit_address, name='edit_address'),
+    url(r'^del_address/(?P<address_id>\d+)/$', views.del_address, name='del_address'),
 ]

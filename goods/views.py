@@ -60,7 +60,7 @@ def details(request, spu_id):
         amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
     else:
         amount = 0
-    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': spu.title, 'price': price, 'amount': amount})
+    return render(request, 'goods/details.html', context={'attr_dict': attr_dict, 'title': spu.title, 'price': price, 'amount': amount, 'sku_id': sku_default.id})
 
 
 @csrf_exempt
@@ -80,7 +80,7 @@ def get_price(request, spu_id):
 
         sku_id = [key for key, value in res.items()if value == len(attr_list)][0]
         price = TbSku.objects.get(pk=sku_id).price
-        return JsonResponse({'code': 0, 'msg': '成功', 'price': price})
+        return JsonResponse({'code': 0, 'msg': '成功', 'price': price, 'sku_id': sku_id})
     return redirect(reverse('goods:index'))
 
 
@@ -144,4 +144,43 @@ def spu_filter(request, cid):
 
 
 def cart_manage(request):
-    return render(request, 'goods/my-Cart.html')
+    user = User.objects.get(pk=request.session.get('uid'))
+    cart_list = CartInfo.objects.filter(user=user).all()
+    total_price = 0
+    for cart in cart_list:
+        total_price += cart.total_price
+    return render(request, 'goods/my-Cart.html', context={'cart_list': cart_list, 'total_price': total_price})
+
+
+@csrf_exempt
+def add_cart(request):
+    sku = TbSku.objects.get(pk=request.POST.get('sku_id'))
+    user = User.objects.get(pk=request.session.get('uid'))
+    cart = CartInfo.objects.filter(product=sku, user=user).first()
+    if cart:
+        cart.product_count += int(request.POST.get('product_number'))
+        cart.total_price = cart.product_count * cart.unit_price
+    else:
+        cart = CartInfo()
+        cart.user = user
+        cart.product = sku
+        cart.product_count = int(request.POST.get('product_number'))
+        cart.unit_price = TbSku.objects.get(pk=request.POST.get('sku_id')).price
+        cart.total_price = cart.unit_price * cart.product_count
+    cart.save()
+    amount = CartInfo.objects.filter(user=user).count()
+    return JsonResponse({'code': 0, 'msg': 'success', 'amount': amount})
+
+
+def update_cart(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.product_count = request.GET.get('num')
+    cart.total_price = cart.unit_price * int(request.GET.get('num'))
+    cart.save()
+    return JsonResponse({'code': 0, 'msg': 'success'})
+
+
+def del_cart_item(request):
+    cart = CartInfo.objects.get(pk=request.GET.get('id'))
+    cart.delete()
+    return JsonResponse({'code': 0, 'msg': 'success'})

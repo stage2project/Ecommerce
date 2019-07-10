@@ -41,9 +41,9 @@ class OrderInfo(models.Model):
     order_status = models.SmallIntegerField(choices=ORDER_status, default=1, verbose_name='订单状态')
     product_count = models.IntegerField(verbose_name='产品数量')
     product_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='总价格')
-    transit_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='运费')
+    transit_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='运费', default=0)
     user = models.ForeignKey('users.User', verbose_name='用户')
-    addr = models.ForeignKey('users.Address', verbose_name='地址')
+    addr = models.ForeignKey('users.Address',on_delete=models.SET_NULL, verbose_name='地址', null=True, default=None)
     trance_num = models.CharField(max_length=100, default='', verbose_name='支付编号')
 
     class Meta:
