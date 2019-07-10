@@ -72,9 +72,9 @@
             <!---->
             <div class="border clearfix">
                <span class="l_f">
-                <a href="javascript:ovid();"   class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
+                <a href="javascript:ovid();" onclick="member_delAll()"  class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
                </span>
-{#                <span class="r_f">共：<b>2345</b>条</span>#}
+                <span class="r_f">共：<b>{{ user_total }}</b>条</span>
 
             </div>
             <!---->
@@ -98,7 +98,7 @@
                     <tbody>
                     {% for all in user %}
                     <tr>
-                        <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+                        <td><label><input type="checkbox" class="myclass" id="checkId_ƒ{{ all.id }}" value="{{ all.id }}" class="ace"><span class="lbl"></span></label></td>
                         <td>{{ all.id }}</td>
                         <td>{{ all.username }}</td>
                         <td>
@@ -142,10 +142,9 @@
                                class="btn btn-xs btn-success"><i class="icon-ok bigger-120"></i></a>
                             <a title="编辑" onclick="member_edit('550')" href="javascript:;"
                                class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
-                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')"
+                            <a title="删除" href="javascript:;" onclick="member_del(this,{{ all.id }})"
                                class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
                         </td>
-
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -241,6 +240,7 @@
             return 'left';
         }
     })
+
     /*用户-添加*/
     $('#member_add').on('click', function () {
         layer.open({
@@ -345,11 +345,46 @@
     }
 
     /*用户-删除*/
-    function member_del(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
-        });
+    function member_delAll() {
+        alert('dsadsad')
+        let ids = new Array();
+        $(".myclass").each(function (i) {
+          if($(this).is(":checked")){
+              var tmp = $(this).val();
+             ids.push(tmp);
+          }
+        })
+        $.ajax({
+        url:"{% url 'backmanage:delete_all' %}",
+        method:"POST",
+        dataType:"JSON",
+        data:{ids:ids.toString()},
+        async:false,
+        success:function (data,status) {
+            if(status ==200){
+
+                layer.msg('已删除!', {icon: 1, time: 1000})
+            }
+            //
+        }});
+
+    }
+    function member_del(obj1, id) {
+    $.ajax({
+        url:"{% url 'backmanage:delete' %}",
+        method:"POST",
+        dataType:"JSON",
+        data:{id:id},
+        async:false,
+        success:function (data,status) {
+
+            if(status ==200){
+                layer.msg('已删除!', {icon: 1, time: 1000})
+            }
+            //
+        }
+
+    });
     }
 
 

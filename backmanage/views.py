@@ -115,13 +115,17 @@ def admin_info(request):
     if request.method == 'POST':
         oldpwd = request.POST.get('oldpwd')
         oldpassword_hash = hashlib.sha1(oldpwd.encode('utf8')).hexdigest()
+
         newpwd = request.POST.get('newpwd')
         newpassword_hash = hashlib.sha1(newpwd.encode('utf8')).hexdigest()
+
         confirm_newpwd = request.POST.get('confirm_newpwd')
         confirm_pwd = hashlib.sha1(confirm_newpwd.encode('utf8')).hexdigest()
+
         res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpassword_hash)
         print(oldpwd, oldpassword_hash, newpwd, newpassword_hash, confirm_newpwd, confirm_pwd, res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
+
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name=request.session.get('username'))
     return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
@@ -136,7 +140,7 @@ def administrator(request):
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        privilege = Privilege.objects.filter(id = request.POST.get('admin-role'))[0]
+        privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
         admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
         admin.save()
@@ -144,8 +148,7 @@ def administrator(request):
     admin_total = Admin.objects.count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admins':admins,'privileges':privileges})
-
+    return render(request, 'backmanage/administrator.html', context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
 
 
 def ads_list(request):
@@ -271,12 +274,14 @@ def home(request):
 
 def integration(request):
     user = User.objects.all()
-    return render(request, 'backmanage/integration.html', context={'user': user})
+    user_total = User.objects.count()
+    return render(request, 'backmanage/integration.html', context={'user': user, 'user_total': user_total})
 
 
 def member_grading(request):
     user = User.objects.all()
-    return render(request, 'backmanage/member-Grading.html', context={'user': user})
+    user_total = User.objects.count()
+    return render(request, 'backmanage/member-Grading.html', context={'user': user, 'user_total': user_total})
 
 
 def member_show(request, type):
@@ -456,7 +461,8 @@ def user_list(request):        # 会员列表
     # del = User.objects.get(pk)
     # del.delete()
     user = User.objects.all()
-    return render(request, 'backmanage/user_list.html', context={'user': user})
+    user_total = User.objects.count()
+    return render(request, 'backmanage/user_list.html', context={'user': user, 'user_total': user_total})
 
 
 def attribute_list(request, cid):
@@ -587,4 +593,23 @@ def attribute_get(request):
     for brand in data:
         brands.append({"id": brand.id, "name": brand.name})
     return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
+
+
+def delete(request):
+    del_id = request.POST.get('id')
+    cut = User.objects.get(pk=del_id)
+    cut.delete()
+    return JsonResponse('删除成功')
+
+
+def delete_all(request):
+    delall_id = request.POST.get('ids')
+    for id in delall_id.split(","):
+        cutall = User.objects.get(pk=id)
+        cutall.delete()
+    return JsonResponse('批量删除成功')
+
+
+
+
 
