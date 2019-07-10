@@ -70,7 +70,7 @@ def login(request):
         password = request.POST.get('password')
         password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
         code = request.POST.get('code')
-        verficode = request.session['verficode']
+        verficode = request.session['admin_verficode']
         res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id', 'admin_name')
         if len(res) > 0 and verficode == code:  # 登录成功
             request.session['admin_id'] = res[0]['id']
@@ -126,12 +126,12 @@ def admin_info(request):
         confirm_newpwd = request.POST.get('confirm_newpwd')
         confirm_pwd = hashlib.sha1(confirm_newpwd.encode('utf8')).hexdigest()
 
-        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpassword_hash)
+        res = Admin.objects.filter(admin_name=request.session.get('admin_username')).update(admin_password=newpassword_hash)
         print(oldpwd, oldpassword_hash, newpwd, newpassword_hash, confirm_newpwd, confirm_pwd, res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
 
-    admin_name = request.session.get('username')
-    info = Admin.objects.get(admin_name=request.session.get('username'))
+    admin_name = request.session.get('admin_username')
+    info = Admin.objects.get(admin_name=request.session.get('admin_username'))
     return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
 
 
@@ -588,7 +588,7 @@ def logout(request):
 def verficode(request):
     vc = VerfiCode()
     res = vc.output()
-    request.session['verficode'] = vc.code
+    request.session['admin_verficode'] = vc.code
     return HttpResponse(res)
 
 
