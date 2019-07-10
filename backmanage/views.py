@@ -90,16 +90,32 @@ def add_brand(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
     if request.method == "POST":
-        print(request.POST)
         brand = TbBrand()
         brand.name = request.POST['bname']
-        file = request.FILES
-        savepath = os.path.join(settings.MEDIA_ROOT,str(file))
-        brand.logo = savepath
+        file = request.FILES.get('brlogo')
+        path = os.path.join(settings.MEDIA_ROOT,file.name)
+        ext = os.path.splitext(file.name)
+        if len(ext) < 1 or not ext[1] in settings.ALLOWED_FILEEXTS:
+            return redirect(reverse('backmanage:add_brand'))
+        if os.path.exists(path):
+            dir1 = datetime.today().strftime("%Y/%m/%d")
+            dir = os.path.join(settings.MEDIA_ROOT, dir1)
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+            file_name = ext[0] + datetime.today().strftime("%Y%m%d%H%M%S") + str(randint(1, 1000)) + ext[1] if len(ext) > 1 else ''
+            path = os.path.join(dir, file_name)
+        with open(path, 'wb') as fp:
+            if file.multiple_chunks():
+                for block1 in file.chunks():
+                    fp.write(block1)
+            else:
+                fp.write(file.read())
+        dir2 = os.path.join(dir1, file_name)
+        brand.logo = 'upload/' + dir2
         brand.yn = request.POST['checkbox']
         brand.category = TbCategory.objects.filter(id = request.POST['s_cid'])[0]
-        print(file,settings.MEDIA_ROOT,brand.name,brand.logo,brand.yn,brand.category)
-        # brand.save()
+        print(file,brand.name,brand.logo,brand.yn,brand.category)
+        brand.save()
         return redirect(reverse('backmanage:brand_manage'))
     return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
 
