@@ -95,19 +95,22 @@
                 <div class="table_menu_list" id="testIframe">
                     <table class="table table-striped table-bordered table-hover" id="sample_table">
                         <thead>
-                        <tr>
-                            <th width="25px">
-                                <label><input type="checkbox" class="ace"><span class="lbl"></span></label>
-                            </th>
-                            <th width="80px">编号</th>
-                            <th width="250px">登录名</th>
-                            <th width="100px">手机</th>
-                            <th width="100px">邮箱</th>
-                            <th width="100px">角色</th>
-                            <th width="180px">加入时间</th>
-                            <th width="70px">状态</th>
-                            <th width="200px">操作</th>
-                        </tr>
+                            <tr>
+                                <th width="25px">
+                                    <label>
+                                        <input type="checkbox" class="ace">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </th>
+                                <th width="80px">编号</th>
+                                <th width="250px">登录名</th>
+                                <th width="100px">手机</th>
+                                <th width="100px">邮箱</th>
+                                <th width="100px">角色</th>
+                                <th width="180px">加入时间</th>
+                                <th width="70px">状态</th>
+                                <th width="200px">操作</th>
+                            </tr>
                         </thead>
                         <tbody>
                         {% for adm in admins %}
@@ -196,9 +199,17 @@
                     <span class="c-red">*</span>性别：
                 </label>
                 <div class="formControls  skin-minimal">
-                    {#                    <label><input name="form-field-radio" type="radio" class="ace" checked="checked"><span class="lbl">保密</span></label>&nbsp;&nbsp;#}
-                    <label><input name="form-field-radio" type="radio" class="ace" value="1"><span class="lbl">男</span></label>&nbsp;&nbsp;
-                    <label><input name="form-field-radio" type="radio" class="ace" value="0"><span class="lbl">女</span></label>
+                    <label>
+                        <input name="form-field-radio" type="radio" class="ace" value="1">
+                        <span class="lbl">男</span>
+                    </label>&nbsp;&nbsp;
+                    <label>
+                        <input name="form-field-radio" type="radio" class="ace" value="0">
+                        <span class="lbl">女</span>
+                    </label>
+                </div>
+                <div class="col-4">
+                    <span class="Validform_checktip"></span>
                 </div>
             </div>
             <div class="form-group">
@@ -395,10 +406,9 @@
             title: '添加管理员',
             area: ['700px', ''],
             shadeClose: false,
-            content: $('#add_administrator_style'
-            ),
+            content: $('#add_administrator_style')
         });
-    })
+    });
 
     $('#Add_Administrator').on('click', function () {
         $.post('{% url "backmanage:administrator" %}', $('form').serialize())
@@ -410,7 +420,7 @@
         tiptype: 2,
         callback: function (data) {
             //form[0].submit();
-            if (data.status ==x 1) {
+            if (data.status == 1) {
                 layer.msg(data.info, {icon: data.status, time: 1000}, function () {
                     location.reload();//刷新页面 
                 });
