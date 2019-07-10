@@ -101,11 +101,9 @@ def add_brand(request):
         print(file,settings.MEDIA_ROOT,brand.name,brand.logo,brand.yn,brand.category)
         # brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-<<<<<<< HEAD
-    return render(request, 'backmanage/Add_Brand.html', context={'all_second_category': all_second_category})
-=======
+
     return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
->>>>>>> origin/day0627
+
 
 
 def admin_competence(request):
@@ -113,12 +111,9 @@ def admin_competence(request):
     privilege = []
     privileges = Privilege.objects.all()
     for p in privileges:
-<<<<<<< HEAD
-        privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount': p.admin.count()})
 
-=======
         privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
->>>>>>> origin/day0627
+
     return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
@@ -194,12 +189,8 @@ def brand_details(request):
 
 def brand_manage(request):
     brands = TbBrand.objects.all()
-<<<<<<< HEAD
 
-    return render(request, 'backmanage/Brand_Manage.html', context={'brands': brands})
-=======
     return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
->>>>>>> origin/day0627
 
 
 def category_manage(request):
@@ -272,13 +263,7 @@ def competence(request, index=0):
         add_prv.save()
         user = request.POST.getlist('username')
         for u in user:
-<<<<<<< HEAD
-            Admin.objects.filter(id=int(u)).update(
-                privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
-        return JsonResponse({'code': 0, 'msg': 'success'})
-    admins = Admin.objects.all()
-    return render(request, 'backmanage/Competence.html', context={'admins': admins, })
-=======
+
             Admin.objects.filter(id=int(u)).update(privilege=add_prv)
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
@@ -288,7 +273,7 @@ def competence(request, index=0):
     # if user111 in pusers:
     #     print(12345678)
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
->>>>>>> origin/day0627
+
 
 
 def cover_management(request):
@@ -637,6 +622,7 @@ def attribute_get(request):
         {'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
 
 
+@csrf_exempt
 def delete(request):
     del_id = request.POST.get('id')
     cut = User.objects.get(pk=del_id)
@@ -644,9 +630,10 @@ def delete(request):
     return JsonResponse('删除成功')
 
 
+@csrf_exempt
 def delete_all(request):
     delall_id = request.POST.get('ids')
-    for id in delall_id.split(","):
-        cutall = User.objects.get(pk=id)
+    for i in delall_id.split(","):
+        cutall = User.objects.get(pk=i)
         cutall.delete()
     return JsonResponse('批量删除成功')

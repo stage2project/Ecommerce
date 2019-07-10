@@ -99,7 +99,7 @@
                     {% for all in user %}
                         <tr>
                             <td><label><input type="checkbox" class="myclass" id="checkId_ƒ{{ all.id }}"
-                                              value="{{ all.id }}" class="ace"><span class="lbl"></span></label></td>
+                                              value="{{ all.id }}"><span class="lbl"></span></label></td>
                             <td>{{ all.id }}</td>
                             <td>{{ all.username }}</td>
                             <td>
@@ -358,7 +358,6 @@
 
     /*用户-删除*/
     function member_delAll() {
-        alert('dsadsad')
         let ids = new Array();
         $(".myclass").each(function (i) {
             if ($(this).is(":checked")) {

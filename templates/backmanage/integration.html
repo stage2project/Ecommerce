@@ -30,7 +30,7 @@
     <div class="" id="Other_Management">
         <div class="border clearfix">
        <span class="l_f">
-        <a href="" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;批量删除</a>
+        <a href="" onclick="member_delAll()" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;批量删除</a>
        </span>
             <span class="r_f">共：<b>{{ user_total }}</b>条</span>
         </div>
@@ -50,7 +50,8 @@
                 <tbody>
                 {% for all in user %}
                 <tr>
-                    <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+                    <td><label><input type="checkbox" class="myclass" id="checkId_ƒ{{ all.id }}"
+                                              value="{{ all.id }}"><span class="lbl"></span></label></td>
                     <td>{{ all.id }}</td>
                     <td>{{ all.username }}</td>
                     <td><a href="javascript:ovid()" onclick="integration_history('23')">{{ all.grade }}</a></td>
@@ -192,6 +193,30 @@
             layer.msg('已删除!', {icon: 1, time: 1000});
         });
     }*/
+    function member_delAll() {
+        let ids = new Array();
+        $(".myclass").each(function (i) {
+            if ($(this).is(":checked")) {
+                var tmp = $(this).val();
+                ids.push(tmp);
+            }
+        })
+        $.ajax({
+            url: "{% url 'backmanage:delete_all' %}",
+            method: "POST",
+            dataType: "JSON",
+            data: {ids: ids.toString()},
+            async: false,
+            success: function (data, status) {
+                if (status == 200) {
+
+                    layer.msg('已删除!', {icon: 1, time: 1000})
+                }
+                //
+            }
+        });
+
+    }
 
     function member_del(obj1, id) {
         $.ajax({
