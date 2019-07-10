@@ -1993,7 +1993,7 @@ blockquote,blockquote.pull-right
 
 .user-info
 {
-  max-width: 100px;
+  max-width: 200px;
   display: inline-block;
   overflow: hidden;
   padding:0px 10px;

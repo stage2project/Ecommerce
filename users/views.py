@@ -67,7 +67,7 @@ def register(request):
             user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
                                        email=email, phone=phone)
             user.save()
-            return redirect(reverse('goods:index'))
+            return redirect(reverse('users:login'))
 
     return render(request, 'goods/register.html', context={
             'form': form
@@ -148,7 +148,8 @@ def order_info(request, order_id):
 
 
 def logout(request):
-    request.session.flush()
+    request.session.pop("uid")
+    request.session.pop("username")
     return redirect(reverse('goods:index'))
 
 

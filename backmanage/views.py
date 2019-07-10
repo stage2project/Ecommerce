@@ -57,14 +57,11 @@ def add_admin(request):
 
 
 def index(request):
-    date = datetime.now()
-    # id = session['id']
-    # menu_list = Admin.objects.values('menu_list').get(pk=id)
-    # [1,2,3]
-    if 'uid' in request.session:
-        username = request.session.get('username')
-        return render(request, 'backmanage/index.html', context={'username': username})
-    return render(request, 'backmanage/index.html', context={'date': date})
+    if request.session.get("admin_id"):
+        username = request.session.get('admin_username')
+        data = Privilege.objects.filter(admin=request.session.get("admin_id")).all()[0]
+        return render(request, 'backmanage/index.html', context={'username': username, 'data': data})
+    return redirect(reverse("backmanage:login"))
 
 
 def login(request):
@@ -74,10 +71,10 @@ def login(request):
         password_hash = hashlib.sha1(password.encode('utf8')).hexdigest()
         code = request.POST.get('code')
         verficode = request.session['verficode']
-        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id','admin_name')
+        res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id', 'admin_name')
         if len(res) > 0 and verficode == code:  # 登录成功
-            request.session['uid'] = res[0]['id']
-            request.session['username'] = res[0]['admin_name']
+            request.session['admin_id'] = res[0]['id']
+            request.session['admin_username'] = res[0]['admin_name']
             return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
         return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
@@ -88,17 +85,21 @@ def account_detail(request):
 
 
 def add_brand(request):
-    all_second_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
-    print(all_second_category)
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
     if request.method == "POST":
+        print(request.POST)
         brand = TbBrand()
         brand.name = request.POST['bname']
-        brand.logo = request.POST['blogo']
+        file = request.FILES
+        savepath = os.path.join(settings.MEDIA_ROOT,str(file))
+        brand.logo = savepath
         brand.yn = request.POST['checkbox']
-        brand.category = request.POST['description']
-        brand.save()
+        brand.category = TbCategory.objects.filter(id = request.POST['s_cid'])[0]
+        print(file,settings.MEDIA_ROOT,brand.name,brand.logo,brand.yn,brand.category)
+        # brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-    return render(request, 'backmanage/Add_Brand.html',context={'all_second_category':all_second_category})
+    return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
 
 
 def admin_competence(request):
@@ -107,18 +108,24 @@ def admin_competence(request):
     privileges = Privilege.objects.all()
     for p in privileges:
         privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
-
     return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
 def admin_info(request):
     if request.method == 'POST':
         oldpwd = request.POST.get('oldpwd')
+        oldpassword_hash = hashlib.sha1(oldpwd.encode('utf8')).hexdigest()
+
         newpwd = request.POST.get('newpwd')
+        newpassword_hash = hashlib.sha1(newpwd.encode('utf8')).hexdigest()
+
         confirm_newpwd = request.POST.get('confirm_newpwd')
-        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password = newpwd)
-        print(oldpwd,newpwd,confirm_newpwd,res)
+        confirm_pwd = hashlib.sha1(confirm_newpwd.encode('utf8')).hexdigest()
+
+        res = Admin.objects.filter(admin_name=request.session.get('username')).update(admin_password=newpassword_hash)
+        print(oldpwd, oldpassword_hash, newpwd, newpassword_hash, confirm_newpwd, confirm_pwd, res)
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
+
     admin_name = request.session.get('username')
     info = Admin.objects.get(admin_name=request.session.get('username'))
     return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
@@ -133,7 +140,7 @@ def administrator(request):
         user_tel = request.POST.get('user-tel')
         email = request.POST.get('email')
         user_qq = request.POST.get('user-qq')
-        privilege = Privilege.objects.filter(id = request.POST.get('admin-role'))[0]
+        privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
         admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
         admin.save()
@@ -141,9 +148,7 @@ def administrator(request):
     admin_total = Admin.objects.count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/administrator.html',context={'admin_total':admin_total,'admins':admins,'privileges':privileges})
-
-
+    return render(request, 'backmanage/administrator.html', context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
 
 def ads_list(request):
     return render(request, 'backmanage/Ads_list.html')
@@ -175,7 +180,6 @@ def brand_details(request):
 
 def brand_manage(request):
     brands = TbBrand.objects.all()
-
     return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
 
 
@@ -235,16 +239,24 @@ def competence(request,index=0):
         admins = Admin.objects.all()
         return render(request, 'backmanage/Competence.html', context={'admins': admins,'checked_admins': checked_admins, 'privilege': privilege})
     if request.method == 'POST':
-        add_prv = Privilege()
+        if request.POST.get("privilege_id"):
+            add_prv = Privilege.objects.get(pk=request.POST.get("privilege_id"))
+        else:
+            add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
         add_prv.describe = request.POST.get('describe')
         add_prv.menu_list = request.POST.getlist('user-Character-0-0')
         add_prv.save()
         user = request.POST.getlist('username')
         for u in user:
-            Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
+            Admin.objects.filter(id=int(u)).update(privilege=add_prv)
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
+    # pusers = Privilege.objects.values('privilege_name')
+    # print(pusers)
+    # user111 = '超级管理员'
+    # if user111 in pusers:
+    #     print(12345678)
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
 
 
@@ -267,12 +279,15 @@ def home(request):
 
 
 def integration(request):
-    return render(request, 'backmanage/integration.html')
+    user = User.objects.all()
+    user_total = User.objects.count()
+    return render(request, 'backmanage/integration.html', context={'user': user, 'user_total': user_total})
 
 
 def member_grading(request):
     user = User.objects.all()
-    return render(request, 'backmanage/member-Grading.html', context={'user': user})
+    user_total = User.objects.count()
+    return render(request, 'backmanage/member-Grading.html', context={'user': user, 'user_total': user_total})
 
 
 def member_show(request, type):
@@ -449,20 +464,11 @@ def transaction(request):
 
 
 def user_list(request):        # 会员列表
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        sex = request.POST.get('form-field-radio')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        place = request.POST.get('place')
-        birthday = request.POST.get('birthday')
-        user = User(username=username, password=password, sex=sex, phone=phone,
-                    email=email, birthday=birthday, place=place)
-        user.save()
-        return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
+    # del = User.objects.get(pk)
+    # del.delete()
     user = User.objects.all()
-    return render(request, 'backmanage/user_list.html', context={'user': user})
+    user_total = User.objects.count()
+    return render(request, 'backmanage/user_list.html', context={'user': user, 'user_total': user_total})
 
 
 def attribute_list(request, cid):
@@ -556,7 +562,8 @@ def attribute_add(request):
 
 
 def logout(request):
-    request.session.flush()
+    request.session.pop('admin_id')
+    request.session.pop('admin_username')
     return redirect(reverse('backmanage:login'))
 
 
@@ -593,4 +600,23 @@ def attribute_get(request):
     for brand in data:
         brands.append({"id": brand.id, "name": brand.name})
     return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
+
+
+def delete(request):
+    del_id = request.POST.get('id')
+    cut = User.objects.get(pk=del_id)
+    cut.delete()
+    return JsonResponse('删除成功')
+
+
+def delete_all(request):
+    delall_id = request.POST.get('ids')
+    for id in delall_id.split(","):
+        cutall = User.objects.get(pk=id)
+        cutall.delete()
+    return JsonResponse('批量删除成功')
+
+
+
+
 

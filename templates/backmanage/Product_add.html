@@ -71,13 +71,18 @@
                     </select>
                     <select id="small_category" name="s_cid">
                         <option>选择产品分类</option>
-                        {% for small_category in all_small_category %}
-                               <option value="{{ small_category.id }}">
-                                   {{ small_category.name }}
-                               </option>
-                        {% endfor %}
                     </select>
                 </div>
+            </div>
+            <div class="clearfix cl">
+                    <label class="form-label col-2">
+                        <span class="c-red">*</span>品牌：
+                    </label>
+                    <div class="formControls col-10">
+                        <select id="brand" name="brandid">
+                            <option>产品品牌</option>
+                        </select>
+                    </div>
             </div>
             <div class="clearfix cl">
                 <label class="form-label col-2">
@@ -119,8 +124,9 @@
                  small_parent_id = {{ small_category.parentid }}
                  if(big_category_id == small_parent_id){
                      var option = "<option value='" + '{{ small_category.id }}'+"'>" + '{{ small_category.name }}'+"</option>"
+                     $('#small_category').append(option)
                  }
-                 $('#small_category').append(option)
+
              {% endfor %}
         }
     )

@@ -60,7 +60,7 @@ def commit_order(request):
             orderproduct.order_info = orderinfo
             orderproduct.save()
             cart.delete()
-        request.session.delete("cart_info_list")
+        request.session.pop("cart_info_list")
         request.session["orderinfo_id"] = orderinfo.id
         return JsonResponse({'code': 0})
     orderinfo = OrderInfo.objects.get(pk=request.session["orderinfo_id"])
@@ -93,7 +93,7 @@ def pay_order(request):
 
     pay_url = 'https://openapi.alipaydev.com/gateway.do?' + order_string
     if not request.is_ajax():
-        request.session.delete("orderinfo_id")
+        request.session.pop("orderinfo_id")
     return JsonResponse({"res": 3, "pay_url": pay_url})
 
 
