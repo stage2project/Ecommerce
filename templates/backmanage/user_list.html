@@ -59,20 +59,20 @@
         <div class="d_Confirm_Order_style">
             <div class="search_style">
 
-{#                <ul class="search_content clearfix">#}
-{#                    <li><label class="l_f">会员名称</label><input name="" type="text" class="text_add"#}
-{#                                                              placeholder="输入会员名称、电话、邮箱" style=" width:400px"/></li>#}
-{#                    <li><label class="l_f">添加时间</label><input class="inline laydate-icon" id="start"#}
-{#                                                              style=" margin-left:10px;"></li>#}
-{#                    <li style="width:90px;">#}
-{#                        <button type="button" class="btn_search"><i class="icon-search"></i>查询</button>#}
-{#                    </li>#}
-{#                </ul>#}
+                {#                <ul class="search_content clearfix">#}
+                {#                    <li><label class="l_f">会员名称</label><input name="" type="text" class="text_add"#}
+                {#                                                              placeholder="输入会员名称、电话、邮箱" style=" width:400px"/></li>#}
+                {#                    <li><label class="l_f">添加时间</label><input class="inline laydate-icon" id="start"#}
+                {#                                                              style=" margin-left:10px;"></li>#}
+                {#                    <li style="width:90px;">#}
+                {#                        <button type="button" class="btn_search"><i class="icon-search"></i>查询</button>#}
+                {#                    </li>#}
+                {#                </ul>#}
             </div>
             <!---->
             <div class="border clearfix">
                <span class="l_f">
-                <a href="javascript:ovid();" onclick="member_delAll()"  class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
+                <a href="" onclick="member_delAll()" class="btn btn-danger"><i class="icon-trash"></i>批量删除</a>
                </span>
                 <span class="r_f">共：<b>{{ user_total }}</b>条</span>
 
@@ -97,55 +97,57 @@
                     </thead>
                     <tbody>
                     {% for all in user %}
-                    <tr>
-                        <td><label><input type="checkbox" class="myclass" id="checkId_ƒ{{ all.id }}" value="{{ all.id }}" class="ace"><span class="lbl"></span></label></td>
-                        <td>{{ all.id }}</td>
-                        <td>{{ all.username }}</td>
-                        <td>
-                            {% if all.sex == 0 %}
-                                 男
-                            {% elif all.sex == 1 %}
-                                 女
-                            {% else %}
-                                 保密
-                            {% endif %}
-                        </td>
-                        <td>{{ all.phone }}</td>
-                        <td>{{ all.email }}</td>
-                        <td class="text-l">{{ all.place }}</td>
-                        <td>{{ all.regtime }}</td>
-                        <td>
-                                {% if all.grade|str2int == 0 or all.grade|str2int < 1000 %}
-                                        铜牌会员
-                                {% elif all.grade|str2int == 1000 %}
-                                        银牌会员
-                                {% elif all.grade|str2int > 1000 and all.grade|str2int < 2500  %}
-                                        银牌会员
-                                {% elif all.grade|str2int == 2500 %}
-                                        金牌会员
-                                {% elif all.grade|str2int > 2500 and all.grade|str2int < 5000 %}
-                                        金牌会员
-                                {% elif all.grade|str2int == 5000 %}
-                                        钻石会员
-                                {% elif all.grade|str2int > 5000 and all.grade|str2int < 10000 %}
-                                        钻石会员
+                        <tr>
+                            <td><label><input type="checkbox" class="myclass" id="checkId_ƒ{{ all.id }}"
+                                              value="{{ all.id }}" class="ace"><span class="lbl"></span></label></td>
+                            <td>{{ all.id }}</td>
+                            <td>{{ all.username }}</td>
+                            <td>
+                                {% if all.sex == 0 %}
+                                    男
+                                {% elif all.sex == 1 %}
+                                    女
                                 {% else %}
-                                        超级会员
+                                    保密
                                 {% endif %}
                             </td>
-                        <td class="td-status">
+                            <td>{{ all.phone }}</td>
+                            <td>{{ all.email }}</td>
+                            <td class="text-l">{{ all.place }}</td>
+                            <td>{{ all.regtime }}</td>
+                            <td>
+                                {% if all.grade|str2int == 0 or all.grade|str2int < 1000 %}
+                                    铜牌会员
+                                {% elif all.grade|str2int == 1000 %}
+                                    银牌会员
+                                {% elif all.grade|str2int > 1000 and all.grade|str2int < 2500 %}
+                                    银牌会员
+                                {% elif all.grade|str2int == 2500 %}
+                                    金牌会员
+                                {% elif all.grade|str2int > 2500 and all.grade|str2int < 5000 %}
+                                    金牌会员
+                                {% elif all.grade|str2int == 5000 %}
+                                    钻石会员
+                                {% elif all.grade|str2int > 5000 and all.grade|str2int < 10000 %}
+                                    钻石会员
+                                {% else %}
+                                    超级会员
+                                {% endif %}
+                            </td>
+                            <td class="td-status">
                             <span class="label label-success radius">
                                 {% if adm.status %}{{ '已停用' }}{% else %}{{ '已启用' }}{% endif %}
                             </span>
-                        </td>                        <td class="td-manage">
-                            <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
-                               class="btn btn-xs btn-success"><i class="icon-ok bigger-120"></i></a>
-                            <a title="编辑" onclick="member_edit('550')" href="javascript:;"
-                               class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
-                            <a title="删除" href="javascript:;" onclick="member_del(this,{{ all.id }})"
-                               class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="td-manage">
+                                <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
+                                   class="btn btn-xs btn-success"><i class="icon-ok bigger-120"></i></a>
+                                <a title="编辑" onclick="member_edit('550')" href="javascript:;"
+                                   class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
+                                <a title="删除" href="" onclick="member_del(this,{{ all.id }})"
+                                   class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>
@@ -155,50 +157,54 @@
 </div>
 <!--添加用户图层-->
 <div class="add_menber" id="add_menber_style" style="display:none">
- <form action="{% url 'users:register' %}" method="post" id="form-admin-add">
-            {% csrf_token %}
-    <ul class=" page-content">
-        <li><label class="label_name">用&nbsp;&nbsp;户 &nbsp;名：</label><span class="add_name"><input value="" name="username"
-                                                                                                   type="text"
-                                                                                                   class="text_add"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label><span class="add_name"><input name="password" type="text"
-                                                                                 class="text_add"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label><span class="add_name">
+    <form action="{% url 'users:register' %}" method="post" id="form-admin-add">
+        {% csrf_token %}
+        <ul class=" page-content">
+            <li><label class="label_name">用&nbsp;&nbsp;户 &nbsp;名：</label><span class="add_name"><input value=""
+                                                                                                       name="username"
+                                                                                                       type="text"
+                                                                                                       class="text_add"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label><span
+                    class="add_name"><input name="password" type="text"
+                                            class="text_add"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label><span class="add_name">
      <label><input name="form-field-radio" type="radio" checked="checked" class="ace"><span class="lbl">男</span></label>&nbsp;&nbsp;&nbsp;
      <label><input name="form-field-radio" type="radio" class="ace"><span class="lbl">女</span></label>&nbsp;&nbsp;&nbsp;
      <label><input name="form-field-radio" type="radio" class="ace"><span class="lbl">保密</span></label>
      </span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：</label><span class="add_name"><input name="birthday" type="text"
-                                                                                 class="text_add"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">移动电话：</label><span class="add_name"><input name="phone" type="text"
-                                                                                 class="text_add"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">电子邮箱：</label><span class="add_name"><input name="email" type="text"
-                                                                                 class="text_add"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li class="adderss"><label class="label_name">家庭住址：</label><span class="add_name"><input name="place" type="text"
-                                                                                                 class="text_add"
-                                                                                                 style=" width:350px"/></span>
-            <div class="prompt r_f"></div>
-        </li>
-        <li><label class="label_name">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：</label><span class="add_name">
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：</label><span
+                    class="add_name"><input name="birthday" type="text"
+                                            class="text_add"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">移动电话：</label><span class="add_name"><input name="phone" type="text"
+                                                                                     class="text_add"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">电子邮箱：</label><span class="add_name"><input name="email" type="text"
+                                                                                     class="text_add"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li class="adderss"><label class="label_name">家庭住址：</label><span class="add_name"><input name="place"
+                                                                                                     type="text"
+                                                                                                     class="text_add"
+                                                                                                     style=" width:350px"/></span>
+                <div class="prompt r_f"></div>
+            </li>
+            <li><label class="label_name">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：</label><span class="add_name">
      <label><input name="form-field-radio1" type="radio" checked="checked" class="ace"><span
              class="lbl">开启</span></label>&nbsp;&nbsp;&nbsp;
      <label><input name="form-field-radio1" type="radio" class="ace"><span class="lbl">关闭</span></label></span>
-            <div class="prompt r_f"></div>
-        </li>
-    </ul>
- </form>
+                <div class="prompt r_f"></div>
+            </li>
+        </ul>
+    </form>
 </div>
 </body>
 </html>
@@ -267,10 +273,17 @@
                 });
                 if (num > 0) {
                     return false;
-                }
-                else {
+                } else {
 
-                    $.post("{% url 'backmanage:user_list' %}", {'username': username, 'password': password, 'email': email, 'phone': phone, 'sex': sex, 'birthday': birthday, 'place': place}, function (data) {
+                    $.post("{% url 'backmanage:user_list' %}", {
+                        'username': username,
+                        'password': password,
+                        'email': email,
+                        'phone': phone,
+                        'sex': sex,
+                        'birthday': birthday,
+                        'place': place
+                    }, function (data) {
                         {#if (data.status) #}
 
                     })
@@ -331,8 +344,7 @@
                 });
                 if (num > 0) {
                     return false;
-                }
-                else {
+                } else {
 
                     layer.alert('添加成功！', {
                         title: '提示框',
@@ -349,44 +361,45 @@
         alert('dsadsad')
         let ids = new Array();
         $(".myclass").each(function (i) {
-          if($(this).is(":checked")){
-              var tmp = $(this).val();
-             ids.push(tmp);
-          }
+            if ($(this).is(":checked")) {
+                var tmp = $(this).val();
+                ids.push(tmp);
+            }
         })
         $.ajax({
-        url:"{% url 'backmanage:delete_all' %}",
-        method:"POST",
-        dataType:"JSON",
-        data:{ids:ids.toString()},
-        async:false,
-        success:function (data,status) {
-            if(status ==200){
+            url: "{% url 'backmanage:delete_all' %}",
+            method: "POST",
+            dataType: "JSON",
+            data: {ids: ids.toString()},
+            async: false,
+            success: function (data, status) {
+                if (status == 200) {
 
-                layer.msg('已删除!', {icon: 1, time: 1000})
+                    layer.msg('已删除!', {icon: 1, time: 1000})
+                }
+                //
             }
-            //
-        }});
+        });
 
     }
+
     function member_del(obj1, id) {
-    $.ajax({
-        url:"{% url 'backmanage:delete' %}",
-        method:"POST",
-        dataType:"JSON",
-        data:{id:id},
-        async:false,
-        success:function (data,status) {
+        $.ajax({
+            url: "{% url 'backmanage:delete' %}",
+            method: "POST",
+            dataType: "JSON",
+            data: {id: id},
+            async: false,
+            success: function (data, status) {
 
-            if(status ==200){
-                layer.msg('已删除!', {icon: 1, time: 1000})
+                if (status == 200) {
+                    layer.msg('已删除!', {icon: 1, time: 1000})
+                }
+                //
             }
-            //
-        }
 
-    });
+        });
     }
-
 
 
 </script>

@@ -20,7 +20,6 @@ from backmanage.models import *
 
 import json
 
-
 # Create your views here.
 from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey, TbSpuPics
@@ -28,8 +27,9 @@ from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
 from users.models import User
 
+
 def add_competence(request):
-    comp = {'超级管理员':'拥有至高无上的权利,操作系统的所有权限', '普通管理员': '拥有网站系统大部分使用权限,无权限管理功能', '编辑管理员': '拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
+    comp = {'超级管理员': '拥有至高无上的权利,操作系统的所有权限', '普通管理员': '拥有网站系统大部分使用权限,无权限管理功能', '编辑管理员': '拥有部分权限,主要进行编辑功能,无编辑订单功能,权限分配功能'}
     for key, value in comp.items():
         res = Privilege()
         res.privilege_name = key
@@ -98,7 +98,7 @@ def add_brand(request):
         brand.category = request.POST['description']
         brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-    return render(request, 'backmanage/Add_Brand.html',context={'all_second_category':all_second_category})
+    return render(request, 'backmanage/Add_Brand.html', context={'all_second_category': all_second_category})
 
 
 def admin_competence(request):
@@ -106,7 +106,7 @@ def admin_competence(request):
     privilege = []
     privileges = Privilege.objects.all()
     for p in privileges:
-        privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
+        privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount': p.admin.count()})
 
     return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
@@ -142,13 +142,16 @@ def administrator(request):
         user_qq = request.POST.get('user-qq')
         privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
-        admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel, admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq, privilege=privilege)
+        admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel,
+                      admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq,
+                      privilege=privilege)
         admin.save()
         return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
     admin_total = Admin.objects.count()
     admins = Admin.objects.all()
     privileges = Privilege.objects.all()
-    return render(request, 'backmanage/administrator.html', context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
+    return render(request, 'backmanage/administrator.html',
+                  context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
 
 
 def ads_list(request):
@@ -182,7 +185,7 @@ def brand_details(request):
 def brand_manage(request):
     brands = TbBrand.objects.all()
 
-    return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
+    return render(request, 'backmanage/Brand_Manage.html', context={'brands': brands})
 
 
 def category_manage(request):
@@ -195,7 +198,8 @@ def category_list(request):
     count = TbCategory.objects.filter(status=0).count()
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     # todo 按照大类目分组显示小类目
-    return render(request, 'backmanage/Category_list.html', context={'categorys': category, 'count': count, 'all_big_category': all_big_category})
+    return render(request, 'backmanage/Category_list.html',
+                  context={'categorys': category, 'count': count, 'all_big_category': all_big_category})
 
 
 @csrf_exempt
@@ -211,7 +215,8 @@ def category_add(request):
         category.save()
         # todo 增加小类目时，列表未更新
         return redirect(reverse('backmanage:category_list'))
-    return render(request, 'backmanage/Category_add.html', context={'all_big_category': all_big_category,'all_second_category':all_second_category})
+    return render(request, 'backmanage/Category_add.html',
+                  context={'all_big_category': all_big_category, 'all_second_category': all_second_category})
 
 
 @csrf_exempt
@@ -230,16 +235,18 @@ def category_update(request, cid=None):
     # TODO  cid不存在时错误页面没有
     if not category:
         return HttpResponse("板块不存在")
-    return render(request, 'backmanage/Category_update.html', context={"category": category, 'all_big_category': all_big_category})
+    return render(request, 'backmanage/Category_update.html',
+                  context={"category": category, 'all_big_category': all_big_category})
 
 
-def competence(request,index=0):
+def competence(request, index=0):
     if index:
         privilege = Privilege.objects.get(pk=index)
         checked_admins = privilege.admin.all()
-        print(privilege,checked_admins)
+        print(privilege, checked_admins)
         admins = Admin.objects.all()
-        return render(request, 'backmanage/Competence.html', context={'admins': admins,'checked_admins': checked_admins, 'privilege': privilege})
+        return render(request, 'backmanage/Competence.html',
+                      context={'admins': admins, 'checked_admins': checked_admins, 'privilege': privilege})
     if request.method == 'POST':
         add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
@@ -248,10 +255,11 @@ def competence(request,index=0):
         add_prv.save()
         user = request.POST.getlist('username')
         for u in user:
-            Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
-        return JsonResponse({'code':0, 'msg':'success'})
+            Admin.objects.filter(id=int(u)).update(
+                privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
+        return JsonResponse({'code': 0, 'msg': 'success'})
     admins = Admin.objects.all()
-    return render(request, 'backmanage/Competence.html',context={'admins':admins,})
+    return render(request, 'backmanage/Competence.html', context={'admins': admins, })
 
 
 def cover_management(request):
@@ -350,8 +358,11 @@ def product_add(request):
             spu_pic.spu = spu
             spu_pic.pic = path
             spu_pic.save()
-        return redirect(reverse('backmanage:sku_add', kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'), 'unique_code': spu.unique_code}))
-    return render(request, 'backmanage/Product_add.html',  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
+        return redirect(reverse('backmanage:sku_add',
+                                kwargs={'bcid': request.POST.get('b_cid'), 'scid': request.POST.get('s_cid'),
+                                        'unique_code': spu.unique_code}))
+    return render(request, 'backmanage/Product_add.html',
+                  context={'all_small_category': all_small_category, 'all_big_category': all_big_category})
 
 
 def upload_pictures(spuid, pictures):
@@ -365,9 +376,9 @@ def upload_pictures(spuid, pictures):
 
         # 解决文件重名
         if not os.path.exists(path):
-            os.makedirs(path) # 递归创建目录
+            os.makedirs(path)  # 递归创建目录
         path = os.path.join(path, picture.name)
-        paths.append('upload/'+str(spuid)+'/'+picture.name)
+        paths.append('upload/' + str(spuid) + '/' + picture.name)
         # 创建新文件
         with open(path, 'wb') as fp:
             # 如果文件超过2.5M,则分块读写
@@ -401,9 +412,9 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
                 sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
                 sku_attr.save()
         return JsonResponse({'code': 0})
-    return render(request, 'backmanage/Sku_add.html',  context={'all_small_category': all_small_category,
-                                                                'all_big_category': all_big_category,
-                                                                'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
+    return render(request, 'backmanage/Sku_add.html', context={'all_small_category': all_small_category,
+                                                               'all_big_category': all_big_category,
+                                                               'bcid': bcid, 'scid': scid, 'unique_code': unique_code})
 
 
 def pruduct_list(request):
@@ -457,7 +468,7 @@ def transaction(request):
     return render(request, 'backmanage/transaction.html')
 
 
-def user_list(request):        # 会员列表
+def user_list(request):  # 会员列表
     # del = User.objects.get(pk)
     # del.delete()
     user = User.objects.all()
@@ -485,7 +496,8 @@ def attribute_list(request, cid):
         attribute_values = attribute.attr_value.all()
         for value in attribute_values:
             key['values'].append({'id': value.id, 'value': value.value})
-    return render(request, 'backmanage/Attribute_list.html', context={'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid':cid})
+    return render(request, 'backmanage/Attribute_list.html',
+                  context={'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid})
 
 
 @csrf_exempt
@@ -513,7 +525,7 @@ def attribute_add(request):
         is_common = request.POST.get('is_common')
         attribute_name = request.POST.get("attribute_name")
         attribute_value = request.POST.get("attribute_value")
-        if is_common is None or attribute_value is None or attribute_name is None or attribute_name.strip() == '' or attribute_value.strip() =='':
+        if is_common is None or attribute_value is None or attribute_name is None or attribute_name.strip() == '' or attribute_value.strip() == '':
             return JsonResponse({'code': 1, 'msg': '参数错误'})
         if is_common == '1':
             res = category.attr_key.filter(is_common=1, name=attribute_name.strip())
@@ -592,7 +604,8 @@ def attribute_get(request):
     data = category.brand.all()
     for brand in data:
         brands.append({"id": brand.id, "name": brand.name})
-    return JsonResponse({'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
+    return JsonResponse(
+        {'common_attribute': common_attribute, 'special_attribute': special_attribute, 'cid': cid, 'brand': brands})
 
 
 def delete(request):
@@ -608,8 +621,3 @@ def delete_all(request):
         cutall = User.objects.get(pk=id)
         cutall.delete()
     return JsonResponse('批量删除成功')
-
-
-
-
-

@@ -42,7 +42,8 @@
                     <div class="widget-body">
                         <ul class="b_P_Sort_list">
                             <li><i class="orange  fa fa-user-secret"></i><a href="/admin/member_show/0">全部</a></li>
-                            <li><i class="fa fa-diamond pink "></i> <a href="/admin/member_show/1">铜牌会员{{ count }}</a></li>
+                            <li><i class="fa fa-diamond pink "></i> <a href="/admin/member_show/1">铜牌会员{{ count }}</a>
+                            </li>
                             <li><i class="fa fa-diamond pink "></i> <a href="/admin/member_show/2">银牌会员</a></li>
                             <li><i class="fa fa-diamond pink "></i> <a href="/admin/member_show/3">金牌会员</a></li>
                             <li><i class="fa fa-diamond pink"></i> <a href="/admin/member_show/4">钻石会员</a></li>
@@ -78,50 +79,50 @@
                         </thead>
                         <tbody>
                         {% for all in user %}
-                        <tr>
-                            <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                            <td>{{ all.id }}</td>
-                            <td>{{ all.username }}</td>
-                            <td>
-                                {% if all.sex == 0 %}
+                            <tr>
+                                <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+                                <td>{{ all.id }}</td>
+                                <td>{{ all.username }}</td>
+                                <td>
+                                    {% if all.sex == 0 %}
                                         男
-                                {% elif all.sex == 1 %}
+                                    {% elif all.sex == 1 %}
                                         女
-                                {% else %}
+                                    {% else %}
                                         保密
-                                {% endif %}
-                            </td>
-                            <td>{{ all.phone }}</td>
-                            <td>{{ all.email }}</td>
-                            <td>{{ all.birthday }}</td>
-                            <td>
-                                {% if all.grade|str2int == 0 or all.grade|str2int < 1000 %}
+                                    {% endif %}
+                                </td>
+                                <td>{{ all.phone }}</td>
+                                <td>{{ all.email }}</td>
+                                <td>{{ all.birthday }}</td>
+                                <td>
+                                    {% if all.grade|str2int == 0 or all.grade|str2int < 1000 %}
                                         铜牌会员
-                                {% elif all.grade|str2int == 1000 %}
+                                    {% elif all.grade|str2int == 1000 %}
                                         银牌会员
-                                {% elif all.grade|str2int > 1000 and all.grade|str2int < 2500  %}
+                                    {% elif all.grade|str2int > 1000 and all.grade|str2int < 2500 %}
                                         银牌会员
-                                {% elif all.grade|str2int == 2500 %}
+                                    {% elif all.grade|str2int == 2500 %}
                                         金牌会员
-                                {% elif all.grade|str2int > 2500 and all.grade|str2int < 5000 %}
+                                    {% elif all.grade|str2int > 2500 and all.grade|str2int < 5000 %}
                                         金牌会员
-                                {% elif all.grade|str2int == 5000 %}
+                                    {% elif all.grade|str2int == 5000 %}
                                         钻石会员
-                                {% elif all.grade|str2int > 5000 and all.grade|str2int < 10000 %}
+                                    {% elif all.grade|str2int > 5000 and all.grade|str2int < 10000 %}
                                         钻石会员
-                                {% else %}
+                                    {% else %}
                                         超级会员
-                                {% endif %}
-                            </td>
-                            <td class="text-l">{{ all.grade }}</td>
-                            <td class="td-status"><span class="label label-success radius">已启用</span></td>
-                            <td class="td-manage" style="width: 7px">
-                                <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
-                                   class="btn btn-xs btn-success"><i class="fa fa-check bigger-120"></i>停用</a>
-                                <a href="javascript:;" title="删除" onclick="member_del(this,'1')"
-                                   class="btn btn-xs btn-warning"><i class="fa fa-trash  bigger-120"></i>删除</a>
-                            </td>
-                        </tr>
+                                    {% endif %}
+                                </td>
+                                <td class="text-l">{{ all.grade }}</td>
+                                <td class="td-status"><span class="label label-success radius">已启用</span></td>
+                                <td class="td-manage" style="width: 7px">
+                                    <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用"
+                                       class="btn btn-xs btn-success"><i class="fa fa-check bigger-120"></i>停用</a>
+                                    <a href="" title="删除" onclick="member_del(this,'{{ all.id }}')"
+                                       class="btn btn-xs btn-warning"><i class="fa fa-trash  bigger-120"></i>删除</a>
+                                </td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>
@@ -164,6 +165,27 @@
     function member_show(title, url, id, w, h) {
         layer_show(title, url + '#?=' + id, w, h);
     }
+
+    /*用户-删除*/
+    function member_del(obj1, id) {
+        $.ajax({
+            url: "{% url 'backmanage:delete' %}",
+            method: "POST",
+            dataType: "JSON",
+            data: {id: id},
+            async: false,
+            success: function (data, status) {
+
+                if (status == 200) {
+                    layer.msg('已删除!', {icon: 1, time: 1000})
+                }
+                //
+            }
+
+        });
+    }
+
+
 
     /*用户-停用*/
     function member_stop(obj, id) {
@@ -308,7 +330,7 @@
             var off2 = $source.offset();
             var w2 = $source.width();
 
-            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1/w2)) return 'right';
             return 'left';
         }
     });
