@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Django',
+        'NAME': 'django01',
         'HOST': '47.102.128.212',
         'USER': 'root',
         'PASSWORD': '1q2w3e',
@@ -159,3 +159,10 @@ TINYMCE_DEFAULT_CONFIG = {
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
 # 允许上传的文件后缀
 ALLOWED_FILEEXTS = ['.png', '.jpeg', '.jpg', '.gif', '.bmp']
+
+APP_ID = "2016101100659505"
+
+MERCHANT_PRIVATE_KEY_PATH = os.path.join(BASE_DIR, "orders/keys/rsa_private_key.pem")
+ALIPAY_PUBLIC_KEY_PATH = os.path.join(BASE_DIR, "orders/keys/rsa_public_key.pem")
+
+

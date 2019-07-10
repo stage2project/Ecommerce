@@ -57,13 +57,11 @@ def add_admin(request):
 
 
 def index(request):
-    date = datetime.now()
-    id = request.session['uid']
-    if 'uid' in request.session:
-        username = request.session.get('username')
-        data = Privilege.objects.filter(admin=id).all()[0]
-        return render(request, 'backmanage/index.html', context={'username': username,'data': data})
-    return render(request, 'backmanage/index.html', context={'date': date})
+    if request.session.get("admin_id"):
+        username = request.session.get('admin_username')
+        data = Privilege.objects.filter(admin=request.session.get("admin_id")).all()[0]
+        return render(request, 'backmanage/index.html', context={'username': username, 'data': data})
+    return redirect(reverse("backmanage:login"))
 
 
 def login(request):
@@ -75,8 +73,8 @@ def login(request):
         verficode = request.session['verficode']
         res = Admin.objects.filter(admin_name=username, admin_password=password_hash).values('id', 'admin_name')
         if len(res) > 0 and verficode == code:  # 登录成功
-            request.session['uid'] = res[0]['id']
-            request.session['username'] = res[0]['admin_name']
+            request.session['admin_id'] = res[0]['id']
+            request.session['admin_username'] = res[0]['admin_name']
             return JsonResponse({'code': 1, 'msg': 'ok'}, safe=False)
         return JsonResponse({'code': 0, 'msg': 'failed'}, safe=False)
     return render(request, 'backmanage/login.html')
@@ -582,7 +580,8 @@ def attribute_add(request):
 
 
 def logout(request):
-    request.session.flush()
+    request.session.pop('admin_id')
+    request.session.pop('admin_username')
     return redirect(reverse('backmanage:login'))
 
 

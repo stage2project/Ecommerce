@@ -8,8 +8,8 @@
 {% block member-right %}
         <div class="member-right fr">
             <div class="member-head">
-                <div class="member-heels fl"><h2>订单号：1234567890</h2></div>
-                <div class="member-backs fr"><a href="#">返回订单首页</a></div>
+                <div class="member-heels fl"><h2>订单号：{{ order.order_id }}</h2></div>
+                <div class="member-backs fr"><a href="{% url 'users:order_manage' %}">返回订单首页</a></div>
             </div>
             <div class="member-border">
                <div class="member-order">
@@ -19,24 +19,18 @@
                    </dl>
                    <dl class="member-custom clearfix ">
                        <dt>订单信息</dt>
-                       <dd>订单编号：98654091436</dd>
-                       <dd>订单金额：￥10000000</dd>
-                       <dd>付款时间：2015-09-22 08：22</dd>
-                       <dd>发货时间：2015-09-22 08：22</dd>
+                       <dd>订单编号：{{ order.order_id }}</dd>
+                       <dd>订单金额：￥{{ order.product_price }}</dd>
+                       <dd>付款时间：{{ order.pay_date }}</dd>
+                       <dd>创建时间：{{ order.create_time }}</dd>
                    </dl>
                    <dl>
                        <dt>配送信息</dt>
-                       <dd class="member-seller"><span>收货地址：<em>张子琪</em></span> <span>18801066117</span> <span>北京市海淀区中关村南街99号，幸福小区3号楼4门401</span></dd>
+                       <dd class="member-seller"><span>收货地址：<em>{{ order.addr.a_name }}</em></span> <span>{{ order.addr.a_phone }}</span> <span>{{ order.addr.a_place }}</span></dd>
                    </dl>
-                   <dl class="member-custom clearfix ">
-                       <dt>发票信息</dt>
-                       <dd>发票类型：电子发票 发票下载</dd>
-                       <dd>发票抬头：公司</dd>
-                       <dd>发票内容：化妆品</dd>
-                   </dl>
+
                    <dl>
                        <dt>商品信息</dt>
-                       <dd class="member-seller">本订单是由 “以纯甲醇旗舰店” 发货并且提高售后服务，商品在下单后会尽快给您发货。 </dd>
                    </dl>
                </div>
                <div class="member-serial">
@@ -48,28 +42,21 @@
                            <div class="No4">单价</div>
                            <div class="No5">小计</div>
                        </li>
-                       <li class="clearfix">
-                           <div class="No1">987645</div>
-                           <div class="No2"><a href="#">BWXD日系复古男士松紧腰小脚九分裤简约休闲收口运动潮裤垮裤百搭</a> </div>
-                           <div class="No3">1</div>
-                           <div class="No4">￥78.00</div>
-                           <div class="No5">￥99.00</div>
-                       </li>
-                       <li class="clearfix">
-                           <div class="No1">908756</div>
-                           <div class="No2"><a href="#">现货包邮小米手环充电线 小米手环充电器 小米手环数据线 有腕带</a> </div>
-                           <div class="No3">2</div>
-                           <div class="No4">￥78.00</div>
-                           <div class="No5">￥99.00</div>
-                       </li>
+                       {% for order_product in  order_product_list %}
+                            <li class="clearfix">
+                               <div class="No1">{{ order_product.product.id}}</div>
+                               <div class="No2"><a href="/details/{{ order_product.product.spu.unique_code}}">{{ order_product.product.title}}</a> </div>
+                               <div class="No3">{{ order_product.count}}</div>
+                               <div class="No4">{{ order_product.product.price}}</div>
+                               <div class="No5">{{ order_product.price}}</div>
+                           </li>
+                       {% endfor %}
                    </ul>
                </div>
             </div>
             <div class="member-settle clearfix">
                 <div class="fr">
                     <div><span>商品金额：</span><em>￥270.00</em></div>
-                    <div><span>运费：</span><em>￥270.00</em></div>
-                    <div class="member-line"></div>
                     <div><span>共需支付：</span><em>￥280.00</em></div>
                 </div>
             </div>
