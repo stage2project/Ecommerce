@@ -384,31 +384,7 @@
            }
         })
     };
-{#    $('#save_submit').on('click', function () {#}
-{#        $.post('{% url "backmanage:competence" %}', $('#add_privileges').serialize())#}
-{#    })#}
 
-    {#    /*返回事件*/#}
-{#    function article_save() {#}
-{#        $.post('{% url "backmanage:login" %}', $('input').serialize(),function (data){#}
-{#                if(data['code']){#}
-{#                        layer.alert('登陆成功！', {#}
-{#                        title: '提示框',#}
-{#                        icon: 1,#}
-{#                        });#}
-{#                        location.href = "{% url 'backmanage:index' %}";#}
-{#                        layer.close(index);#}
-{#                }else{#}
-{#                    layer.alert('登陆失败！', {#}
-{#                        title: '提示框',#}
-{#                        icon: 1,#}
-{#                        });#}
-{#                        location.href = "{% url 'backmanage:login' %}";#}
-{#                        layer.close(index);#}
-{#                }#}
-{##}
-{#            })#}
-{#    };#}
 $(function () {
     {% autoescape off %}
         select_list = eval("("+"{{ privilege.menu_list}}"+")")

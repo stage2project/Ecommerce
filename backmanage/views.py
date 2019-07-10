@@ -88,17 +88,20 @@ def account_detail(request):
 
 
 def add_brand(request):
-    all_second_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
-    print(all_second_category)
+    all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
+    all_small_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
     if request.method == "POST":
         brand = TbBrand()
         brand.name = request.POST['bname']
-        brand.logo = request.POST['blogo']
+        file = request.FILES.get('pictures')
+        savepath = os.path.join(settings.MEDIA_ROOT,str(file))
+        brand.logo = savepath
         brand.yn = request.POST['checkbox']
-        brand.category = request.POST['description']
-        brand.save()
+        brand.category = TbCategory.objects.filter(id = request.POST['s_cid'])[0]
+        print(file,settings.MEDIA_ROOT,brand.name,brand.logo,brand.yn,brand.category)
+        # brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-    return render(request, 'backmanage/Add_Brand.html',context={'all_second_category':all_second_category})
+    return render(request, 'backmanage/Add_Brand.html',context={'all_big_category':all_big_category,'all_small_category':all_small_category})
 
 
 def admin_competence(request):
@@ -107,7 +110,6 @@ def admin_competence(request):
     privileges = Privilege.objects.all()
     for p in privileges:
         privilege.append({'privilege': p, 'users': p.admin.values('admin_name'), 'usercount':p.admin.count()})
-
     return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
