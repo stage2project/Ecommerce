@@ -62,7 +62,7 @@
                 </a>
             </span>
             <span class="r_f">共：
-                <b>234</b>个品牌
+                <b>{{ brands.count }}</b>个品牌
             </span>
         </div>
         <!--品牌展示-->
@@ -116,7 +116,13 @@
                                     {{ brand.category.name }}
                                 </td>
                                 <td class="td-status">
-                                    <span class="label label-success radius">{{ brand.yn}}</span>
+                                    <span class="label label-success radius">
+                                        {% if not brand.yn %}
+                                            {{ '显示' }}
+                                        {% else %}
+                                            {{ '不显示' }}
+                                        {% endif %}
+                                    </span>
                                 </td>
                                 <td class="td-manage">
                                     <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用" class="btn btn-xs btn-success">

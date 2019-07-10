@@ -38,6 +38,7 @@
                         权限名称
                     </label>
                     <div class="col-sm-9">
+                        <input type="hidden" name="privilege_id" value="{{ privilege.id }}" >
                         <input type="text" id="form-field-1" placeholder="" name="privilege_name" class="col-xs-10 col-sm-5"  value="{{ privilege.privilege_name }}" >
                     </div>
                 </div>
@@ -306,12 +307,12 @@
     <button onclick="article_save_submit();" class="btn btn-primary radius" type="button" id="save_submit">
         <i class="fa fa-save "></i> 保存并提交
     </button>
-    <button onclick="article_save();" class="btn btn-secondary  btn-warning" type="button" id="backout">
-        <i class="fa fa-reply"></i> 返回上一步
+    <button onclick="cancel();" class="btn btn-warning" id="save_submit" type="button">
+        &nbsp;&nbsp;<i class="fa fa-save "></i> 取消&nbsp;&nbsp;
     </button>
-    <button onclick="layer_close();" class="btn btn-default radius" type="button">
-        &nbsp;&nbsp;取消&nbsp;&nbsp;
-    </button>
+{#    <button onclick="cancel();" type="button" id="save_submit" class="btn btn-warning">#}
+{#                        <i class="fa fa-save "></i> 取消#}
+{#                    </button>#}
 </div>
 </form>
 </body>
@@ -401,4 +402,8 @@ $(function () {
         }
     {% endautoescape %}
 })
+
+function cancel() {
+        window.location.href = '{% url "backmanage:admin_competence" %}'
+    }
 </script>

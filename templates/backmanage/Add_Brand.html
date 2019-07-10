@@ -23,14 +23,10 @@
     <script src="{% static 'backmanage/assets/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/typeahead-bs2.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/layer/layer.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.queue.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.speed.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/handlers.js' %}"></script>
 </head>
 <body>
 <div class=" clearfix">
-    <form action="" method="post">
+    <form action="{% url 'backmanage:add_brand' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div id="add_brand" class="clearfix">
     {#        <div class="c_add">#}
@@ -47,7 +43,7 @@
                             <i>*</i>品牌图片：
                         </label>
                         <div class="formControls col-10">
-                            <input type="file" name="pictures" multiple> <br>
+                            <input type="file" name="pictures" > <br>
                             允许上传:png,jpeg,jpg,gif,bmp文件
                         </div>
                     <li class=" clearfix">
@@ -87,11 +83,9 @@
                 </ul>
                 <div>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button onclick="article_save_submit();" type="button" id="save_submit" class="btn btn-warning">
-                        <i class="fa fa-save "></i> 保存
-                    </button>
+                    <input type="submit" value="保存" class="btn btn-warning">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button onclick="article_save_submit();" type="button" id="save_submit" class="btn btn-warning">
+                    <button onclick="cancel();" type="button" id="save_submit" class="btn btn-warning">
                         <i class="fa fa-save "></i> 取消
                     </button>
                 </div>
@@ -116,16 +110,19 @@
             $("#select_style").height($(window).height() - 220);
         });
     })
+    function cancel() {
+        window.location.href = '{% url "backmanage:brand_manage" %}'
+    }
 
-    function article_save_submit() {
-        $.post('{% url "backmanage:add_brand" %}', $('form').serialize(),function(data){
-           if(data['code'] == 0){
-               window.location.href = '{% url "backmanage:brand_manage" %}'
-           }else{
-               alert(data['msg'])
-           }
-        })
-    };
+{#    function article_save_submit() {#}
+{#        $.post('{% url "backmanage:add_brand" %}', $('form').serialize(),function(data){#}
+{#           if(data['code'] == 0){#}
+{#               window.location.href = '{% url "backmanage:brand_manage" %}'#}
+{#           }else{#}
+{#               alert(data['msg'])#}
+{#           }#}
+{#        })#}
+{#    };#}
 </script>
 <script type="text/javascript">
     function updateProgress(file) {
@@ -216,8 +213,9 @@
                  small_parent_id = {{ small_category.parentid }}
                  if(big_category_id == small_parent_id){
                      var option = "<option value='" + '{{ small_category.id }}'+"'>" + '{{ small_category.name }}'+"</option>"
-                 }
                  $('#small_category').append(option)
+                 }
+
              {% endfor %}
         }
     )

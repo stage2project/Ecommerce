@@ -58,12 +58,11 @@ def add_admin(request):
 
 def index(request):
     date = datetime.now()
-    # id = session['id']
-    # menu_list = Admin.objects.values('menu_list').get(pk=id)
-    # [1,2,3]
+    id = request.session['uid']
     if 'uid' in request.session:
         username = request.session.get('username')
-        return render(request, 'backmanage/index.html', context={'username': username})
+        data = Privilege.objects.filter(admin=id).all()[0]
+        return render(request, 'backmanage/index.html', context={'username': username,'data': data})
     return render(request, 'backmanage/index.html', context={'date': date})
 
 
@@ -91,9 +90,10 @@ def add_brand(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
     if request.method == "POST":
+        print(request.POST)
         brand = TbBrand()
         brand.name = request.POST['bname']
-        file = request.FILES.get('pictures')
+        file = request.FILES
         savepath = os.path.join(settings.MEDIA_ROOT,str(file))
         brand.logo = savepath
         brand.yn = request.POST['checkbox']
@@ -101,7 +101,7 @@ def add_brand(request):
         print(file,settings.MEDIA_ROOT,brand.name,brand.logo,brand.yn,brand.category)
         # brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-    return render(request, 'backmanage/Add_Brand.html',context={'all_big_category':all_big_category,'all_small_category':all_small_category})
+    return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
 
 
 def admin_competence(request):
@@ -182,7 +182,6 @@ def brand_details(request):
 
 def brand_manage(request):
     brands = TbBrand.objects.all()
-
     return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
 
 
@@ -242,16 +241,24 @@ def competence(request,index=0):
         admins = Admin.objects.all()
         return render(request, 'backmanage/Competence.html', context={'admins': admins,'checked_admins': checked_admins, 'privilege': privilege})
     if request.method == 'POST':
-        add_prv = Privilege()
+        if request.POST.get("privilege_id"):
+            add_prv = Privilege.objects.get(pk=request.POST.get("privilege_id"))
+        else:
+            add_prv = Privilege()
         add_prv.privilege_name = request.POST.get('privilege_name')
         add_prv.describe = request.POST.get('describe')
         add_prv.menu_list = request.POST.getlist('user-Character-0-0')
         add_prv.save()
         user = request.POST.getlist('username')
         for u in user:
-            Admin.objects.filter(id=int(u)).update(privilege=Privilege.objects.filter(privilege_name=request.POST.get('privilege_name'))[0])
+            Admin.objects.filter(id=int(u)).update(privilege=add_prv)
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
+    # pusers = Privilege.objects.values('privilege_name')
+    # print(pusers)
+    # user111 = '超级管理员'
+    # if user111 in pusers:
+    #     print(12345678)
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
 
 
