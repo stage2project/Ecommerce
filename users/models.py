@@ -29,7 +29,7 @@ class User(models.Model):                                          # user 用户
 class Address(models.Model):                                       # address 收货地址建模
     a_name = models.CharField(max_length=255)                      # 收件人姓名
     a_phone = models.CharField(max_length=128)                     # 收件人电话
-    a_region = models.CharField(max_length=128)                     # 收件人电话
+    a_region = models.CharField(max_length=128, null=True)                     # 收件人电话
     a_place = models.CharField(max_length=255, null=False)         # 收货地址
     a_email = models.CharField(max_length=255, null=False)         # 收件人邮箱
     fixed_telephone = models.CharField(max_length=128, default=None)
