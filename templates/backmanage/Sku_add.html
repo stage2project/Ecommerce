@@ -294,12 +294,14 @@
                  small_parent_id = {{ small_category.parentid }}
                  if(big_category_id == small_parent_id){
                      var option = "<option value='" + '{{ small_category.id }}'+"'>" + '{{ small_category.name }}'+"</option>"
+                     $('#small_category').append(option)
                  }
-                 $('#small_category').append(option)
              {% endfor %}
         }
     )
     $('#small_category').change(function () {
+        $('#special').empty()
+        $('#common').append(item)
         cid = $('#small_category option:selected').val()
         $.get('{% url "backmanage:attribute_get" %}',{'cid':cid},function (data) {
             index = 0
