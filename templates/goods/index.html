@@ -502,17 +502,13 @@
                             {% if small_category.parentid == big_category.id %}
                                 <div class="brand-poa H-over clearfix">
                             <ul>
-                                {% for spu in all_spu %}
-                                    {% if spu.category == small_category %}
+                                {% for item in spu_pic_list %}
+                                    {% if item.spu.category == small_category %}
                                         <li>
-                                            {% for pic in all_pics %}
-                                                {% if pic.spu == spu %}
-                                                <div class="brand-imgss"><a href="/details/{{ spu.unique_code }}"><img src="{% static pic.pic %}"></a></div>
-                                                {% endif %}
-                                            {% endfor %}
-                                            <div class="brand-title"><a href="/details/{{ spu.unique_code }}">{{ spu.title }}</a>
+                                            <div class="brand-imgss"><a href="/details/{{ item.spu.unique_code }}"><img src="{% static item.spu_pic.pic %}" style="height: 165px;width: 220px"></a></div>
+                                            <div class="brand-title"><a href="/details/{{ item.spu.unique_code }}">{{ item.spu.title }}</a>
                                             </div>
-                                            <div class="brand-price">{{ spu.list_pirce }}</div>
+                                            <div class="brand-price">{{ item.spu.list_pirce }}</div>
                                         </li>
                                     {% endif %}
                                 {% endfor %}

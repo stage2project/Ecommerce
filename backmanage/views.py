@@ -172,6 +172,7 @@ def administrator(request):
     return render(request, 'backmanage/administrator.html',
                   context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
 
+
 def ads_list(request):
     return render(request, 'backmanage/Ads_list.html')
 
@@ -281,7 +282,6 @@ def competence(request, index=0):
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
-
 
 
 def cover_management(request):
