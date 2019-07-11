@@ -44,6 +44,21 @@
          })
      </script>
     <script>
+        $(document).ready(function(){
+                items = $(".attrdiv a[class='cur']")
+                temp = window.location.href.split('/')
+                spuid = temp[temp.length-1]
+                post_json = {}
+                for(i = 0; i< items.length; i++ ){
+                    post_json[$(items[i]).attr('name')] = $(items[i]).attr('value')
+                }
+                console.log(post_json)
+                $.post('/get_price/'+spuid,post_json, function (data) {
+                    sku_id = data['sku_id']
+                    document.getElementById('price').innerHTML ='<strong>'+data['price']+'</strong>';
+                    document.getElementById('title').innerText = data['title']
+                })
+        })
         var sku_id = {{ sku_id }}
         function attrdiv_click(name, value){
          		$(".attrdiv a[name='"+name+"']").removeClass("cur");
@@ -199,7 +214,7 @@
         </div>
     </div>
     <div class="container clearfix">
-        <div class="header-logo fl"><h1><a href="#"><img src="/static/goods/icon/logo.png"></a> </h1></div>
+        <div class="header-logo fl"><h1><a href="/"><img src="/static/goods/icon/logo.png"></a> </h1></div>
         <div class="head-form fl">
             <form class="clearfix">
                 <input type="text" class="search-text" accesskey="" id="key" autocomplete="off"  placeholder="手机模型">

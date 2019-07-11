@@ -66,6 +66,8 @@ urlpatterns = [
     url(r'^sku_add/$', views.sku_add, name='sku_add'),
     url(r'^delete/$', views.delete, name='delete'),
     url(r'^delete_all/$', views.delete_all, name='delete_all'),
+    url(r'^update_advertising/$', views.update_advertising, name='update_advertising'),
+    url(r'^del_advertising/$', views.del_advertising, name='del_advertising'),
 
 
 

@@ -166,7 +166,7 @@
                                     <p>
                                         {% for brand in  all_brand %}
                                             {% if brand.category.id == small_category.id %}
-                                                <a href="" class="ecolor610">{{ brand.name }}</a>
+                                                <a href="{% url 'goods:list_page'  small_category.id  %}" class="ecolor610">{{ brand.name }}</a>
                                             {% endif %}
                                         {% endfor %}
                                     </p>
