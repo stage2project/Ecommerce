@@ -419,6 +419,7 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
     if request.method == 'POST':
         unique_code = request.POST.get('unique_code')
         spu = TbSpu.objects.get(unique_code=unique_code)
+        print(request.POST.get('data'))
         for data in json.loads(request.POST.get('data')):
             sku = TbSku()
             sku.title = data['title']
@@ -427,6 +428,7 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
             sku.spu = TbSpu.objects.get(unique_code=unique_code)
             sku.save()
             attrs = data['attribute'].split(',')
+            print(attrs)
             for attr in attrs:
                 sku_attr = TbSkuAttr()
                 sku_attr.sku = sku
