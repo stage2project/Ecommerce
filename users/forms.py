@@ -1,6 +1,8 @@
 import re
 from django import forms
 from django.core.exceptions import ValidationError
+from django.http import request
+
 from .models import User
 
 
@@ -24,7 +26,7 @@ class UserRegisterForm(forms.Form):
         'required': '必须输入手机号码',
         'max_length': '电话号码不能大于11位'
     })
-    # sms = forms.CharField(max_length=6)
+    sms = forms.CharField(max_length=6)
 
     def clean_username(self):
         res = User.objects.filter(username=self.cleaned_data.get('username')).exists()

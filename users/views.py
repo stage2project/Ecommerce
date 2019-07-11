@@ -58,16 +58,18 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            # sms = request.POST.get('sms')
-            # if sms == request.session['sms']:
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get('email')
-            phone = form.cleaned_data.get('phone')
-            user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
-                                       email=email, phone=phone)
-            user.save()
-            return redirect(reverse('users:login'))
+            sms = request.POST.get('sms')
+            if sms == request.session['sms']:
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                email = form.cleaned_data.get('email')
+                phone = form.cleaned_data.get('phone')
+                user = User.objects.create(username=username, password=hashlib.sha1(password.encode('utf8')).hexdigest(),
+                                           email=email, phone=phone)
+                user.save()
+                return redirect(reverse('users:login'))
+            else:
+                form.sms.error_messages = "验证码错误"
 
     return render(request, 'goods/register.html', context={
             'form': form
@@ -78,28 +80,33 @@ def person(request):
     return render(request, 'goods/my-user.html')
 
 
-# def send_sms(request, phone, templateParam, **kwargs):
-#     client = AcsClient(kwargs['ACCESS_KEY_ID'], kwargs['ACCESS_KEY_SECRET'], 'default')
-#     request = CommonRequest()
-#     request.set_accept_format('json')
-#     request.set_domain('dysmsapi.aliyuncs.com')
-#     request.set_method('POST')
-#     request.set_protocol_type('https')  # https | http
-#     request.set_version('2017-05-25')
-#     request.set_action_name('SendSms')
-#     request.add_query_param('PhoneNumbers', phone)
-#     request.add_query_param('SignName', kwargs['SignName'])
-#     request.add_query_param('TemplateCode', kwargs['TemplateCode'])
-#     request.add_query_param('TemplateParam', templateParam)
-#     response = client.do_action_with_exception(request)
-#     print(str(response, encoding='utf-8'))
-#
-#     if request.method == 'POST':
-#         num = randint(100000, 999999)
-#         request.session['sms'] = str(num)
-#         send_sms(phone, {'code': str(num), **SMSCONFIG})
-#         return JsonResponse({'code': 1})
-#
+def send_sms_tool(phone, templateParam, **kwargs):
+    client = AcsClient(kwargs['ACCESS_KEY_ID'], kwargs['ACCESS_KEY_SECRET'], 'default')
+    request = CommonRequest()
+    request.set_accept_format('json')
+    request.set_domain('dysmsapi.aliyuncs.com')
+    request.set_method('POST')
+    request.set_protocol_type('https')  # https | http
+    request.set_version('2017-05-25')
+    request.set_action_name('SendSms')
+    request.add_query_param('PhoneNumbers', phone)
+    request.add_query_param('SignName', kwargs['SignName'])
+    request.add_query_param('TemplateCode', kwargs['TemplateCode'])
+    request.add_query_param('TemplateParam', templateParam)
+    client.do_action_with_exception(request)
+
+
+def send_sms(request):
+    print(request.GET.get('phone'))
+    phone = request.GET.get('phone')
+    if not phone:
+        return JsonResponse({"code": 1, "msg": "phone number can not be null"})
+    num = randint(100000, 999999)
+    request.session['sms'] = str(num)
+    send_sms_tool(phone, {'code': str(num)}, **SMSCONFIG)
+    return JsonResponse({"code": 0, "msg": "succsss"})
+
+
 def order(request):
     return render(request, 'goods/my-d.html')
 
@@ -151,10 +158,6 @@ def logout(request):
     request.session.pop("uid")
     request.session.pop("username")
     return redirect(reverse('goods:index'))
-
-
-def send_sms(request):
-    return None
 
 
 @csrf_exempt

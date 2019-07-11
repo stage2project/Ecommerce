@@ -62,14 +62,14 @@
                     <div class="login-input">
                         <label><i class="heart">*</i>手  机  号：</label>
                         <input type="text" class="list-iphone" id="iphone" name="phone" placeholder="">
-{#                        <a href="{% url 'users:sms' %}" class="obtain">获取短信验证码</a>#}
+                        <a href="javascript:void(0)" class="obtain" onclick="send_sms()">获取短信验证码</a>
                     </div>
                     <div style="color: red; margin-left: 272px">{{ form.phone.errors }}</div>
 
-{#                    <div class="login-input">#}
-{#                        <label><i class="heart">*</i>短信验证码：</label>#}
-{#                        <input type="text" class="list-notes" id="message" name="sms" placeholder="">#}
-{#                    </div>#}
+                    <div class="login-input">
+                        <label><i class="heart">*</i>短信验证码：</label>
+                        <input type="text" class="list-notes" id="message" name="sms" placeholder="">
+                    </div>
 
                     <div class="item-ifo">
                         <input type="checkbox" onClick="agreeonProtocol();" id="readme" checked="checked" class="checkbox">
@@ -125,3 +125,9 @@
 <!-- footer End -->
 </body>
 </html>
+<script type="text/javascript" src="/static/goods/js/jquery.js"></script>
+<script>
+    function send_sms() {
+        $.get("{% url 'users:send_sms' %}", {'phone':$("#iphone").val()})
+    }
+</script>

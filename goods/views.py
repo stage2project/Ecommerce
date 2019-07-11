@@ -22,6 +22,9 @@ def index(request):
     static_advertisement = Advertisement.objects.filter(yn=0, type=1).order_by('order', '-create_time').all()[:4]
     banner_advertisement = Advertisement.objects.filter(yn=0, type=2).order_by('order', '-create_time').all()[:1]
     all_spu = TbSpu.objects.all()
+    spu_pic_list = []
+    for spu in all_spu:
+        spu_pic_list.append({"spu": spu, "spu_pic": spu.spu_pic.first()})
     all_pics = TbSpuPics.objects.all()
     if request.session.get('uid'):
         amount = CartInfo.objects.filter(user=User.objects.get(pk=request.session.get('uid'))).count()
@@ -30,7 +33,7 @@ def index(request):
     return render(request, 'goods/index.html', context={"all_big_category": all_big_category, "all_small_category": all_small_category,
                                                         "all_brand": all_brand, 'carousel_advertisement': carousel_advertisement,
                                                         'static_advertisement': static_advertisement, "banner_advertisement": banner_advertisement,
-                                                        "all_spu": all_spu, 'all_pics': all_pics, 'amount': amount})
+                                                        'spu_pic_list': spu_pic_list, 'amount': amount})
 
 
 def details(request, spu_id):
