@@ -77,7 +77,9 @@ def register(request):
 
 
 def person(request):
-    return render(request, 'goods/my-user.html')
+
+    user = User.objects.filter(username=request.session['username'])
+    return render(request, 'goods/my-user.html', context={'user': user})
 
 
 def send_sms_tool(phone, templateParam, **kwargs):

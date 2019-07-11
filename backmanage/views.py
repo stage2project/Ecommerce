@@ -25,6 +25,7 @@ from backmanage.verfiCode import VerfiCode
 from goods.models import TbCategory, TbAttributeKey, TbSpuPics
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue
 from goods.models import TbCategory, TbAttributeKey, TbAttributeValue, TbSku, TbBrand, TbSpu, TbSkuAttr
+from orders.models import OrderInfo
 from users.models import User
 
 
@@ -308,7 +309,12 @@ def home(request):
 def integration(request):
     user = User.objects.all()
     user_total = User.objects.count()
-    return render(request, 'backmanage/integration.html', context={'user': user, 'user_total': user_total})
+    order = OrderInfo.objects.all()
+    order_total = OrderInfo.objects.count()
+    # order_id = request.POST.get('')
+    # order = OrderInfo.objects.filter(pk=order_id)
+
+    return render(request, 'backmanage/integration.html', context={'user': user, 'user_total': user_total, 'order': order, 'order_total': order_total})
 
 
 def member_grading(request):
@@ -348,7 +354,9 @@ def order_handling(request):
 
 
 def orderform(request):
-    return render(request, 'backmanage/Orderform.html')
+    order = OrderInfo.objects.all()
+    order_total = OrderInfo.objects.count()
+    return render(request, 'backmanage/Orderform.html', context={'order': order, 'order_total': order_total})
 
 
 def payment_configure(request):
@@ -497,8 +505,6 @@ def transaction(request):
 
 
 def user_list(request):  # 会员列表
-    # del = User.objects.get(pk)
-    # del.delete()
     user = User.objects.all()
     user_total = User.objects.count()
     return render(request, 'backmanage/user_list.html', context={'user': user, 'user_total': user_total})

@@ -16,3 +16,8 @@ def get_split_1(value):
 @register.filter(name='str2int')
 def str_2_int(value):
     return int(value)
+
+
+@register.filter(name='getvalue')
+def getvalue(value, id):
+    return dict(value).get(id)

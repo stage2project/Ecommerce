@@ -131,29 +131,35 @@
                 <div class="member-heels fl"><h2>个人中心</h2></div>
             </div>
                       <div class="member-caution clearfix">
+                          {% for u in user %}
                    <ul>
                        <li class="clearfix">
                            <div class="warn1"></div>
                            <div class="warn2">用户名</div>
-                           <div class="warn3">亚里士多德</div>
-{#                           <div class="warn4"><a href="#">修改</a> </div>#}
+                           <div class="warn3">{{ u.username }}</div>
                        </li>
                        <li class="clearfix">
                            <div class="warn1"></div>
                            <div class="warn2">性别</div>
-                           <div class="warn3">女 </div>
+                           <div class="warn3">{{ u.sex }} </div>
                        </li>
                        <li class="clearfix">
                            <div class="warn1"></div>
                            <div class="warn2">生日</div>
-                           <div class="warn3">2019-6-16 </div>
+                           <div class="warn3">{{ u.birthday }} </div>
                        </li>
                        <li class="clearfix">
                            <div class="warn1"></div>
+                           <div class="warn2">手机号码</div>
+                           <div class="warn3">{{ u.phone }}</div>
+                       </li>
+                        <li class="clearfix">
+                           <div class="warn1"></div>
                            <div class="warn2">所在地</div>
-                           <div class="warn3">北京海淀</div>
+                           <div class="warn3">{{ u.place }}</div>
                        </li>
                    </ul>
+                          {% endfor %}
                </div>
 
 
