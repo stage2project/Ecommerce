@@ -428,12 +428,13 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
             sku.spu = TbSpu.objects.get(unique_code=unique_code)
             sku.save()
             attrs = data['attribute'].split(',')
-            print(attrs)
             for attr in attrs:
+                attr_key = attr.split(':')[0]
+                attr_value = attr.split(':')[1]
                 sku_attr = TbSkuAttr()
                 sku_attr.sku = sku
-                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr[0])
-                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
+                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr_key)
+                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr_value)
                 sku_attr.save()
         return JsonResponse({'code': 0})
     return render(request, 'backmanage/Sku_add.html', context={'all_small_category': all_small_category,
