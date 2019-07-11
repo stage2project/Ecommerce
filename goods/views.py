@@ -71,18 +71,20 @@ def details(request, spu_id):
 @csrf_exempt
 def get_price(request, spu_id):
     if request.method == "POST" and request.is_ajax():
+        print(request.POST)
         skus = TbSpu.objects.get(unique_code=spu_id).skus.all()
         sku_id_list = [sku.id for sku in skus]
         attr_list = []
         for attr in request.POST:
             attr_list.append(TbSkuAttr.objects.filter(attr_key=attr, attr_value=request.POST.get(attr), sku_id__in=sku_id_list).values('sku_id'))
+        print(attr_list)
         res = []
         for i in range(len(attr_list)):
             for j in attr_list[i]:
                 res.append(j.get('sku_id'))
-
+        print(res)
         res = dict(Counter(res))
-
+        print(res)
         sku_id = [key for key, value in res.items()if value == len(attr_list)][0]
         price = TbSku.objects.get(pk=sku_id).price
         title = TbSku.objects.get(pk=sku_id).title
