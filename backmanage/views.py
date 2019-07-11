@@ -91,10 +91,11 @@ def add_brand(request):
         brand = TbBrand()
         brand.name = request.POST['bname']
         file = request.FILES.get('brlogo')
-        path = os.path.join(settings.MEDIA_ROOT,file.name)
+        path = os.path.join(settings.MEDIA_ROOT, file.name)
         ext = os.path.splitext(file.name)
         if len(ext) < 1 or not ext[1] in settings.ALLOWED_FILEEXTS:
             return redirect(reverse('backmanage:add_brand'))
+        brand.logo = 'upload/' + file.name
         if os.path.exists(path):
             dir1 = datetime.today().strftime("%Y/%m/%d")
             dir = os.path.join(settings.MEDIA_ROOT, dir1)
@@ -102,21 +103,20 @@ def add_brand(request):
                 os.makedirs(dir)
             file_name = ext[0] + datetime.today().strftime("%Y%m%d%H%M%S") + str(randint(1, 1000)) + ext[1] if len(ext) > 1 else ''
             path = os.path.join(dir, file_name)
+            dir2 = os.path.join(dir1, file_name)
+            brand.logo = 'upload/' + dir2
         with open(path, 'wb') as fp:
             if file.multiple_chunks():
                 for block1 in file.chunks():
                     fp.write(block1)
             else:
                 fp.write(file.read())
-        dir2 = os.path.join(dir1, file_name)
-        brand.logo = 'upload/' + dir2
         brand.yn = request.POST['checkbox']
-        brand.category = TbCategory.objects.filter(id = request.POST['s_cid'])[0]
-        print(file,brand.name,brand.logo,brand.yn,brand.category)
+        brand.category = TbCategory.objects.filter(id=request.POST['s_cid'])[0]
         brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-    return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
 
+    return render(request, 'backmanage/Add_Brand.html', context={'all_big_category': all_big_category, 'all_small_category':  all_small_category})
 
 
 def admin_competence(request):

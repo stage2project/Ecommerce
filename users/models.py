@@ -34,7 +34,7 @@ class Address(models.Model):                                       # address 收
     a_email = models.CharField(max_length=255, null=False)         # 收件人邮箱
     fixed_telephone = models.CharField(max_length=128, default=None)
     is_default = models.BooleanField(default=False, verbose_name='是否默认')  # 是否默认
-    user = models.ForeignKey('users.User', verbose_name='用户', related_name='user_addr', null=True)
+    user = models.ForeignKey('users.User', verbose_name='用户', related_name='user_addr')
 
     class Meta:
         db_table = 'address'                                       # 表名address

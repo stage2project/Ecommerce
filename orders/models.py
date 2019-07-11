@@ -45,7 +45,7 @@ class OrderInfo(models.Model):
     user = models.ForeignKey('users.User', verbose_name='用户')
     addr = models.ForeignKey('users.Address',on_delete=models.SET_NULL, verbose_name='地址', null=True, default=None)
     trance_num = models.CharField(max_length=100, default='', verbose_name='支付编号')
-    create_time = models.DateTimeField(auto_now_add=True, null=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     pay_date = models.DateTimeField(null=True)
 
     class Meta:
