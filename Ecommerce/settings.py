@@ -134,7 +134,6 @@ STATICFILES_DIRS = [
 ]
 
 
-
 # 阿里云短信验证码配置
 SMSCONFIG = {
     'ACCESS_KEY_ID': "LTAIwJRC5pKyAD2r",

@@ -63,7 +63,7 @@ def index(request):
         return render(request, 'backmanage/index.html', context={'username': username, 'data': data})
     return redirect(reverse("backmanage:login"))
 
-
+# 登录
 def login(request):
     if request.is_ajax():
         username = request.POST.get('username')
@@ -84,6 +84,7 @@ def account_detail(request):
     return render(request, 'backmanage/Account_Details.html')
 
 
+# 品牌
 def add_brand(request):
     all_big_category = TbCategory.objects.filter(status=0, parentid=0).all()
     all_small_category = TbCategory.objects.filter(status=0).exclude(parentid=0).all()
@@ -130,6 +131,7 @@ def admin_competence(request):
     return render(request, 'backmanage/admin_Competence.html', context={'number': number, 'privilege': privilege})
 
 
+# 管理员修改密码
 def admin_info(request):
     if request.method == 'POST':
         oldpwd = request.POST.get('oldpwd')
@@ -150,6 +152,7 @@ def admin_info(request):
     return render(request, 'backmanage/admin_info.html', context={'admin_name': admin_name, 'info': info})
 
 
+# 添加管理员
 def administrator(request):
     if request.method == 'POST':
         user_name = request.POST.get('username')
@@ -199,12 +202,12 @@ def article_sort(request):
 
 def brand_details(request,id=0):
     brands = TbBrand.objects.get(pk=id)
-    return render(request, 'backmanage/Brand_detailed.html',context={'brands':brands})
+    return render(request, 'backmanage/Brand_detailed.html', context={'brands': brands})
 
 
 def brand_manage(request):
     brands = TbBrand.objects.all()
-    return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
+    return render(request, 'backmanage/Brand_Manage.html', context={'brands': brands})
 
 
 def category_manage(request):
