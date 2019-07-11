@@ -22,10 +22,6 @@
     <script src="{% static 'backmanage/assets/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'backmanage/assets/js/jquery.dataTables.bootstrap.js' %}"></script>
     <script src="{% static 'backmanage/assets/layer/layer.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.queue.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/swfupload.speed.js' %}"></script>
-    <script type="text/javascript" src="{% static 'backmanage/Widget/swfupload/handlers.js' %}"></script>
     <title>广告管理</title>
 </head>
 <body>
@@ -40,11 +36,10 @@
                 </div>
                 <div class="widget-body">
                     <ul class="b_P_Sort_list">
-                        <li><i class="orange  fa fa-user-secret"></i><a href="#">全部(235)</a></li>
-                        <li><i class="fa fa-image pink "></i> <a href="#">首页轮播广告大(5)</a></li>
-                        <li><i class="fa fa-image pink "></i> <a href="#">轮播广告小1(3)</a></li>
-                        <li><i class="fa fa-image pink "></i> <a href="#">轮播广告小2(3)</a></li>
-                        <li><i class="fa fa-image pink "></i> <a href="#">单个广告(6)</a></li>
+                        <li><i class="orange  fa fa-user-secret"></i><a href="#">全部</a></li>
+                        <li><i class="fa fa-image pink "></i> <a href="#">首页轮播广告大</a></li>
+                        <li><i class="fa fa-image pink "></i> <a href="#">广告小</a></li>
+                        <li><i class="fa fa-image pink "></i> <a href="#">单个广告</a></li>
                     </ul>
                 </div>
             </div>
@@ -53,10 +48,10 @@
     <div class="Ads_list">
         <div class="border clearfix">
             <span class="l_f">
-                <a href="javascript:ovid()" id="ads_add" class="btn btn-warning">
+                <a href="javascript:void(0)" id="ads_add" class="btn btn-warning">
                     <i class="fa fa-plus"></i> 添加广告
                 </a>
-                <a href="javascript:ovid()" class="btn btn-danger">
+                <a href="javascript:void(0)" class="btn btn-danger">
                     <i class="fa fa-trash"></i> 批量删除
                 </a>
             </span>
@@ -75,34 +70,41 @@
                         <th>排序</th>
                         <th width="100">分类</th>
                         <th width="220px">图片</th>
-                        <th width="150px">尺寸（大小）</th>
-                        <th width="250px">链接地址</th>
                         <th width="180px">加入时间</th>
                         <th width="70px">状态</th>
                         <th width="250px">操作</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for ad in ad_list %}
                 <tr>
                     <td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
-                    <td>1</td>
-                    <td><input name="" type="text" style=" width:50px" placeholder="1"/></td>
-                    <td>幻灯片</td>
+                    <td>{{ ad.id }}</td>
+                    <td>{{ ad.order }}</td>
+                    <td>{% if ad.type == 0 %}首页轮播大图{% elif ad.type == 1 %}小广告1{% else %}单个广告{% endif %}</td>
                     <td>
                         <span class="ad_img">
-                            <img src="{% static 'backmanage/products/ad.jpg' %}" width="100%" height="100%"/>
+                            <img src="{% static ad.pic %}" width="100%" height="100%"/>
                         </span>
                     </td>
-                    <td>1890x1080</td>
-                    <td><a href="#" target="_blank">http://item.jd.com/10443270082.html</a></td>
-                    <td>2016-6-29 12:34</td>
-                    <td class="td-status"><span class="label label-success radius">显示</span></td>
+                    <td>{{ ad.create_time }}</td>
+                    <td class="td-status">
+                        {% if ad.yn == 0 %}
+                        <span class="label label-success radius">显示</span>
+                        {% else %}
+                        <span class="label label-defaunt radius">已关闭</span>
+                        {% endif %}
+                    </td>
                     <td class="td-manage">
-                        <a onClick="member_stop(this,'10001')" href="javascript:;" title="停用" class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120"></i></a>
-                        <a title="编辑" onclick="member_edit('编辑','member-add.html','4','','510')" href="javascript:;" class="btn btn-xs btn-info"><i class="fa fa-edit bigger-120"></i></a>
-                        <a title="删除" href="javascript:;" onclick="member_del(this,'1')" class="btn btn-xs btn-warning"><i class="fa fa-trash  bigger-120"></i></a>
+                        {% if ad.yn == 0 %}
+                            <a onClick="member_stop(this,'{{ ad.id }}')" href="javascript:;" title="停用" class="btn btn-xs btn-success"><i class="fa fa-check  bigger-120">停用</i></a>
+                        {% else %}
+                            <a style="text-decoration:none" class="btn btn-xs " onClick="member_start(this,'{{ ad.id }}')" href="javascript:;" title="显示"><i class="fa fa-close bigger-120">显示</i></a>
+                        {% endif %}
+                        <a title="删除" href="javascript:;" onclick="member_del(this,'{{ ad.id }}')" class="btn btn-xs btn-warning"><i class="fa fa-trash  bigger-120">删除</i></a>
                     </td>
                 </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -117,20 +119,10 @@
                 <span class="cont_style">
                     <select class="form-control" id="form-field-select-1">
                         <option value="">选择分类</option>
-                        <option value="AL">首页大幻灯片</option>
-                        <option value="AK">首页小幻灯片</option>
-                        <option value="AZ">单广告图</option>
-                        <option value="AR">其他广告</option>
-                        <option value="CA">板块栏目广告</option>
+                        <option value="0">首页大幻灯片</option>
+                        <option value="1">广告小</option>
+                        <option value="2">单个广告</option>
                     </select>
-                </span>
-            </li>
-            <li>
-                <label class="label_name">图片尺寸</label>
-                <span class="cont_style">
-                    <input name="长" type="text" id="form-field-1" placeholder="0" class="col-xs-10 col-sm-5" style="width:80px">
-                    <span class="l_f" style="margin-left:10px;">x</span>
-                    <input name="宽" type="text" id="form-field-1" placeholder="0" class="col-xs-10 col-sm-5" style="width:80px">
                 </span>
             </li>
             <li>
@@ -140,22 +132,16 @@
                 </span>
             </li>
             <li>
-                <label class="label_name">链接地址</label>
-                <span class="cont_style">
-                    <input name="地址" type="text" id="form-field-1" placeholder="地址" class="col-xs-10 col-sm-5" style="width:450px">
-                </span>
-            </li>
-            <li>
                 <label class="label_name">状&nbsp;&nbsp;态：</label>
                 <span class="cont_style">
                      &nbsp&nbsp;
                      <label>
-                         <input name="form-field-radio1" type="radio" checked="checked" class="ace">
+                         <input name="form-field-radio1" type="radio" checked="checked" class="ace" value="0">
                          <span class="lbl">显示</span>
                      </label>
                     &nbsp;&nbsp;&nbsp;
                     <label>
-                        <input name="form-field-radio1" type="radio" class="ace">
+                        <input name="form-field-radio1" type="radio" class="ace" value="1">
                         <span class="lbl">隐藏</span>
                     </label>
                 </span>
@@ -164,26 +150,7 @@
             <li>
                 <label class="label_name">图片</label>
                 <span class="cont_style">
-                    <div class="demo">
-                        <div class="logobox">
-                            <div class="resizebox">
-                                <img src="{% static 'backmanage/images/image.png' %}" width="100px" alt="" height="100px"/>
-                            </div>
-                        </div>
-                        <div class="logoupload">
-                            <div class="btnbox">
-                                <a id="uploadBtnHolder" class="uploadbtn" href="javascript:;">上传替换</a>
-                            </div>
-                            <div style="clear:both;height:0;overflow:hidden;"></div>
-                            <div class="progress-box" style="display:none;">
-                                <div class="progress-num">上传进度：<b>0%</b></div>
-                                <div class="progress-bar"><div style="width:0%;" class="bar-line"></div></div>
-                            </div>
-                            <div class="prompt">
-                                <p>图片大小小于5MB,支持.jpg;.gif;.png;.jpeg格式的图片</p>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="file" name="picture" id="picture">
                 </span>
             </li>
         </ul>
@@ -217,9 +184,10 @@
     /*广告图片-停用*/
     function member_stop(obj, id) {
         layer.confirm('确认要关闭吗？', {icon: 0,}, function (index) {
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" class="btn btn-xs " onClick="member_start(this,id)" href="javascript:;" title="显示"><i class="fa fa-close bigger-120"></i></a>');
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" class="btn btn-xs " onClick="member_start(this,'+id+')" href="javascript:;" title="显示"><i class="fa fa-close bigger-120">显示</i></a>');
             $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已关闭</span>');
             $(obj).remove();
+            $.get('{% url "backmanage:update_advertising" %}', {'id': id, 'yn': 1})
             layer.msg('关闭!', {icon: 5, time: 1000});
         });
     }
@@ -227,9 +195,10 @@
     /*广告图片-启用*/
     function member_start(obj, id) {
         layer.confirm('确认要显示吗？', {icon: 0,}, function (index) {
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" class="btn btn-xs btn-success" onClick="member_stop(this,id)" href="javascript:;" title="关闭"><i class="fa fa-check  bigger-120"></i></a>');
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" class="btn btn-xs btn-success" onClick="member_stop(this,'+id+')" href="javascript:;" title="关闭"><i class="fa fa-check  bigger-120">停用</i></a>');
             $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">显示</span>');
             $(obj).remove();
+            $.get('{% url "backmanage:update_advertising" %}', {'id': id, 'yn': 0})
             layer.msg('显示!', {icon: 6, time: 1000});
         });
     }
@@ -238,6 +207,7 @@
     function member_del(obj, id) {
         layer.confirm('确认要删除吗？', {icon: 0,}, function (index) {
             $(obj).parents("tr").remove();
+            $.get('{% url "backmanage:del_advertising" %}', {'id': id})
             layer.msg('已删除!', {icon: 1, time: 1000});
         });
     }
@@ -270,11 +240,30 @@
                     return false;
                 }
                 else {
-                    layer.alert('添加成功！', {
-                        title: '提示框',
-                        icon: 1,
-                    });
-                    layer.close(index);
+                    console.log($('option:selected').val())
+                    console.log($('#form-field-1').val())
+                    console.log($('input[type="radio"]:checked').val())
+                    console.log($('input[name="picture"]')[0].files[0])
+                    form_data = new FormData()
+                    form_data.append('class', $('option:selected').val());
+                    form_data.append('order', $('#form-field-1').val());
+                    form_data.append("yn", $('input[type="radio"]:checked').val());
+                    form_data.append("picture", $('input[name="picture"]')[0].files[0]);
+                    $.ajax({
+                         url:'{% url "backmanage:advertising" %}',
+                        type: 'post',
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        success: function (data) {
+                            layer.alert('添加成功！', {
+                            title: '提示框',
+                            icon: 1,
+                            });
+                            layer.close(index);
+                        }
+                    })
+
                 }
             }
         });

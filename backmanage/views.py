@@ -177,8 +177,30 @@ def ads_list(request):
     return render(request, 'backmanage/Ads_list.html')
 
 
+@csrf_exempt
 def advertising(request):
-    return render(request, 'backmanage/advertising.html')
+    if request.method == "POST":
+        path = os.path.join(settings.MEDIA_ROOT, 'ad')
+        print(request.POST)
+        file = request.FILES.get('picture')
+        path = os.path.join(path, file.name)
+        # 创建新文件
+        with open(path, 'wb') as fp:
+            # 如果文件超过2.5M,则分块读写
+            if file.multiple_chunks():
+                for block1 in file.chunks():
+                    fp.write(block1)
+            else:
+                fp.write(file.read())
+        ad = Advertisement()
+        ad.type = request.POST.get('class')
+        ad.order = request.POST.get('order')
+        ad.yn = request.POST.get('yn')
+        ad.pic = 'upload/ad/' + file.name
+        ad.save()
+        return JsonResponse({'code': 0, 'msg': 'success'})
+    ads = Advertisement.objects.order_by('id').all()
+    return render(request, 'backmanage/advertising.html', context={'ad_list': ads})
 
 
 def amount(request):
@@ -649,3 +671,17 @@ def delete_all(request):
         cutall = User.objects.get(pk=i)
         cutall.delete()
     return JsonResponse('批量删除成功')
+
+
+def update_advertising(request):
+    yn = request.GET.get('yn')
+    ad = Advertisement.objects.get(pk=request.GET.get('id'))
+    ad.yn = yn
+    ad.save()
+    return JsonResponse({'code': 0})
+
+
+def del_advertising(request):
+    ad = Advertisement.objects.get(pk=request.GET.get('id'))
+    ad.delete()
+    return JsonResponse({'code': 0})
