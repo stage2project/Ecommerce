@@ -76,7 +76,7 @@ def pay_order(request):
         alipay_public_key_path=ALIPAY_PUBLIC_KEY_PATH,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥
         debug=True,  # 默认False,
     )
-    if request.is_ajax():
+    if request.is_ajax() and request.META.get('HTTP_REFERER').split('/')[-2] == "order_manage":
         order = OrderInfo.objects.get(order_id=request.GET.get('order_id'))
     else:
         order = OrderInfo.objects.get(pk=request.session["orderinfo_id"])
@@ -98,7 +98,8 @@ def pay_order(request):
 
 
 def check_pay_status(request):
-    order_list = OrderInfo.objects.all()
+    user = User.objects.get(pk=request.session.get('uid'))
+    order_list = OrderInfo.objects.filter(user=user).all()
     for order in order_list:
         alipay = AliPay(
             appid=APP_ID,

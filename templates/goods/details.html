@@ -176,6 +176,8 @@
                     <li><a href="{% url 'users:register' %}">免费注册</a></li>
                 {% else %}
                     <li><a href="{% url 'users:person' %}" style="color:#ea4949;">{{ request.session.username }}</a></li>
+                    <li class="headerul">|</li>
+                    <li><a href="{% url 'users:logout' %}">退出</a></li>
                 {% endif %}
                 <li class="headerul">|</li>
                 <li><a href="{% url 'users:order_manage' %}">订单查询</a> </li>
