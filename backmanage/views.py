@@ -197,13 +197,13 @@ def article_sort(request):
     return render(request, 'backmanage/article_Sort.html')
 
 
-def brand_details(request):
-    return render(request, 'backmanage/Brand_detailed.html')
+def brand_details(request,id=0):
+    brands = TbBrand.objects.get(pk=id)
+    return render(request, 'backmanage/Brand_detailed.html',context={'brands':brands})
 
 
 def brand_manage(request):
     brands = TbBrand.objects.all()
-
     return render(request, 'backmanage/Brand_Manage.html',context={'brands':brands})
 
 
@@ -281,11 +281,6 @@ def competence(request, index=0):
             Admin.objects.filter(id=int(u)).update(privilege=add_prv)
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
-    # pusers = Privilege.objects.values('privilege_name')
-    # print(pusers)
-    # user111 = '超级管理员'
-    # if user111 in pusers:
-    #     print(12345678)
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
 
 

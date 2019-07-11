@@ -109,7 +109,7 @@
                                     <img src="{% static brand.logo %}" width="130"/>
                                 </td>
                                 <td>
-                                    <a href="javascript:ovid()" name="{% url 'backmanage:brand_details' %}" style="cursor:pointer" class="text-primary brond_name" onclick="generateOrders('561');" title="{{ brand.name }}">{{ brand.name }}
+                                    <a href="javascript:ovid()" name="{% url 'backmanage:brand_details' %}" style="cursor:pointer" class="text-primary brond_name" onclick="generateOrders('{{ brand.id }}');" title="{{ brand.name }}">{{ brand.name }}
                                     </a>
                                 </td>
                                 <td class="td-status">
@@ -213,7 +213,7 @@
         parent.layer.close(index);
     });
     function generateOrders(id) {
-        window.location.href = "Brand_detailed.html?=" + id;
+        window.location.href = "{% url 'backmanage:brand_details' %}" + id;
     };
 
     /*品牌-查看*/
