@@ -115,7 +115,6 @@ def add_brand(request):
         print(file,brand.name,brand.logo,brand.yn,brand.category)
         brand.save()
         return redirect(reverse('backmanage:brand_manage'))
-
     return render(request, 'backmanage/Add_Brand.html',context={'all_big_category': all_big_category,'all_small_category': all_small_category})
 
 
