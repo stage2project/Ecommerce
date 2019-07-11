@@ -301,7 +301,7 @@
     )
     $('#small_category').change(function () {
         $('#special').empty()
-        $('#common').append(item)
+        $('#common').empty()
         cid = $('#small_category option:selected').val()
         $.get('{% url "backmanage:attribute_get" %}',{'cid':cid},function (data) {
             index = 0
