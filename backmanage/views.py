@@ -450,6 +450,7 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
             sku.spu = TbSpu.objects.get(unique_code=unique_code)
             sku.save()
             attrs = data['attribute'].split(',')
+            print(attrs)
             for attr in attrs:
                 attr_key = attr.split(':')[0]
                 attr_value = attr.split(':')[1]
