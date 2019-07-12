@@ -269,13 +269,13 @@
     //购物记录
 
     function Order_history(id) {
-        $.get()
-        layer.open({
+        $.get({% url 'backmanage:integration' %}, {id:'id'}, function (data) {
+            layer.open({
             type: 1,
             title: '购物记录',
             area: ['800px', '400px'],
             shadeClose: true,
-            content: $('#Order_history'),
+            content: $('#Order_history' + data),
         });
         $('#Order_history_list').dataTable({
             "aaSorting": [[1, "desc"]],//默认第几个排序
@@ -286,6 +286,9 @@
                 "aTargets": [0, 1]
             }]
         });
+            $(".Order_history input")
+        })
+
     }
 
 

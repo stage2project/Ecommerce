@@ -331,10 +331,10 @@ def home(request):
 def integration(request):
     user = User.objects.all()
     user_total = User.objects.count()
-    order = OrderInfo.objects.all()
+    
     order_total = OrderInfo.objects.count()
-    # order_id = request.POST.get('')
-    # order = OrderInfo.objects.filter(pk=order_id)
+    order_id = request.GET.get('id')
+    order = OrderInfo.objects.filter(pk=order_id)
 
     return render(request, 'backmanage/integration.html', context={'user': user, 'user_total': user_total, 'order': order, 'order_total': order_total})
 
