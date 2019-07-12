@@ -92,7 +92,7 @@ def add_brand(request):
         brand.name = request.POST['bname']
         file = request.FILES.get('brlogo')
         try:
-            path = os.path.join(settings.STATIC_ROOT, file.name)
+            path = os.path.join(settings.STATIC_ROOT, 'upload/'+file.name)
         except Exception as e:
             path = os.path.join(settings.MEDIA_ROOT, file.name)
         ext = os.path.splitext(file.name)
@@ -101,7 +101,10 @@ def add_brand(request):
         brand.logo = 'upload/' + file.name
         if os.path.exists(path):
             dir1 = datetime.today().strftime("%Y/%m/%d")
-            dir = os.path.join(settings.MEDIA_ROOT, dir1)
+            try:
+                dir = os.path.join(settings.STATIC_ROOT, 'upload/' + dir1)
+            except Exception as e:
+                dir = os.path.join(settings.MEDIA_ROOT, dir1)
             if not os.path.exists(dir):
                 os.makedirs(dir)
             file_name = ext[0] + datetime.today().strftime("%Y%m%d%H%M%S") + str(randint(1, 1000)) + ext[1] if len(ext) > 1 else ''
@@ -417,7 +420,7 @@ def upload_pictures(spuid, pictures):
     paths = []
     for picture in pictures:
         try:
-            path = os.path.join(settings.STATIC_ROOT, str(spuid))
+            path = os.path.join(settings.STATIC_ROOT, "upload/"+str(spuid))
         except Exception as e:
             path = os.path.join(settings.MEDIA_ROOT, str(spuid))
         # 文件类型过滤
