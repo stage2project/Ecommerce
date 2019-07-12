@@ -173,12 +173,35 @@ def administrator(request):
     return render(request, 'backmanage/administrator.html',
                   context={'admin_total': admin_total, 'admins': admins, 'privileges': privileges})
 
+
 def ads_list(request):
     return render(request, 'backmanage/Ads_list.html')
 
 
+@csrf_exempt
 def advertising(request):
-    return render(request, 'backmanage/advertising.html')
+    if request.method == "POST":
+        path = os.path.join(settings.MEDIA_ROOT, 'ad')
+        print(request.POST)
+        file = request.FILES.get('picture')
+        path = os.path.join(path, file.name)
+        # 创建新文件
+        with open(path, 'wb') as fp:
+            # 如果文件超过2.5M,则分块读写
+            if file.multiple_chunks():
+                for block1 in file.chunks():
+                    fp.write(block1)
+            else:
+                fp.write(file.read())
+        ad = Advertisement()
+        ad.type = request.POST.get('class')
+        ad.order = request.POST.get('order')
+        ad.yn = request.POST.get('yn')
+        ad.pic = 'upload/ad/' + file.name
+        ad.save()
+        return JsonResponse({'code': 0, 'msg': 'success'})
+    ads = Advertisement.objects.order_by('id').all()
+    return render(request, 'backmanage/advertising.html', context={'ad_list': ads})
 
 
 def amount(request):
@@ -282,7 +305,6 @@ def competence(request, index=0):
         return JsonResponse({'code':0, 'msg':'success'})
     admins = Admin.objects.all()
     return render(request, 'backmanage/Competence.html',context={'admins':admins,})
-
 
 
 def cover_management(request):
@@ -420,6 +442,7 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
     if request.method == 'POST':
         unique_code = request.POST.get('unique_code')
         spu = TbSpu.objects.get(unique_code=unique_code)
+        print(request.POST.get('data'))
         for data in json.loads(request.POST.get('data')):
             sku = TbSku()
             sku.title = data['title']
@@ -428,11 +451,14 @@ def sku_add(request, bcid=None, scid=None, unique_code=None):
             sku.spu = TbSpu.objects.get(unique_code=unique_code)
             sku.save()
             attrs = data['attribute'].split(',')
+            print(attrs)
             for attr in attrs:
+                attr_key = attr.split(':')[0]
+                attr_value = attr.split(':')[1]
                 sku_attr = TbSkuAttr()
                 sku_attr.sku = sku
-                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr[0])
-                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr[-1])
+                sku_attr.attr_key = TbAttributeKey.objects.get(pk=attr_key)
+                sku_attr.attr_value = TbAttributeValue.objects.get(pk=attr_value)
                 sku_attr.save()
         return JsonResponse({'code': 0})
     return render(request, 'backmanage/Sku_add.html', context={'all_small_category': all_small_category,
@@ -647,3 +673,17 @@ def delete_all(request):
         cutall = User.objects.get(pk=i)
         cutall.delete()
     return JsonResponse('批量删除成功')
+
+
+def update_advertising(request):
+    yn = request.GET.get('yn')
+    ad = Advertisement.objects.get(pk=request.GET.get('id'))
+    ad.yn = yn
+    ad.save()
+    return JsonResponse({'code': 0})
+
+
+def del_advertising(request):
+    ad = Advertisement.objects.get(pk=request.GET.get('id'))
+    ad.delete()
+    return JsonResponse({'code': 0})

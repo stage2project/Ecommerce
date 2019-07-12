@@ -106,8 +106,9 @@
                 var tbody = $("<tbody></tbody>");
                 tbody.appendTo(table);
                 ////生成组合
+                console.log(arrayInfor)
                 var zuheDate = step.doExchange(arrayInfor);
-
+                console.log(zuheDate)
                 var postData = step.doGenPostData(arrayInfor)
                 if (zuheDate.length > 0) {
                     //创建行
@@ -294,12 +295,14 @@
                  small_parent_id = {{ small_category.parentid }}
                  if(big_category_id == small_parent_id){
                      var option = "<option value='" + '{{ small_category.id }}'+"'>" + '{{ small_category.name }}'+"</option>"
+                     $('#small_category').append(option)
                  }
-                 $('#small_category').append(option)
              {% endfor %}
         }
     )
     $('#small_category').change(function () {
+        $('#special').empty()
+        $('#common').empty()
         cid = $('#small_category option:selected').val()
         $.get('{% url "backmanage:attribute_get" %}',{'cid':cid},function (data) {
             index = 0
