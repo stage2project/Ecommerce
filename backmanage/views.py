@@ -154,6 +154,7 @@ def administrator(request):
     if request.method == 'POST':
         user_name = request.POST.get('username')
         userpassword = request.POST.get('password')
+        userpassword_hash = hashlib.sha1(userpassword.encode('utf8')).hexdigest()
         user_sex = request.POST.get('form-field-radio')
         login_ip = request.META['REMOTE_ADDR']
         user_tel = request.POST.get('user-tel')
@@ -161,7 +162,7 @@ def administrator(request):
         user_qq = request.POST.get('user-qq')
         privilege = Privilege.objects.filter(id=request.POST.get('admin-role'))[0]
         reg_date = datetime.now()
-        admin = Admin(admin_name=user_name, admin_password=userpassword, admin_sex=user_sex, admin_phone=user_tel,
+        admin = Admin(admin_name=user_name, admin_password=userpassword_hash, admin_sex=user_sex, admin_phone=user_tel,
                       admin_email=email, admin_reg_date=reg_date, admin_login_ip=login_ip, admin_qq=user_qq,
                       privilege=privilege)
         admin.save()
