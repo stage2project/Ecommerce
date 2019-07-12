@@ -301,7 +301,7 @@
             console.log(data)
             $('ul[class="clearfix"]').empty()
             for(i=0;i<data['spu_list'].length;i++){
-                inner_html = '<li><a href="/details/'+data['spu_list'][i].unique_code+'"> <img src="/static/'+data['spu_list'][i].spu_pic+'"></a>\n' +
+                inner_html = '<li><a href="/details/'+data['spu_list'][i].unique_code+'"> <img src="/static/'+data['spu_list'][i].spu_pic+'"  style="width: 220px;height: 165px"></a>\n' +
                     '<p class="head-name"><a href="/details/'+data['spu_list'][i].unique_code+'">'+data['spu_list'][i].spu_title+'</a> </p>\n' +
                     '<p><span class="price">'+data['spu_list'][i].list_price+'</span></p>\n' +
                     '<p class="head-futi clearfix"><span class="fl">好评度：90% </span> <span class="fr">100人购买</span></p>\n' +
