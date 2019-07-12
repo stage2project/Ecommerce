@@ -91,7 +91,10 @@ def add_brand(request):
         brand = TbBrand()
         brand.name = request.POST['bname']
         file = request.FILES.get('brlogo')
-        path = os.path.join(settings.MEDIA_ROOT, file.name)
+        try:
+            path = os.path.join(settings.STATIC_ROOT, file.name)
+        except Exception as e:
+            path = os.path.join(settings.MEDIA_ROOT, file.name)
         ext = os.path.splitext(file.name)
         if len(ext) < 1 or not ext[1] in settings.ALLOWED_FILEEXTS:
             return redirect(reverse('backmanage:add_brand'))
@@ -413,7 +416,10 @@ def product_add(request):
 def upload_pictures(spuid, pictures):
     paths = []
     for picture in pictures:
-        path = os.path.join(settings.MEDIA_ROOT, str(spuid))
+        try:
+            path = os.path.join(settings.STATIC_ROOT, str(spuid))
+        except Exception as e:
+            path = os.path.join(settings.MEDIA_ROOT, str(spuid))
         # 文件类型过滤
         ext = os.path.splitext(picture.name)
         if len(ext) < 1 or not ext[1] in settings.ALLOWED_FILEEXTS:
